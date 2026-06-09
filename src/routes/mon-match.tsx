@@ -1,0 +1,213 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowLeft, Mail, Plus, BellRing, CheckCircle2, Clock } from "lucide-react";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import { AppHeader } from "@/components/AppHeader";
+import { BottomNav } from "@/components/BottomNav";
+import { FloatingInput } from "@/components/FloatingInput";
+
+export const Route = createFileRoute("/mon-match")({
+  head: () => ({
+    meta: [
+      { title: "Mon match — PlayOff Amateurs" },
+      { name: "description", content: "Suivez les paiements et les joueurs de votre match." },
+    ],
+  }),
+  component: MonMatchPage,
+});
+
+type Player = {
+  id: number;
+  initials: string;
+  name: string;
+  color: string;
+  paid: boolean;
+  isMe?: boolean;
+};
+
+const INITIAL_PLAYERS: Player[] = [
+  { id: 1, initials: "TD", name: "Thai (moi)", color: "#0D1B4B", paid: true, isMe: true },
+  { id: 2, initials: "PB", name: "Pierre", color: "#FF6B00", paid: false },
+  { id: 3, initials: "LC", name: "Lucas", color: "#22C55E", paid: true },
+  { id: 4, initials: "AX", name: "Alex", color: "#3B82F6", paid: true },
+  { id: 5, initials: "HG", name: "Hugo", color: "#A855F7", paid: false },
+  { id: 6, initials: "MR", name: "Marc", color: "#0D1B4B", paid: true },
+  { id: 7, initials: "JL", name: "Julien", color: "#EC4899", paid: true },
+  { id: 8, initials: "SB", name: "Sami", color: "#14B8A6", paid: true },
+  { id: 9, initials: "RD", name: "Romain", color: "#EAB308", paid: true },
+  { id: 10, initials: "NV", name: "Noah", color: "#9CA3AF", paid: false },
+];
+
+const AVATAR_COLORS = ["#0D1B4B", "#FF6B00", "#22C55E", "#3B82F6", "#A855F7", "#EC4899", "#14B8A6", "#EAB308"];
+
+function MonMatchPage() {
+  const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS);
+  const [showForm, setShowForm] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const paidCount = useMemo(() => players.filter((p) => p.paid).length, [players]);
+  const total = players.length;
+  const pricePerPlayer = 8;
+  const collected = paidCount * pricePerPlayer;
+  const totalAmount = total * pricePerPlayer;
+  const remaining = totalAmount - collected;
+  const progress = total > 0 ? (paidCount / total) * 100 : 0;
+  const pendingCount = total - paidCount;
+
+  const addPlayer = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!firstName.trim()) return;
+    const initials =
+      firstName.trim().slice(0, 1).toUpperCase() +
+      (email.trim().slice(0, 1).toUpperCase() || firstName.trim().slice(1, 2).toUpperCase() || "X");
+    const newPlayer: Player = {
+      id: Date.now(),
+      initials,
+      name: firstName.trim(),
+      color: AVATAR_COLORS[players.length % AVATAR_COLORS.length],
+      paid: false,
+    };
+    setPlayers((p) => [...p, newPlayer]);
+    setFirstName("");
+    setEmail("");
+    setShowForm(false);
+    toast.success(`${newPlayer.name} a été ajouté au match`);
+  };
+
+  return (
+    <div className="min-h-screen pb-28 md:pb-12">
+      <AppHeader />
+
+      <main className="mx-auto max-w-2xl px-4 sm:px-6 py-5 sm:py-8 space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Link to="/terrains" className="h-10 w-10 rounded-full bg-card border border-border inline-flex items-center justify-center hover:bg-muted transition" aria-label="Retour">
+              <ArrowLeft className="h-5 w-5" strokeWidth={1.75} />
+            </Link>
+            <h1 className="text-2xl sm:text-3xl font-bold">Mon match</h1>
+          </div>
+          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#DCFCE7", color: "#15803D", borderColor: "#86EFAC" }}>
+            <CheckCircle2 className="h-4 w-4" strokeWidth={2} /> Réservé
+          </span>
+        </div>
+
+        <div className="bg-card border border-border rounded-2xl p-4 flex items-start gap-4">
+          <div className="h-14 w-14 rounded-full bg-muted inline-flex items-center justify-center text-3xl shrink-0" aria-hidden>⚽</div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold">Terrain Municipal Avon</p>
+            <p className="text-sm text-muted-foreground">Foot à 5 · 1h</p>
+            <p className="text-sm text-muted-foreground">Sam 31 mai · 15h00 – 16h00</p>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-muted-foreground">Prix total</p>
+            <p className="font-extrabold text-xl" style={{ color: "#FF6B00" }}>80 €</p>
+          </div>
+        </div>
+
+        <div className="rounded-2xl p-5 text-primary-foreground text-center" style={{ background: "#0D1B4B" }}>
+          <p className="font-bold text-xl">
+            {totalAmount} € ÷ {total} joueurs ={" "}
+            <span style={{ color: "#FF6B00" }}>{pricePerPlayer} €</span>
+          </p>
+          <p className="text-sm opacity-80 mt-1">par joueur · tout compris</p>
+          <button
+            onClick={() => toast.success("Lien copié !", { description: "Partagez-le avec vos coéquipiers." })}
+            className="mt-3 inline-flex items-center gap-2 font-semibold hover:underline underline-offset-4"
+            style={{ color: "#FF6B00" }}
+          >
+            <Mail className="h-4 w-4" strokeWidth={1.75} /> Partager le lien de paiement
+          </button>
+        </div>
+
+        <div className="bg-card border border-border rounded-2xl p-4">
+          <div className="flex items-center justify-between">
+            <p className="font-bold" style={{ color: "#0D1B4B" }}>Paiements reçus</p>
+            <p className="font-bold">{paidCount} / {total} joueurs</p>
+          </div>
+          <div className="mt-3 h-3 w-full rounded-full bg-muted overflow-hidden">
+            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, background: "#22C55E" }} />
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {collected} € collectés · {remaining} € restants
+          </p>
+        </div>
+
+        <div>
+          <p className="text-base font-medium text-muted-foreground mb-2">Joueurs ({total})</p>
+          <ul className="bg-card border border-border rounded-2xl divide-y divide-border overflow-hidden">
+            {players.map((p) => (
+              <li key={p.id} className="flex items-center gap-3 px-4 py-3">
+                <div
+                  className="h-10 w-10 rounded-full text-white font-bold text-sm inline-flex items-center justify-center shrink-0"
+                  style={{ background: p.color }}
+                  aria-hidden
+                >
+                  {p.initials}
+                </div>
+                <p className="flex-1 font-medium truncate">{p.name}</p>
+                <p className="text-sm font-semibold w-10 text-right">{pricePerPlayer}€</p>
+                {p.paid ? (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#DCFCE7", color: "#15803D" }}>
+                    Payé ✅
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#FED7AA", color: "#9A3412" }}>
+                    <Clock className="h-3 w-3" strokeWidth={2} /> En attente
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {showForm ? (
+            <form onSubmit={addPlayer} className="mt-3 bg-card border border-border rounded-2xl p-4 space-y-3">
+              <div className="grid sm:grid-cols-2 gap-3">
+                <FloatingInput label="Prénom" value={firstName} onChange={(e) => setFirstName(e.target.value)} autoFocus required />
+                <FloatingInput label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              </div>
+              <div className="flex gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => { setShowForm(false); setFirstName(""); setEmail(""); }}
+                  className="h-12 px-5 rounded-xl border border-border bg-card font-semibold hover:bg-muted transition"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  className="h-12 px-6 rounded-xl font-bold hover:opacity-95 active:scale-[0.99] transition"
+                  style={{ background: "#FF6B00", color: "#1A1A1A" }}
+                >
+                  Ajouter
+                </button>
+              </div>
+            </form>
+          ) : (
+            <button
+              onClick={() => setShowForm(true)}
+              className="mt-3 w-full h-12 rounded-xl border-2 bg-card font-semibold inline-flex items-center justify-center gap-2 hover:bg-muted transition"
+              style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+            >
+              <Plus className="h-5 w-5" strokeWidth={2} /> Ajouter un joueur
+            </button>
+          )}
+        </div>
+
+        <button
+          onClick={() =>
+            toast.success(`Rappel envoyé à ${pendingCount} joueur${pendingCount > 1 ? "s" : ""}`)
+          }
+          disabled={pendingCount === 0}
+          className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ background: "#22C55E" }}
+        >
+          <BellRing className="h-5 w-5" strokeWidth={2} />
+          Envoyer un rappel ({pendingCount} joueur{pendingCount > 1 ? "s" : ""})
+        </button>
+      </main>
+
+      <BottomNav active="reservations" />
+    </div>
+  );
+}

@@ -9,38 +9,135 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TerrainsRouteImport } from './routes/terrains'
+import { Route as MonMatchRouteImport } from './routes/mon-match'
+import { Route as InscriptionRouteImport } from './routes/inscription'
+import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TerrainIdRouteImport } from './routes/terrain.$id'
 
+const TerrainsRoute = TerrainsRouteImport.update({
+  id: '/terrains',
+  path: '/terrains',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonMatchRoute = MonMatchRouteImport.update({
+  id: '/mon-match',
+  path: '/mon-match',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InscriptionRoute = InscriptionRouteImport.update({
+  id: '/inscription',
+  path: '/inscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TerrainIdRoute = TerrainIdRouteImport.update({
+  id: '/terrain/$id',
+  path: '/terrain/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mon-match': typeof MonMatchRoute
+  '/terrains': typeof TerrainsRoute
+  '/terrain/$id': typeof TerrainIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mon-match': typeof MonMatchRoute
+  '/terrains': typeof TerrainsRoute
+  '/terrain/$id': typeof TerrainIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/connexion': typeof ConnexionRoute
+  '/inscription': typeof InscriptionRoute
+  '/mon-match': typeof MonMatchRoute
+  '/terrains': typeof TerrainsRoute
+  '/terrain/$id': typeof TerrainIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/connexion'
+    | '/inscription'
+    | '/mon-match'
+    | '/terrains'
+    | '/terrain/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/connexion'
+    | '/inscription'
+    | '/mon-match'
+    | '/terrains'
+    | '/terrain/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/connexion'
+    | '/inscription'
+    | '/mon-match'
+    | '/terrains'
+    | '/terrain/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConnexionRoute: typeof ConnexionRoute
+  InscriptionRoute: typeof InscriptionRoute
+  MonMatchRoute: typeof MonMatchRoute
+  TerrainsRoute: typeof TerrainsRoute
+  TerrainIdRoute: typeof TerrainIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terrains': {
+      id: '/terrains'
+      path: '/terrains'
+      fullPath: '/terrains'
+      preLoaderRoute: typeof TerrainsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mon-match': {
+      id: '/mon-match'
+      path: '/mon-match'
+      fullPath: '/mon-match'
+      preLoaderRoute: typeof MonMatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inscription': {
+      id: '/inscription'
+      path: '/inscription'
+      fullPath: '/inscription'
+      preLoaderRoute: typeof InscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +145,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terrain/$id': {
+      id: '/terrain/$id'
+      path: '/terrain/$id'
+      fullPath: '/terrain/$id'
+      preLoaderRoute: typeof TerrainIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConnexionRoute: ConnexionRoute,
+  InscriptionRoute: InscriptionRoute,
+  MonMatchRoute: MonMatchRoute,
+  TerrainsRoute: TerrainsRoute,
+  TerrainIdRoute: TerrainIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

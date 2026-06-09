@@ -1,9 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown } from "lucide-react";
+import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import basket1 from "@/assets/court-basket-1.jpg";
+import basket2 from "@/assets/court-basket-2.jpg";
+import basket3 from "@/assets/court-basket-3.jpg";
+import padel1 from "@/assets/court-padel-1.jpg";
+import padel2 from "@/assets/court-padel-2.jpg";
+import padel3 from "@/assets/court-padel-3.jpg";
 
 export const Route = createFileRoute("/terrains")({
   head: () => ({
@@ -32,22 +38,30 @@ type Terrain = {
 };
 
 const terrains: Terrain[] = [
-  // Originaux (v1) — affichés en premier
+  // Football primaires (3)
   { id: 1, name: "Terrain Municipal Avon", sport: "Football 5v5", distance: "2,3 km", rating: 4.6, reviews: 128, price: 40, available: true, primary: true, image: "https://images.unsplash.com/photo-1556056504-5c7696c4c28d?auto=format&fit=crop&w=600&q=70" },
   { id: 2, name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", distance: "3,8 km", rating: 4.3, reviews: 87, price: 45, available: true, primary: true, image: "https://images.unsplash.com/photo-1577223625816-7546f13df25d?auto=format&fit=crop&w=600&q=70" },
   { id: 3, name: "Stade Couvert de Nemours", sport: "Football 5v5", distance: "5,2 km", rating: 4.8, reviews: 54, price: 50, available: false, primary: true, image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=600&q=70" },
-  // Football 5v5
+  // Football secondaires
   { id: 11, name: "Stade Jean Bouin Melun", sport: "Football 5v5", distance: "4,1 km", rating: 4.4, reviews: 62, price: 38, available: true, image: "https://images.unsplash.com/photo-1459865264687-595d652de67e?auto=format&fit=crop&w=600&q=70" },
   { id: 12, name: "City Stade de Barbizon", sport: "Football 5v5", distance: "6,7 km", rating: 4.2, reviews: 41, price: 35, available: true, image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=70" },
   { id: 13, name: "Terrain Synthétique Moret", sport: "Football 5v5", distance: "8,3 km", rating: 4.0, reviews: 29, price: 42, available: false, image: "https://images.unsplash.com/photo-1486286701208-1d58e9338013?auto=format&fit=crop&w=600&q=70" },
-  // Basket à 5
-  { id: 21, name: "Gymnase Avon Centre", sport: "Basket à 5", distance: "1,8 km", rating: 4.5, reviews: 73, price: 30, available: true, image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=600&q=70" },
-  { id: 22, name: "Salle Polyvalente Fontainebleau", sport: "Basket à 5", distance: "3,2 km", rating: 4.1, reviews: 55, price: 28, available: true, image: "https://images.unsplash.com/photo-1518614846876-7e40c8b1f8ef?auto=format&fit=crop&w=600&q=70" },
-  { id: 23, name: "Complexe Nemours Sud", sport: "Basket à 5", distance: "6,1 km", rating: 3.9, reviews: 33, price: 32, available: false, image: "https://images.unsplash.com/photo-1505666287802-931582b5470c?auto=format&fit=crop&w=600&q=70" },
-  // Padel
-  { id: 31, name: "Club Padel Avon", sport: "Padel", distance: "2,9 km", rating: 4.7, reviews: 91, price: 25, available: true, image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=600&q=70" },
-  { id: 32, name: "Padel Arena Fontainebleau", sport: "Padel", distance: "4,4 km", rating: 4.5, reviews: 67, price: 22, available: true, image: "https://images.unsplash.com/photo-1599586120429-48281b6f0ece?auto=format&fit=crop&w=600&q=70" },
-  { id: 33, name: "Padel Club Moret", sport: "Padel", distance: "7,2 km", rating: 4.3, reviews: 48, price: 27, available: false, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=600&q=70" },
+  // Basket primaires (3)
+  { id: 21, name: "Gymnase Avon Centre", sport: "Basket à 5", distance: "1,8 km", rating: 4.5, reviews: 73, price: 30, available: true, primary: true, image: basket1 },
+  { id: 22, name: "Salle Polyvalente Fontainebleau", sport: "Basket à 5", distance: "3,2 km", rating: 4.1, reviews: 55, price: 28, available: true, primary: true, image: basket2 },
+  { id: 23, name: "Playground Nemours Sud", sport: "Basket à 5", distance: "6,1 km", rating: 3.9, reviews: 33, price: 32, available: false, primary: true, image: basket3 },
+  // Basket secondaires
+  { id: 24, name: "Gymnase Léo Lagrange", sport: "Basket à 5", distance: "4,7 km", rating: 4.3, reviews: 48, price: 29, available: true, image: basket1 },
+  { id: 25, name: "Complexe Bois-le-Roi", sport: "Basket à 5", distance: "7,4 km", rating: 4.0, reviews: 36, price: 27, available: true, image: basket2 },
+  { id: 26, name: "Halle des Sports Moret", sport: "Basket à 5", distance: "9,1 km", rating: 4.2, reviews: 25, price: 33, available: false, image: basket3 },
+  // Padel primaires (3)
+  { id: 31, name: "Club Padel Avon", sport: "Padel", distance: "2,9 km", rating: 4.7, reviews: 91, price: 25, available: true, primary: true, image: padel1 },
+  { id: 32, name: "Padel Arena Fontainebleau", sport: "Padel", distance: "4,4 km", rating: 4.5, reviews: 67, price: 22, available: true, primary: true, image: padel2 },
+  { id: 33, name: "Padel Club Moret", sport: "Padel", distance: "7,2 km", rating: 4.3, reviews: 48, price: 27, available: false, primary: true, image: padel3 },
+  // Padel secondaires
+  { id: 34, name: "Padel Indoor Melun", sport: "Padel", distance: "5,8 km", rating: 4.6, reviews: 54, price: 26, available: true, image: padel1 },
+  { id: 35, name: "Padel Garden Barbizon", sport: "Padel", distance: "6,9 km", rating: 4.4, reviews: 38, price: 24, available: true, image: padel2 },
+  { id: 36, name: "Padel Center Nemours", sport: "Padel", distance: "8,5 km", rating: 4.2, reviews: 29, price: 28, available: false, image: padel3 },
 ];
 
 function Stars({ rating }: { rating: number }) {
@@ -197,14 +211,25 @@ function TerrainsPage() {
           })}
         </ul>
 
-        {!showAll && filtered.length > 3 && (
+        {filtered.length > 3 && (
           <div className="mt-6 flex justify-center">
             <button
-              onClick={() => setShowAll(true)}
+              onClick={() => {
+                if (showAll) {
+                  setShowAll(false);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  setShowAll(true);
+                }
+              }}
               className="inline-flex items-center gap-2 h-12 px-6 rounded-xl border-2 bg-card font-semibold hover:bg-muted transition"
               style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
             >
-              Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} />
+              {showAll ? (
+                <>Voir moins de terrains <ChevronUp className="h-4 w-4" strokeWidth={2} /></>
+              ) : (
+                <>Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} /></>
+              )}
             </button>
           </div>
         )}

@@ -1,8 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, MapPin, Star, Check } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarUI } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/terrain/$id")({
   head: () => ({
@@ -49,160 +52,66 @@ function nextHour(t: string) {
   return `${String((h + 1) % 24).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
-// Constantes fictives — créneaux par jour
-const SLOTS_BY_DAY: Record<string, Slot[]> = {
-  "2026-05-25": [
-    { id: "a", time: "09:00", price: 35, status: "available" },
-    { id: "b", time: "11:00", price: 40, status: "full" },
-    { id: "c", time: "14:00", price: 40, status: "available" },
-    { id: "d", time: "16:00", price: 50, status: "available" },
-    { id: "e", time: "18:00", price: 60, status: "available" },
-    { id: "f", time: "20:00", price: 60, status: "full" },
-  ],
-  "2026-05-26": [
-    { id: "a", time: "10:00", price: 35, status: "available" },
-    { id: "b", time: "12:00", price: 40, status: "available" },
-    { id: "c", time: "15:00", price: 45, status: "full" },
-    { id: "d", time: "17:00", price: 55, status: "available" },
-    { id: "e", time: "19:00", price: 65, status: "available" },
-    { id: "f", time: "21:00", price: 55, status: "available" },
-  ],
-  "2026-05-27": [
-    { id: "a", time: "09:00", price: 30, status: "available" },
-    { id: "b", time: "11:00", price: 35, status: "available" },
-    { id: "c", time: "14:00", price: 40, status: "available" },
-    { id: "d", time: "16:00", price: 45, status: "full" },
-    { id: "e", time: "18:00", price: 55, status: "full" },
-    { id: "f", time: "20:00", price: 50, status: "available" },
-  ],
-  "2026-05-28": [
-    { id: "a", time: "10:00", price: 35, status: "available" },
-    { id: "b", time: "13:00", price: 40, status: "available" },
-    { id: "c", time: "15:00", price: 45, status: "available" },
-    { id: "d", time: "17:00", price: 55, status: "available" },
-    { id: "e", time: "19:00", price: 65, status: "full" },
-    { id: "f", time: "21:00", price: 60, status: "available" },
-  ],
-  "2026-05-29": [
-    { id: "a", time: "11:00", price: 40, status: "available" },
-    { id: "b", time: "14:00", price: 45, status: "available" },
-    { id: "c", time: "16:00", price: 50, status: "available" },
-    { id: "d", time: "18:00", price: 70, status: "available" },
-    { id: "e", time: "20:00", price: 80, status: "available" },
-    { id: "f", time: "22:00", price: 60, status: "available" },
-  ],
-  "2026-05-30": [
-    { id: "a", time: "09:00", price: 45, status: "available" },
-    { id: "b", time: "11:00", price: 50, status: "full" },
-    { id: "c", time: "13:00", price: 55, status: "available" },
-    { id: "d", time: "15:00", price: 70, status: "available" },
-    { id: "e", time: "17:00", price: 80, status: "full" },
-    { id: "f", time: "19:00", price: 85, status: "available" },
-  ],
-  "2026-05-31": [
-    { id: "a", time: "10:00", price: 40, status: "available" },
-    { id: "b", time: "12:00", price: 40, status: "available" },
-    { id: "c", time: "14:00", price: 80, status: "available" },
-    { id: "d", time: "16:00", price: 80, status: "available" },
-    { id: "e", time: "18:00", price: 90, status: "full" },
-    { id: "f", time: "20:00", price: 70, status: "available" },
-  ],
-  "2026-06-01": [
-    { id: "a", time: "09:00", price: 35, status: "available" },
-    { id: "b", time: "11:00", price: 40, status: "available" },
-    { id: "c", time: "14:00", price: 45, status: "full" },
-    { id: "d", time: "16:00", price: 55, status: "available" },
-    { id: "e", time: "18:00", price: 65, status: "available" },
-    { id: "f", time: "20:00", price: 60, status: "available" },
-  ],
-  "2026-06-02": [
-    { id: "a", time: "10:00", price: 40, status: "available" },
-    { id: "b", time: "12:00", price: 45, status: "available" },
-    { id: "c", time: "15:00", price: 50, status: "available" },
-    { id: "d", time: "17:00", price: 60, status: "full" },
-    { id: "e", time: "19:00", price: 70, status: "available" },
-    { id: "f", time: "21:00", price: 60, status: "available" },
-  ],
-  "2026-06-03": [
-    { id: "a", time: "09:00", price: 35, status: "full" },
-    { id: "b", time: "11:00", price: 40, status: "available" },
-    { id: "c", time: "14:00", price: 45, status: "available" },
-    { id: "d", time: "16:00", price: 55, status: "available" },
-    { id: "e", time: "18:00", price: 65, status: "available" },
-    { id: "f", time: "20:00", price: 55, status: "available" },
-  ],
-  "2026-06-04": [
-    { id: "a", time: "10:00", price: 40, status: "available" },
-    { id: "b", time: "12:00", price: 45, status: "full" },
-    { id: "c", time: "15:00", price: 50, status: "available" },
-    { id: "d", time: "17:00", price: 60, status: "available" },
-    { id: "e", time: "19:00", price: 70, status: "available" },
-    { id: "f", time: "21:00", price: 60, status: "available" },
-  ],
-  "2026-06-05": [
-    { id: "a", time: "11:00", price: 45, status: "available" },
-    { id: "b", time: "14:00", price: 50, status: "available" },
-    { id: "c", time: "16:00", price: 55, status: "available" },
-    { id: "d", time: "18:00", price: 75, status: "available" },
-    { id: "e", time: "20:00", price: 85, status: "available" },
-    { id: "f", time: "22:00", price: 65, status: "available" },
-  ],
-  "2026-06-06": [
-    { id: "a", time: "09:00", price: 50, status: "available" },
-    { id: "b", time: "11:00", price: 55, status: "available" },
-    { id: "c", time: "13:00", price: 60, status: "full" },
-    { id: "d", time: "15:00", price: 75, status: "available" },
-    { id: "e", time: "17:00", price: 85, status: "available" },
-    { id: "f", time: "19:00", price: 90, status: "full" },
-  ],
-  "2026-06-07": [
-    { id: "a", time: "10:00", price: 45, status: "available" },
-    { id: "b", time: "12:00", price: 50, status: "available" },
-    { id: "c", time: "14:00", price: 60, status: "available" },
-    { id: "d", time: "16:00", price: 75, status: "available" },
-    { id: "e", time: "18:00", price: 85, status: "full" },
-    { id: "f", time: "20:00", price: 70, status: "available" },
-  ],
-  "2026-07-05": [
-    { id: "a", time: "10:00", price: 50, status: "available" },
-    { id: "b", time: "12:00", price: 55, status: "available" },
-    { id: "c", time: "14:00", price: 60, status: "available" },
-    { id: "d", time: "16:00", price: 70, status: "full" },
-    { id: "e", time: "18:00", price: 80, status: "available" },
-    { id: "f", time: "20:00", price: 75, status: "available" },
-  ],
-};
+const BASE_TIMES = ["09:00", "11:00", "14:00", "16:00", "18:00", "20:00"] as const;
+const BASE_PRICES = [35, 40, 45, 55, 65, 60];
+
+function startOfDay(d: Date) {
+  const r = new Date(d);
+  r.setHours(0, 0, 0, 0);
+  return r;
+}
+function mondayOf(d: Date) {
+  const dow = (d.getDay() + 6) % 7;
+  return addDays(startOfDay(d), -dow);
+}
+function diffDays(a: Date, b: Date) {
+  return Math.round((startOfDay(a).getTime() - startOfDay(b).getTime()) / 86400000);
+}
+
+function buildSlotsForDay(dayIndex: number): Slot[] {
+  return BASE_TIMES.map((time, i) => {
+    // déterministe : ~20% complets
+    const full = (dayIndex * 7 + i * 3) % 5 === 0;
+    const priceVar = ((dayIndex + i) % 4) * 5;
+    return {
+      id: String.fromCharCode(97 + i),
+      time,
+      price: BASE_PRICES[i] + priceVar,
+      status: full ? "full" : "available",
+    };
+  });
+}
 
 function SlotPage() {
   const navigate = useNavigate();
-  const [weekStart, setWeekStart] = useState<Date>(new Date(2026, 4, 25)); // Lun 25 mai 2026
-  const [selectedDayISO, setSelectedDayISO] = useState<string>("2026-05-31");
-  const [selectedSlotId, setSelectedSlotId] = useState<string>("c");
-  const [calendarOpen, setCalendarOpen] = useState(false);
-  const calendarRef = useRef<HTMLDivElement | null>(null);
 
-  // Close popover on outside click
-  useEffect(() => {
-    if (!calendarOpen) return;
-    const onClick = (e: MouseEvent) => {
-      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
-        setCalendarOpen(false);
-      }
-    };
-    window.addEventListener("mousedown", onClick);
-    return () => window.removeEventListener("mousedown", onClick);
-  }, [calendarOpen]);
+  // Aujourd'hui figé au mount + fenêtre 30 jours
+  const today = useMemo(() => startOfDay(new Date()), []);
+  const maxDate = useMemo(() => addDays(today, 29), [today]);
+
+  const [weekStart, setWeekStart] = useState<Date>(() => mondayOf(today));
+  const [selectedDayISO, setSelectedDayISO] = useState<string>(() => toISO(today));
+  const [selectedSlotId, setSelectedSlotId] = useState<string>("a");
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   const days = useMemo(
     () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
     [weekStart],
   );
 
-  const slots = SLOTS_BY_DAY[selectedDayISO] ?? [];
+  // Construit créneaux pour le jour sélectionné si dans la fenêtre 30 jours
+  const slots = useMemo(() => {
+    const d = new Date(selectedDayISO + "T00:00:00");
+    const idx = diffDays(d, today);
+    if (idx < 0 || idx > 29) return [];
+    return buildSlotsForDay(idx);
+  }, [selectedDayISO, today]);
+
   const selectedDate = new Date(selectedDayISO + "T00:00:00");
   const selectedSlot = slots.find((s) => s.id === selectedSlotId && s.status === "available");
+  const dayAvailable = slots.some((s) => s.status === "available");
 
-  // Quand le jour change, si le slot sélectionné n'existe pas ou est complet, prendre le 1er dispo
+  // Si jour change, recale slot sélectionné si complet/inexistant
   useEffect(() => {
     if (!slots.length) return;
     const current = slots.find((s) => s.id === selectedSlotId);
@@ -213,21 +122,21 @@ function SlotPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDayISO]);
 
-  const pickMonth = (year: number, month0: number) => {
-    // place sur le 1er lundi du mois (ou 1er jour visible)
-    const first = new Date(year, month0, 1);
-    // recule jusqu'au lundi précédent (ou même jour si lundi)
-    const dow = (first.getDay() + 6) % 7;
-    const monday = addDays(first, -dow);
-    setWeekStart(monday);
-    // sélectionne le 1er jour ayant des créneaux dans cette semaine
-    for (let i = 0; i < 7; i++) {
-      const iso = toISO(addDays(monday, i));
-      if (SLOTS_BY_DAY[iso]) {
-        setSelectedDayISO(iso);
-        break;
-      }
-    }
+  // Bornes navigation semaine
+  const canPrevWeek = diffDays(weekStart, mondayOf(today)) > 0;
+  const canNextWeek = diffDays(addDays(weekStart, 7), maxDate) <= 0;
+
+  const goToday = () => {
+    setSelectedDayISO(toISO(today));
+    setWeekStart(mondayOf(today));
+    setCalendarOpen(false);
+  };
+
+  const onPickDate = (d: Date | undefined) => {
+    if (!d) return;
+    const iso = toISO(d);
+    setSelectedDayISO(iso);
+    setWeekStart(mondayOf(d));
     setCalendarOpen(false);
   };
 
@@ -246,9 +155,15 @@ function SlotPage() {
 
           <div className="mt-2 flex items-center gap-3 flex-wrap">
             <h1 className="text-2xl sm:text-3xl font-bold">Terrain Municipal Avon</h1>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
-              <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
-            </span>
+            {dayAvailable ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
+                <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#9CA3AF", color: "#fff" }}>
+                <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet ce jour
+              </span>
+            )}
           </div>
 
           <div className="mt-1 flex items-center gap-3 text-sm text-muted-foreground">
@@ -268,52 +183,50 @@ function SlotPage() {
           <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
             <div className="inline-flex items-center gap-3">
               <button
-                onClick={() => setWeekStart((d) => addDays(d, -7))}
-                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition"
+                onClick={() => canPrevWeek && setWeekStart((d) => addDays(d, -7))}
+                disabled={!canPrevWeek}
+                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed"
                 aria-label="Semaine précédente"
               >
                 <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
               </button>
               <p className="font-semibold">{formatLong(selectedDate)}</p>
               <button
-                onClick={() => setWeekStart((d) => addDays(d, 7))}
-                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition"
+                onClick={() => canNextWeek && setWeekStart((d) => addDays(d, 7))}
+                disabled={!canNextWeek}
+                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed"
                 aria-label="Semaine suivante"
               >
                 <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
               </button>
             </div>
-            <div className="relative" ref={calendarRef}>
-              <button
-                onClick={() => setCalendarOpen((v) => !v)}
-                className="inline-flex items-center gap-2 h-10 px-3 rounded-xl border border-border bg-card text-sm font-medium hover:bg-muted transition"
-              >
-                <CalendarDays className="h-4 w-4" strokeWidth={1.75} /> Calendrier
-              </button>
-              {calendarOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-xl shadow-lg z-30 p-2 animate-in fade-in slide-in-from-top-1 duration-200">
-                  <p className="px-3 py-2 text-xs font-bold tracking-wider text-muted-foreground uppercase">Mois</p>
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+              <PopoverTrigger asChild>
+                <button className="inline-flex items-center gap-2 h-10 px-3 rounded-xl border border-border bg-card text-sm font-medium hover:bg-muted transition">
+                  <CalendarDays className="h-4 w-4" strokeWidth={1.75} /> Calendrier
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <div className="p-2 border-b border-border">
                   <button
-                    onClick={() => pickMonth(2026, 4)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted text-sm font-medium transition"
+                    onClick={goToday}
+                    className="w-full h-10 rounded-lg font-semibold text-sm hover:opacity-95 transition"
+                    style={{ background: "#FF6B00", color: "#1A1A1A" }}
                   >
-                    Mai 2026
-                  </button>
-                  <button
-                    onClick={() => pickMonth(2026, 5)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted text-sm font-medium transition"
-                  >
-                    Juin 2026
-                  </button>
-                  <button
-                    onClick={() => pickMonth(2026, 6)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted text-sm font-medium transition"
-                  >
-                    Juillet 2026
+                    Aujourd'hui
                   </button>
                 </div>
-              )}
-            </div>
+                <CalendarUI
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={onPickDate}
+                  disabled={{ before: today, after: maxDate }}
+                  defaultMonth={selectedDate}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="mt-4 grid grid-cols-7 gap-2">

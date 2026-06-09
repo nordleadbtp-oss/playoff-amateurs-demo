@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
 import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, MapPin, Star, Check } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
@@ -82,8 +82,27 @@ function buildSlotsForDay(dayIndex: number): Slot[] {
   });
 }
 
+const TERRAIN_DATA: Record<string, { name: string; sport: string; distance: string; rating: number; emoji: string }> = {
+  "1":  { name: "Terrain Municipal Avon",           sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽" },
+  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", distance: "3,8 km", rating: 4.3, emoji: "⚽" },
+  "11": { name: "Stade Jean Bouin Melun",            sport: "Football 5v5", distance: "4,1 km", rating: 4.4, emoji: "⚽" },
+  "12": { name: "City Stade de Barbizon",            sport: "Football 5v5", distance: "6,7 km", rating: 4.2, emoji: "⚽" },
+  "21": { name: "Gymnase Avon Centre",               sport: "Basket à 5",  distance: "1,8 km", rating: 4.5, emoji: "🏀" },
+  "22": { name: "Salle Polyvalente Fontainebleau",   sport: "Basket à 5",  distance: "3,2 km", rating: 4.1, emoji: "🏀" },
+  "24": { name: "Gymnase Léo Lagrange",              sport: "Basket à 5",  distance: "4,7 km", rating: 4.3, emoji: "🏀" },
+  "25": { name: "Complexe Bois-le-Roi",              sport: "Basket à 5",  distance: "7,4 km", rating: 4.0, emoji: "🏀" },
+  "31": { name: "Club Padel Avon",                   sport: "Padel",        distance: "2,9 km", rating: 4.7, emoji: "🎾" },
+  "32": { name: "Padel Arena Fontainebleau",         sport: "Padel",        distance: "4,4 km", rating: 4.5, emoji: "🎾" },
+  "34": { name: "Padel Indoor Melun",                sport: "Padel",        distance: "5,8 km", rating: 4.6, emoji: "🎾" },
+  "35": { name: "Padel Garden Barbizon",             sport: "Padel",        distance: "6,9 km", rating: 4.4, emoji: "🎾" },
+};
+
+const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽" };
+
 function SlotPage() {
   const navigate = useNavigate();
+  const { id } = useParams({ from: "/terrain/$id" });
+  const terrain = TERRAIN_DATA[id] ?? DEFAULT_TERRAIN;
 
   // Aujourd'hui figé au mount + fenêtre 30 jours
   const today = useMemo(() => startOfDay(new Date()), []);
@@ -154,7 +173,7 @@ function SlotPage() {
           </Link>
 
           <div className="mt-2 flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-bold">Terrain Municipal Avon</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">{terrain.name}</h1>
             {dayAvailable ? (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
                 <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
@@ -295,10 +314,10 @@ function SlotPage() {
 
           <div className="bg-card border border-border rounded-2xl p-4">
             <div className="flex items-start gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 inline-flex items-center justify-center text-xl" aria-hidden>⚽</div>
+              <div className="h-10 w-10 rounded-full bg-primary/10 inline-flex items-center justify-center text-xl" aria-hidden>{terrain.emoji}</div>
               <div>
-                <p className="font-bold leading-tight">Terrain Municipal Avon</p>
-                <p className="text-sm text-muted-foreground">Football 5v5 · 📍 2 km</p>
+                <p className="font-bold leading-tight">{terrain.name}</p>
+                <p className="text-sm text-muted-foreground">{terrain.sport} · 📍 {terrain.distance}</p>
               </div>
             </div>
           </div>

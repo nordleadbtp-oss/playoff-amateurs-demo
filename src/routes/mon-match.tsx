@@ -225,6 +225,13 @@ function MonMatchPage() {
             <p className="text-sm text-muted-foreground mb-5">Choisissez le canal d'envoi aux joueurs.</p>
             <div className="space-y-3">
               <button
+                onClick={() => { setShareOpen(false); toast.success("Lien copié — ouvre WhatsApp pour le coller"); }}
+                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+                style={{ background: "#25D366", color: "#fff" }}
+              >
+                💬 Partager via WhatsApp
+              </button>
+              <button
                 onClick={() => { setShareOpen(false); toast.success("SMS envoyé aux joueurs"); }}
                 className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
                 style={{ background: "#FF6B00", color: "#1A1A1A" }}

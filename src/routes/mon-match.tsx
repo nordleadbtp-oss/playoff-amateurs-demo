@@ -233,8 +233,8 @@ function MonMatchPage() {
               </button>
               <button
                 onClick={() => { setShareOpen(false); toast.success("SMS envoyé aux joueurs"); }}
-                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
-                style={{ background: "#FF6B00", color: "#1A1A1A" }}
+                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition"
+                style={{ background: "#0D1B4B", color: "#fff" }}
               >
                 📱 Envoyer par SMS
               </button>

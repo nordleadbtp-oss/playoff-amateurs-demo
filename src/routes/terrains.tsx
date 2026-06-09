@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp } from "lucide-react";
-import { useMemo, useState } from "react";
+import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp, X } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
@@ -23,6 +23,17 @@ export const Route = createFileRoute("/terrains")({
 
 const sports = ["Tous sports", "Football 5v5", "Basket à 5", "Padel"] as const;
 type Sport = (typeof sports)[number];
+
+const VILLES_IDF = [
+  "Avon (77310)", "Fontainebleau (77300)", "Melun (77000)", "Barbizon (77630)",
+  "Nemours (77140)", "Moret-sur-Loing (77250)", "Bois-le-Roi (77590)",
+  "Milly-la-Forêt (91490)", "Étampes (91150)", "Évry-Courcouronnes (91000)",
+  "Corbeil-Essonnes (91100)", "Lieusaint (77127)", "Pontault-Combault (77340)",
+  "Meaux (77100)", "Provins (77160)", "Chelles (77500)", "Lagny-sur-Marne (77400)",
+  "Noisiel (77186)", "Torcy (77200)", "Lognes (77185)",
+  "Paris (75001)", "Vincennes (94300)", "Créteil (94000)", "Montreuil (93100)",
+  "Saint-Denis (93200)", "Bobigny (93000)", "Versailles (78000)",
+];
 
 type Terrain = {
   id: number;
@@ -84,6 +95,9 @@ function Stars({ rating }: { rating: number }) {
 function TerrainsPage() {
   const [active, setActive] = useState<Sport>("Football 5v5");
   const [showAll, setShowAll] = useState(false);
+  const [villeQuery, setVilleQuery] = useState("Avon (77310)");
+  const [villeSuggestions, setVilleSuggestions] = useState<string[]>([]);
+  const villeRef = useRef<HTMLDivElement>(null);
 
   const filtered = useMemo(() => {
     if (active === "Tous sports") {
@@ -108,13 +122,50 @@ function TerrainsPage() {
         </h1>
 
         <div className="mt-5 flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <div className="relative flex-1">
-            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
+          <div className="relative flex-1" ref={villeRef}>
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground z-10" strokeWidth={1.75} />
             <input
-              defaultValue="Avon (77310)"
+              value={villeQuery}
+              onChange={(e) => {
+                const q = e.target.value;
+                setVilleQuery(q);
+                if (q.length >= 2) {
+                  setVilleSuggestions(
+                    VILLES_IDF.filter((v) => v.toLowerCase().includes(q.toLowerCase())).slice(0, 6)
+                  );
+                } else {
+                  setVilleSuggestions([]);
+                }
+              }}
+              onBlur={() => setTimeout(() => setVilleSuggestions([]), 150)}
               aria-label="Ville"
-              className="w-full h-12 sm:h-14 pl-12 pr-4 rounded-xl bg-card border border-border outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 text-base font-medium"
+              placeholder="Ville ou code postal"
+              className="w-full h-12 sm:h-14 pl-12 pr-9 rounded-xl bg-card border border-border outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 text-base font-medium"
             />
+            {villeQuery && (
+              <button
+                onMouseDown={(e) => { e.preventDefault(); setVilleQuery(""); setVilleSuggestions([]); }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full hover:bg-muted inline-flex items-center justify-center text-muted-foreground"
+                aria-label="Effacer"
+              >
+                <X className="h-3.5 w-3.5" strokeWidth={2} />
+              </button>
+            )}
+            {villeSuggestions.length > 0 && (
+              <ul className="absolute left-0 right-0 top-full mt-1 bg-card border border-border rounded-xl shadow-lg z-30 overflow-hidden">
+                {villeSuggestions.map((v) => (
+                  <li key={v}>
+                    <button
+                      onMouseDown={(e) => { e.preventDefault(); setVilleQuery(v); setVilleSuggestions([]); }}
+                      className="w-full text-left px-4 py-2.5 text-sm font-medium hover:bg-muted transition flex items-center gap-2"
+                    >
+                      <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={1.75} />
+                      {v}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="relative flex-1 sm:max-w-xs">
             <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" strokeWidth={1.75} />

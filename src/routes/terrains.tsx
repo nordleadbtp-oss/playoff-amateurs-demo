@@ -211,14 +211,25 @@ function TerrainsPage() {
           })}
         </ul>
 
-        {!showAll && filtered.length > 3 && (
+        {filtered.length > 3 && (
           <div className="mt-6 flex justify-center">
             <button
-              onClick={() => setShowAll(true)}
+              onClick={() => {
+                if (showAll) {
+                  setShowAll(false);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  setShowAll(true);
+                }
+              }}
               className="inline-flex items-center gap-2 h-12 px-6 rounded-xl border-2 bg-card font-semibold hover:bg-muted transition"
               style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
             >
-              Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} />
+              {showAll ? (
+                <>Voir moins de terrains <ChevronUp className="h-4 w-4" strokeWidth={2} /></>
+              ) : (
+                <>Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} /></>
+              )}
             </button>
           </div>
         )}

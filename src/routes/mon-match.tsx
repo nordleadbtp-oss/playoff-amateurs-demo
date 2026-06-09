@@ -208,6 +208,41 @@ function MonMatchPage() {
         </button>
       </main>
 
+      {shareOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="absolute inset-0 bg-black/50 animate-in fade-in duration-200" onClick={() => setShareOpen(false)} />
+          <div className="relative w-full sm:max-w-md bg-card rounded-t-2xl sm:rounded-2xl shadow-xl p-6 animate-in slide-in-from-bottom duration-200">
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="font-bold text-lg" style={{ color: "#0D1B4B" }}>Partager le lien de paiement</h3>
+              <button
+                onClick={() => setShareOpen(false)}
+                className="h-9 w-9 rounded-full hover:bg-muted inline-flex items-center justify-center"
+                aria-label="Fermer"
+              >
+                <X className="h-5 w-5" strokeWidth={2} />
+              </button>
+            </div>
+            <p className="text-sm text-muted-foreground mb-5">Choisissez le canal d'envoi aux joueurs.</p>
+            <div className="space-y-3">
+              <button
+                onClick={() => { setShareOpen(false); toast.success("SMS envoyé aux joueurs"); }}
+                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+                style={{ background: "#FF6B00", color: "#1A1A1A" }}
+              >
+                📱 Envoyer par SMS
+              </button>
+              <button
+                onClick={() => { setShareOpen(false); toast.success("Mail envoyé aux joueurs"); }}
+                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 border-2 bg-card hover:bg-muted transition"
+                style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+              >
+                ✉️ Envoyer par mail
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <BottomNav active="reservations" />
     </div>
   );

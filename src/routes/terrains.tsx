@@ -69,6 +69,7 @@ function Stars({ rating }: { rating: number }) {
 
 function TerrainsPage() {
   const [active, setActive] = useState<Sport>("Football 5v5");
+  const [showAll, setShowAll] = useState(false);
 
   const filtered = useMemo(() => {
     if (active === "Tous sports") {
@@ -80,6 +81,8 @@ function TerrainsPage() {
     // primary first
     return [...list.filter((t) => t.primary), ...list.filter((t) => !t.primary)];
   }, [active]);
+
+  const visible = showAll ? filtered : filtered.slice(0, 3);
 
   return (
     <div className="min-h-screen pb-24 md:pb-12">
@@ -127,7 +130,7 @@ function TerrainsPage() {
             return (
               <button
                 key={s}
-                onClick={() => setActive(s)}
+                onClick={() => { setActive(s); setShowAll(false); }}
                 className={`shrink-0 h-10 px-4 rounded-full text-sm font-semibold border transition ${
                   isActive
                     ? "bg-primary text-primary-foreground border-primary"
@@ -141,7 +144,7 @@ function TerrainsPage() {
         </div>
 
         <ul className="mt-6 space-y-4">
-          {filtered.map((t) => {
+          {visible.map((t) => {
             const Wrapper: typeof Link | "div" = t.available ? Link : "div";
             const wrapperProps = t.available
               ? { to: "/terrain/$id", params: { id: String(t.id) } }
@@ -194,9 +197,17 @@ function TerrainsPage() {
           })}
         </ul>
 
-        <button className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline underline-offset-4 hover:text-primary transition">
-          Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} />
-        </button>
+        {!showAll && filtered.length > 3 && (
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => setShowAll(true)}
+              className="inline-flex items-center gap-2 h-12 px-6 rounded-xl border-2 bg-card font-semibold hover:bg-muted transition"
+              style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+            >
+              Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} />
+            </button>
+          </div>
+        )}
       </main>
 
       <BottomNav active="terrains" />

@@ -130,7 +130,7 @@ function TerrainsPage() {
             return (
               <button
                 key={s}
-                onClick={() => setActive(s)}
+                onClick={() => { setActive(s); setShowAll(false); }}
                 className={`shrink-0 h-10 px-4 rounded-full text-sm font-semibold border transition ${
                   isActive
                     ? "bg-primary text-primary-foreground border-primary"
@@ -144,7 +144,7 @@ function TerrainsPage() {
         </div>
 
         <ul className="mt-6 space-y-4">
-          {filtered.map((t) => {
+          {visible.map((t) => {
             const Wrapper: typeof Link | "div" = t.available ? Link : "div";
             const wrapperProps = t.available
               ? { to: "/terrain/$id", params: { id: String(t.id) } }

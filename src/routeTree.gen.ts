@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TerrainsRouteImport } from './routes/terrains'
 import { Route as MonMatchRouteImport } from './routes/mon-match'
+import { Route as MesReservationsRouteImport } from './routes/mes-reservations'
 import { Route as InscriptionRouteImport } from './routes/inscription'
 import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as IndexRouteImport } from './routes/index'
@@ -24,6 +25,11 @@ const TerrainsRoute = TerrainsRouteImport.update({
 const MonMatchRoute = MonMatchRouteImport.update({
   id: '/mon-match',
   path: '/mon-match',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MesReservationsRoute = MesReservationsRouteImport.update({
+  id: '/mes-reservations',
+  path: '/mes-reservations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InscriptionRoute = InscriptionRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/mes-reservations': typeof MesReservationsRoute
   '/mon-match': typeof MonMatchRoute
   '/terrains': typeof TerrainsRoute
   '/terrain/$id': typeof TerrainIdRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/mes-reservations': typeof MesReservationsRoute
   '/mon-match': typeof MonMatchRoute
   '/terrains': typeof TerrainsRoute
   '/terrain/$id': typeof TerrainIdRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/connexion': typeof ConnexionRoute
   '/inscription': typeof InscriptionRoute
+  '/mes-reservations': typeof MesReservationsRoute
   '/mon-match': typeof MonMatchRoute
   '/terrains': typeof TerrainsRoute
   '/terrain/$id': typeof TerrainIdRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/inscription'
+    | '/mes-reservations'
     | '/mon-match'
     | '/terrains'
     | '/terrain/$id'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/inscription'
+    | '/mes-reservations'
     | '/mon-match'
     | '/terrains'
     | '/terrain/$id'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/connexion'
     | '/inscription'
+    | '/mes-reservations'
     | '/mon-match'
     | '/terrains'
     | '/terrain/$id'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConnexionRoute: typeof ConnexionRoute
   InscriptionRoute: typeof InscriptionRoute
+  MesReservationsRoute: typeof MesReservationsRoute
   MonMatchRoute: typeof MonMatchRoute
   TerrainsRoute: typeof TerrainsRoute
   TerrainIdRoute: typeof TerrainIdRoute
@@ -122,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/mon-match'
       fullPath: '/mon-match'
       preLoaderRoute: typeof MonMatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mes-reservations': {
+      id: '/mes-reservations'
+      path: '/mes-reservations'
+      fullPath: '/mes-reservations'
+      preLoaderRoute: typeof MesReservationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inscription': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConnexionRoute: ConnexionRoute,
   InscriptionRoute: InscriptionRoute,
+  MesReservationsRoute: MesReservationsRoute,
   MonMatchRoute: MonMatchRoute,
   TerrainsRoute: TerrainsRoute,
   TerrainIdRoute: TerrainIdRoute,

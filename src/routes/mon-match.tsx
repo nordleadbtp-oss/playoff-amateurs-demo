@@ -111,13 +111,21 @@ function MonMatchPage() {
             <span style={{ color: "#FF6B00" }}>{pricePerPlayer} €</span>
           </p>
           <p className="text-sm opacity-80 mt-1">par joueur · tout compris</p>
-          <button
-            onClick={() => toast.success("Lien copié !", { description: "Partagez-le avec vos coéquipiers." })}
-            className="mt-3 inline-flex items-center gap-2 font-semibold hover:underline underline-offset-4"
-            style={{ color: "#FF6B00" }}
-          >
-            <Mail className="h-4 w-4" strokeWidth={1.75} /> Partager le lien de paiement
-          </button>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button
+              onClick={() => toast.success("SMS envoyé aux joueurs")}
+              className="h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+              style={{ background: "#FF6B00", color: "#1A1A1A" }}
+            >
+              📱 Envoyer par SMS
+            </button>
+            <button
+              onClick={() => toast.success("Mail envoyé aux joueurs")}
+              className="h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 bg-white text-primary hover:opacity-95 active:scale-[0.99] transition"
+            >
+              ✉️ Envoyer par mail
+            </button>
+          </div>
         </div>
 
         <div className="bg-card border border-border rounded-2xl p-4">

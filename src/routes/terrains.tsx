@@ -197,9 +197,17 @@ function TerrainsPage() {
           })}
         </ul>
 
-        <button className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline underline-offset-4 hover:text-primary transition">
-          Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} />
-        </button>
+        {!showAll && filtered.length > 3 && (
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => setShowAll(true)}
+              className="inline-flex items-center gap-2 h-12 px-6 rounded-xl border-2 bg-card font-semibold hover:bg-muted transition"
+              style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+            >
+              Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} />
+            </button>
+          </div>
+        )}
       </main>
 
       <BottomNav active="terrains" />

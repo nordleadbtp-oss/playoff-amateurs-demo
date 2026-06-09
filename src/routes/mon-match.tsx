@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Mail, Plus, BellRing, CheckCircle2, Clock } from "lucide-react";
+import { ArrowLeft, Plus, BellRing, CheckCircle2, Clock } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";

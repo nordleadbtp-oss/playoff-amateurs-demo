@@ -155,9 +155,15 @@ function SlotPage() {
 
           <div className="mt-2 flex items-center gap-3 flex-wrap">
             <h1 className="text-2xl sm:text-3xl font-bold">Terrain Municipal Avon</h1>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
-              <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
-            </span>
+            {dayAvailable ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
+                <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#9CA3AF", color: "#fff" }}>
+                <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet ce jour
+              </span>
+            )}
           </div>
 
           <div className="mt-1 flex items-center gap-3 text-sm text-muted-foreground">
@@ -177,52 +183,50 @@ function SlotPage() {
           <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
             <div className="inline-flex items-center gap-3">
               <button
-                onClick={() => setWeekStart((d) => addDays(d, -7))}
-                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition"
+                onClick={() => canPrevWeek && setWeekStart((d) => addDays(d, -7))}
+                disabled={!canPrevWeek}
+                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed"
                 aria-label="Semaine précédente"
               >
                 <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
               </button>
               <p className="font-semibold">{formatLong(selectedDate)}</p>
               <button
-                onClick={() => setWeekStart((d) => addDays(d, 7))}
-                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition"
+                onClick={() => canNextWeek && setWeekStart((d) => addDays(d, 7))}
+                disabled={!canNextWeek}
+                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed"
                 aria-label="Semaine suivante"
               >
                 <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
               </button>
             </div>
-            <div className="relative" ref={calendarRef}>
-              <button
-                onClick={() => setCalendarOpen((v) => !v)}
-                className="inline-flex items-center gap-2 h-10 px-3 rounded-xl border border-border bg-card text-sm font-medium hover:bg-muted transition"
-              >
-                <CalendarDays className="h-4 w-4" strokeWidth={1.75} /> Calendrier
-              </button>
-              {calendarOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-xl shadow-lg z-30 p-2 animate-in fade-in slide-in-from-top-1 duration-200">
-                  <p className="px-3 py-2 text-xs font-bold tracking-wider text-muted-foreground uppercase">Mois</p>
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+              <PopoverTrigger asChild>
+                <button className="inline-flex items-center gap-2 h-10 px-3 rounded-xl border border-border bg-card text-sm font-medium hover:bg-muted transition">
+                  <CalendarDays className="h-4 w-4" strokeWidth={1.75} /> Calendrier
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <div className="p-2 border-b border-border">
                   <button
-                    onClick={() => pickMonth(2026, 4)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted text-sm font-medium transition"
+                    onClick={goToday}
+                    className="w-full h-10 rounded-lg font-semibold text-sm hover:opacity-95 transition"
+                    style={{ background: "#FF6B00", color: "#1A1A1A" }}
                   >
-                    Mai 2026
-                  </button>
-                  <button
-                    onClick={() => pickMonth(2026, 5)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted text-sm font-medium transition"
-                  >
-                    Juin 2026
-                  </button>
-                  <button
-                    onClick={() => pickMonth(2026, 6)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted text-sm font-medium transition"
-                  >
-                    Juillet 2026
+                    Aujourd'hui
                   </button>
                 </div>
-              )}
-            </div>
+                <CalendarUI
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={onPickDate}
+                  disabled={{ before: today, after: maxDate }}
+                  defaultMonth={selectedDate}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="mt-4 grid grid-cols-7 gap-2">

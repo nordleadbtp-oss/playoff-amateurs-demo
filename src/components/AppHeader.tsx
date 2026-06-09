@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Map, Calendar, ClipboardList, Bell, Menu, X, LogIn, ClipboardList as ClipIcon, HelpCircle, Globe, Smartphone } from "lucide-react";
 import { useState } from "react";
+import logoAsset from "@/assets/playoff-logo.png.asset.json";
 
 const links = [
   { to: "/terrains", label: "Terrains", icon: Map },
@@ -16,8 +17,8 @@ export function AppHeader() {
   return (
     <header className="bg-primary text-primary-foreground sticky top-0 z-40">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
-        <Link to="/terrains" className="flex items-center shrink-0">
-          <span className="text-white font-bold text-2xl sm:text-3xl tracking-tight">PLAYOFF</span>
+        <Link to="/terrains" className="flex items-center shrink-0" aria-label="PlayOff Amateurs">
+          <img src={logoAsset.url} alt="PlayOff Amateurs" className="h-10 sm:h-12 w-auto" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">

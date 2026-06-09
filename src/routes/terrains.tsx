@@ -69,6 +69,7 @@ function Stars({ rating }: { rating: number }) {
 
 function TerrainsPage() {
   const [active, setActive] = useState<Sport>("Football 5v5");
+  const [showAll, setShowAll] = useState(false);
 
   const filtered = useMemo(() => {
     if (active === "Tous sports") {
@@ -80,6 +81,8 @@ function TerrainsPage() {
     // primary first
     return [...list.filter((t) => t.primary), ...list.filter((t) => !t.primary)];
   }, [active]);
+
+  const visible = showAll ? filtered : filtered.slice(0, 3);
 
   return (
     <div className="min-h-screen pb-24 md:pb-12">

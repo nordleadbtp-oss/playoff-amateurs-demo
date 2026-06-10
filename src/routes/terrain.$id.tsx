@@ -257,7 +257,14 @@ function SlotPage() {
             disabled={!selectedSlot}
             onClick={() => {
               toast.success("Réservation confirmée ! Redirigé vers votre match.");
-              navigate({ to: "/mon-match" });
+              navigate({
+                to: "/mon-match",
+                search: {
+                  terrainId: id,
+                  slot: selectedSlot!.time,
+                  date: selectedDayISO,
+                },
+              });
             }}
             className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ background: "#FF6B00", color: "#1A1A1A" }}

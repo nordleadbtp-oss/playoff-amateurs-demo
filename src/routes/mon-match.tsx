@@ -6,8 +6,34 @@ import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { FloatingInput } from "@/components/FloatingInput";
 
+const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number }> = {
+  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 40 },
+  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 45 },
+  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", emoji: "⚽", price: 50 },
+  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 38 },
+  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 35 },
+  "13": { name: "Terrain Synthétique Moret",    sport: "Football 5v5", emoji: "⚽", price: 42 },
+  "21": { name: "Gymnase Avon Centre",                sport: "Basket à 5", emoji: "🏀", price: 30 },
+  "22": { name: "Salle Polyvalente Fontainebleau",    sport: "Basket à 5", emoji: "🏀", price: 28 },
+  "23": { name: "Playground Nemours Sud",             sport: "Basket à 5", emoji: "🏀", price: 32 },
+  "24": { name: "Gymnase Léo Lagrange",          sport: "Basket à 5", emoji: "🏀", price: 29 },
+  "25": { name: "Complexe Bois-le-Roi",               sport: "Basket à 5", emoji: "🏀", price: 27 },
+  "26": { name: "Halle des Sports Moret",             sport: "Basket à 5", emoji: "🏀", price: 33 },
+  "31": { name: "Club Padel Avon",                    sport: "Padel",       emoji: "🎾", price: 25 },
+  "32": { name: "Padel Arena Fontainebleau",          sport: "Padel",       emoji: "🎾", price: 22 },
+  "33": { name: "Padel Club Moret",                   sport: "Padel",       emoji: "🎾", price: 27 },
+  "34": { name: "Padel Indoor Melun",                 sport: "Padel",       emoji: "🎾", price: 26 },
+  "35": { name: "Padel Garden Barbizon",              sport: "Padel",       emoji: "🎾", price: 24 },
+  "36": { name: "Padel Center Nemours",               sport: "Padel",       emoji: "🎾", price: 28 },
+};
+const DEFAULT_TERRAIN_INFO = { name: "Terrain Municipal Avon", sport: "Football 5v5", emoji: "⚽", price: 40 };
 
 export const Route = createFileRoute("/mon-match")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    terrainId: typeof search.terrainId === "string" ? search.terrainId : undefined,
+    slot: typeof search.slot === "string" ? search.slot : undefined,
+    date: typeof search.date === "string" ? search.date : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Mon match — PlayOff Amateurs" },
@@ -33,6 +59,17 @@ const INITIAL_PLAYERS: Player[] = [
 const AVATAR_COLORS = ["#0D1B4B", "#FF6B00", "#22C55E", "#3B82F6", "#A855F7", "#EC4899", "#14B8A6", "#EAB308"];
 
 function MonMatchPage() {
+  const { terrainId, slot, date } = Route.useSearch();
+  const terrainInfo = terrainId ? (TERRAIN_DATA[terrainId] ?? DEFAULT_TERRAIN_INFO) : DEFAULT_TERRAIN_INFO;
+
+  const slotLabel = (() => {
+    if (slot && date) {
+      const [y, m, d2] = date.split("-");
+      const endH = String(Number(slot.split(":")[0]) + 1).padStart(2, "0");
+      return `${d2}/${m}/${y} · ${slot} – ${endH}:00`;
+    }
+    return "Sam 31 mai · 15h00 – 16h00";
+  })();
 
   const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS);
   const [showForm, setShowForm] = useState(false);
@@ -40,9 +77,7 @@ function MonMatchPage() {
   const [email, setEmail] = useState("");
   const [shareOpen, setShareOpen] = useState(false);
 
-
-
-  const TERRAIN_TOTAL = 80; // prix fixe du terrain (hardcodé)
+  const TERRAIN_TOTAL = terrainInfo.price;
   const paidCount = useMemo(() => players.filter((p) => p.paid).length, [players]);
   const total = players.length;
   const pricePerPlayer = total > 0 ? Math.ceil(TERRAIN_TOTAL / total) : TERRAIN_TOTAL;
@@ -96,19 +131,23 @@ function MonMatchPage() {
           </span>
         </div>
 
+        {/* Recap terrain */}
         <div className="bg-card border border-border rounded-2xl p-4 flex items-start gap-4">
-          <div className="h-14 w-14 rounded-full bg-muted inline-flex items-center justify-center text-3xl shrink-0" aria-hidden>⚽</div>
+          <div className="h-14 w-14 rounded-full bg-muted inline-flex items-center justify-center text-3xl shrink-0" aria-hidden>
+            {terrainInfo.emoji}
+          </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold">Terrain Municipal Avon</p>
-            <p className="text-sm text-muted-foreground">Foot à 5 · 1h</p>
-            <p className="text-sm text-muted-foreground">Sam 31 mai · 15h00 – 16h00</p>
+            <p className="font-bold">{terrainInfo.name}</p>
+            <p className="text-sm text-muted-foreground">{terrainInfo.sport} · 1h</p>
+            <p className="text-sm text-muted-foreground">{slotLabel}</p>
           </div>
           <div className="text-right">
             <p className="text-xs text-muted-foreground">Prix total</p>
-            <p className="font-extrabold text-xl" style={{ color: "#FF6B00" }}>80 €</p>
+            <p className="font-extrabold text-xl" style={{ color: "#FF6B00" }}>{TERRAIN_TOTAL} €</p>
           </div>
         </div>
 
+        {/* Calcul par joueur */}
         <div className="rounded-2xl p-5 text-primary-foreground text-center" style={{ background: "#0D1B4B" }}>
           <p className="font-bold text-xl">
             {TERRAIN_TOTAL} € ÷ {total} joueur{total > 1 ? "s" : ""} ={" "}
@@ -126,6 +165,7 @@ function MonMatchPage() {
           </div>
         </div>
 
+        {/* Barre de progression */}
         <div className="bg-card border border-border rounded-2xl p-4">
           <div className="flex items-center justify-between">
             <p className="font-bold" style={{ color: "#0D1B4B" }}>Paiements reçus</p>
@@ -139,6 +179,7 @@ function MonMatchPage() {
           </p>
         </div>
 
+        {/* Liste joueurs */}
         <div>
           <p className="text-base font-medium text-muted-foreground mb-2">Joueurs ({total})</p>
           <ul className="bg-card border border-border rounded-2xl divide-y divide-border overflow-hidden">
@@ -185,14 +226,18 @@ function MonMatchPage() {
                     <X className="h-3.5 w-3.5" strokeWidth={2} />
                   </button>
                 )}
-                {!p.paid && !p.isMe && (
+                {/* Bouton envoi lien dès qu'un joueur est ajouté, qu'il ait payé ou non */}
+                {!p.isMe && (
                   <button
                     onClick={() => sendIndividualLink(p)}
                     className="ml-auto h-8 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 hover:opacity-90 active:scale-[0.99] transition"
-                    style={{ background: "#0D1B4B", color: "#fff" }}
+                    style={p.paid
+                      ? { background: "#F0FDF4", color: "#15803D", border: "1px solid #86EFAC" }
+                      : { background: "#0D1B4B", color: "#fff" }
+                    }
                   >
                     <Share2 className="h-3 w-3" strokeWidth={2} />
-                    Envoyer le lien · {pricePerPlayer} €
+                    {p.paid ? "Renvoyer le lien" : `Envoyer le lien · ${pricePerPlayer}€`}
                   </button>
                 )}
               </li>
@@ -234,9 +279,7 @@ function MonMatchPage() {
         </div>
 
         <button
-          onClick={() =>
-            toast.success(`Rappel envoyé à ${pendingCount} joueur${pendingCount > 1 ? "s" : ""}`)
-          }
+          onClick={() => toast.success(`Rappel envoyé à ${pendingCount} joueur${pendingCount > 1 ? "s" : ""}`)}
           disabled={pendingCount === 0}
           className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ background: "#22C55E" }}
@@ -260,7 +303,7 @@ function MonMatchPage() {
                 <X className="h-5 w-5" strokeWidth={2} />
               </button>
             </div>
-            <p className="text-sm text-muted-foreground mb-5">Choisissez le canal d'envoi aux joueurs.</p>
+            <p className="text-sm text-muted-foreground mb-5">Choisissez le canal d&apos;envoi aux joueurs.</p>
             <div className="space-y-3">
               {(() => {
                 const PAY_URL = "https://playoff.app/payer/match-12345";

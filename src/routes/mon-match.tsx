@@ -46,11 +46,18 @@ function MonMatchPage() {
   const paidCount = useMemo(() => players.filter((p) => p.paid).length, [players]);
   const total = players.length;
   const pricePerPlayer = total > 0 ? Math.ceil(TERRAIN_TOTAL / total) : TERRAIN_TOTAL;
+  const isRounded = total > 0 && TERRAIN_TOTAL % total !== 0;
   const collected = paidCount * pricePerPlayer;
   const totalAmount = total * pricePerPlayer;
   const remaining = totalAmount - collected;
   const progress = total > 0 ? (paidCount / total) * 100 : 0;
   const pendingCount = total - paidCount;
+
+  const sendIndividualLink = async (p: Player) => {
+    const url = `https://pay.playoff.app/match-12345/joueur-${p.id}`;
+    try { await navigator.clipboard.writeText(url); } catch {}
+    toast.success(`Lien copié pour ${p.name} — à envoyer par WhatsApp ou SMS`);
+  };
 
   const addPlayer = (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,7 +143,7 @@ function MonMatchPage() {
           <p className="text-base font-medium text-muted-foreground mb-2">Joueurs ({total})</p>
           <ul className="bg-card border border-border rounded-2xl divide-y divide-border overflow-hidden">
             {players.map((p) => (
-              <li key={p.id} className="flex items-center gap-3 px-4 py-3">
+              <li key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
                 <div
                   className="h-10 w-10 rounded-full text-white font-bold text-sm inline-flex items-center justify-center shrink-0"
                   style={{ background: p.color }}
@@ -145,7 +152,9 @@ function MonMatchPage() {
                   {p.initials}
                 </div>
                 <p className="flex-1 font-medium truncate">{p.name}</p>
-                <p className="text-sm font-semibold w-10 text-right">{pricePerPlayer}€</p>
+                <p className="text-sm font-semibold text-right whitespace-nowrap">
+                  {pricePerPlayer}€{isRounded && <span className="text-[10px] font-normal text-muted-foreground ml-1">(arrondi)</span>}
+                </p>
                 {p.paid ? (
                   <button
                     onClick={() => !p.isMe && setPlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
@@ -174,6 +183,16 @@ function MonMatchPage() {
                     aria-label={`Retirer ${p.name}`}
                   >
                     <X className="h-3.5 w-3.5" strokeWidth={2} />
+                  </button>
+                )}
+                {!p.paid && !p.isMe && (
+                  <button
+                    onClick={() => sendIndividualLink(p)}
+                    className="ml-auto h-8 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 hover:opacity-90 active:scale-[0.99] transition"
+                    style={{ background: "#0D1B4B", color: "#fff" }}
+                  >
+                    <Share2 className="h-3 w-3" strokeWidth={2} />
+                    Envoyer le lien · {pricePerPlayer} €
                   </button>
                 )}
               </li>

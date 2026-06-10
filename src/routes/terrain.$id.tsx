@@ -122,7 +122,9 @@ function SlotPage() {
   };
 
   const totalPrice = selectedSlot?.price ?? 0;
-  const perPlayer = totalPrice && playerCount > 0 ? (totalPrice/playerCount).toFixed(2).replace(".", ",") : "—";
+  const perPlayerValue = totalPrice && playerCount > 0 ? Math.ceil(totalPrice/playerCount) : 0;
+  const perPlayerRounded = totalPrice > 0 && totalPrice % playerCount !== 0;
+  const perPlayer = totalPrice && playerCount > 0 ? String(perPlayerValue) : "—";
 
   const handlePayment = async (provider: "stripe" | "paypal") => {
     if (!selectedSlot || !terrain) return;
@@ -131,6 +133,7 @@ function SlotPage() {
       navigate({ to: "/connexion", search: { mode: "login", redirect: window.location.pathname } });
       return;
     }
+    toast.info(`Redirection vers ${provider === "stripe" ? "Stripe" : "PayPal"}... (démo)`);
     setBooking(true);
     const { data: resa, error: resaErr } = await supabase
       .from("reservations")
@@ -357,7 +360,10 @@ function SlotPage() {
 
           <div className="rounded-2xl p-4 text-center text-primary-foreground" style={{ background: "#0D1B4B" }}>
             <p className="text-sm opacity-90">Participation par joueur</p>
-            <p className="text-2xl font-extrabold mt-1">{perPlayer} {selectedSlot ? "€" : ""}</p>
+            <p className="text-2xl font-extrabold mt-1">
+              {perPlayer} {selectedSlot ? "€" : ""}
+              {selectedSlot && perPlayerRounded && <span className="text-sm font-medium opacity-80 ml-1">(arrondi)</span>}
+            </p>
             <p className="text-xs opacity-75 mt-1">{selectedSlot ? `${totalPrice} € ÷ ${playerCount} joueur${playerCount>1?"s":""}` : "Sélectionnez un créneau"}</p>
           </div>
 
@@ -368,18 +374,21 @@ function SlotPage() {
           ) : (
             <div className="rounded-2xl border border-border bg-card p-4 space-y-3 transition-all duration-200">
               <p className="font-bold text-center" style={{ color: "#0D1B4B" }}>
-                Équipe complète ! Choisissez votre mode de paiement
+                Réserver ce créneau
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <p className="text-xs text-center text-muted-foreground">
+                Vous payez le terrain en totalité, les joueurs vous remboursent ensuite.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button onClick={() => handlePayment("stripe")} disabled={!selectedSlot || booking}
                   className="h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ background: "#635BFF" }}>
-                  💳 Stripe
+                  💳 Payer {totalPrice} € par Stripe
                 </button>
                 <button onClick={() => handlePayment("paypal")} disabled={!selectedSlot || booking}
                   className="h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ background: "#003087" }}>
-                  🅿️ PayPal
+                  🅿️ Payer {totalPrice} € par PayPal
                 </button>
               </div>
             </div>

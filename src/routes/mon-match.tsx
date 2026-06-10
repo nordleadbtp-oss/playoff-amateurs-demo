@@ -46,11 +46,18 @@ function MonMatchPage() {
   const paidCount = useMemo(() => players.filter((p) => p.paid).length, [players]);
   const total = players.length;
   const pricePerPlayer = total > 0 ? Math.ceil(TERRAIN_TOTAL / total) : TERRAIN_TOTAL;
+  const isRounded = total > 0 && TERRAIN_TOTAL % total !== 0;
   const collected = paidCount * pricePerPlayer;
   const totalAmount = total * pricePerPlayer;
   const remaining = totalAmount - collected;
   const progress = total > 0 ? (paidCount / total) * 100 : 0;
   const pendingCount = total - paidCount;
+
+  const sendIndividualLink = async (p: Player) => {
+    const url = `https://pay.playoff.app/match-12345/joueur-${p.id}`;
+    try { await navigator.clipboard.writeText(url); } catch {}
+    toast.success(`Lien copié pour ${p.name} — à envoyer par WhatsApp ou SMS`);
+  };
 
   const addPlayer = (e: React.FormEvent) => {
     e.preventDefault();

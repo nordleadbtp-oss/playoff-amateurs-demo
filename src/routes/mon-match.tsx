@@ -151,13 +151,22 @@ function MonMatchPage() {
                 <p className="flex-1 font-medium truncate">{p.name}</p>
                 <p className="text-sm font-semibold w-10 text-right">{pricePerPlayer}€</p>
                 {p.paid ? (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#DCFCE7", color: "#15803D" }}>
+                  <button
+                    onClick={() => !p.isMe && setPlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
+                    disabled={p.isMe}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 disabled:cursor-not-allowed hover:opacity-90"
+                    style={{ background: "#DCFCE7", color: "#15803D" }}
+                  >
                     Payé ✅
-                  </span>
+                  </button>
                 ) : (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#FED7AA", color: "#9A3412" }}>
+                  <button
+                    onClick={() => setPlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: true } : x))}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 hover:opacity-90 cursor-pointer"
+                    style={{ background: "#FED7AA", color: "#9A3412" }}
+                  >
                     <Clock className="h-3 w-3" strokeWidth={2} /> En attente
-                  </span>
+                  </button>
                 )}
               </li>
             ))}

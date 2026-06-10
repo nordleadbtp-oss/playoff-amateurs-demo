@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp, X } from "lucide-react";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
+import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp, X, ArrowUpDown } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
@@ -85,6 +85,7 @@ function Stars({ rating }: { rating: number }) {
 function TerrainsPage() {
   const [active, setActive] = useState<Sport>("Football 5v5");
   const [showAll, setShowAll] = useState(false);
+  const [sortBy, setSortBy] = useState<"distance" | "rating" | "price">("distance");
   const [villeQuery, setVilleQuery] = useState("Avon (77310)");
   const [villeSuggestions, setVilleSuggestions] = useState<string[]>([]);
   const villeRef = useRef<HTMLDivElement>(null);
@@ -191,7 +192,24 @@ function TerrainsPage() {
           })}
         </div>
 
-        <ul className="mt-6 space-y-4">
+        <div className="mt-4 flex items-center justify-between gap-2">
+          <p className="text-sm text-muted-foreground">{filtered.length} terrain{filtered.length > 1 ? "s" : ""} trouvé{filtered.length > 1 ? "s" : ""}</p>
+          <div className="flex items-center gap-1.5 bg-card border border-border rounded-xl px-3 h-10">
+            <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={2} />
+            <select
+              value={sortBy}
+              onChange={(e) => { setSortBy(e.target.value as "distance" | "rating" | "price"); setShowAll(false); }}
+              className="text-sm font-semibold bg-transparent outline-none cursor-pointer pr-1"
+              aria-label="Trier par"
+            >
+              <option value="distance">Distance</option>
+              <option value="rating">Note</option>
+              <option value="price">Prix</option>
+            </select>
+          </div>
+        </div>
+
+        <ul className="mt-3 space-y-4">
           {visible.map((t) => {
             const Wrapper: typeof Link | "div" = t.available ? Link : "div";
             const wrapperProps = t.available ? { to: "/terrain/$id", params: { id: String(t.id) } } : { "aria-disabled": true };
@@ -252,3 +270,5 @@ function TerrainsPage() {
     </div>
   );
 }
+
+

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useParams, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, MapPin, Star, Check, Minus, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -23,16 +23,22 @@ type Slot = { id: string; time: string; price: number; status: "available" | "fu
 const TERRAIN_DATA: Record<string, { name: string; sport: string; distance: string; rating: number; emoji: string; price: number }> = {
   "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽", price: 40 },
   "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", distance: "3,8 km", rating: 4.3, emoji: "⚽", price: 45 },
+  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", distance: "5,2 km", rating: 4.8, emoji: "⚽", price: 50 },
   "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", distance: "4,1 km", rating: 4.4, emoji: "⚽", price: 38 },
   "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", distance: "6,7 km", rating: 4.2, emoji: "⚽", price: 35 },
+  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", distance: "8,3 km", rating: 4.0, emoji: "⚽", price: 42 },
   "21": { name: "Gymnase Avon Centre",                sport: "Basket à 5",  distance: "1,8 km", rating: 4.5, emoji: "🏀", price: 30 },
   "22": { name: "Salle Polyvalente Fontainebleau",    sport: "Basket à 5",  distance: "3,2 km", rating: 4.1, emoji: "🏀", price: 28 },
+  "23": { name: "Playground Nemours Sud",             sport: "Basket à 5",  distance: "6,1 km", rating: 3.9, emoji: "🏀", price: 32 },
   "24": { name: "Gymnase Léo Lagrange",               sport: "Basket à 5",  distance: "4,7 km", rating: 4.3, emoji: "🏀", price: 29 },
   "25": { name: "Complexe Bois-le-Roi",               sport: "Basket à 5",  distance: "7,4 km", rating: 4.0, emoji: "🏀", price: 27 },
+  "26": { name: "Halle des Sports Moret",             sport: "Basket à 5",  distance: "9,1 km", rating: 4.2, emoji: "🏀", price: 33 },
   "31": { name: "Club Padel Avon",                    sport: "Padel",       distance: "2,9 km", rating: 4.7, emoji: "🎾", price: 25 },
   "32": { name: "Padel Arena Fontainebleau",          sport: "Padel",       distance: "4,4 km", rating: 4.5, emoji: "🎾", price: 22 },
+  "33": { name: "Padel Club Moret",                   sport: "Padel",       distance: "7,2 km", rating: 4.3, emoji: "🎾", price: 27 },
   "34": { name: "Padel Indoor Melun",                 sport: "Padel",       distance: "5,8 km", rating: 4.6, emoji: "🎾", price: 26 },
   "35": { name: "Padel Garden Barbizon",              sport: "Padel",       distance: "6,9 km", rating: 4.4, emoji: "🎾", price: 24 },
+  "36": { name: "Padel Center Nemours",               sport: "Padel",       distance: "8,5 km", rating: 4.2, emoji: "🎾", price: 28 },
 };
 const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽", price: 40 };
 
@@ -61,6 +67,7 @@ function nextHour(t: string) { const [h, m] = t.split(":").map(Number); return `
 
 function SlotPage() {
   const { id } = useParams({ from: "/terrain/$id" });
+  const navigate = useNavigate();
   const terrain = TERRAIN_DATA[id] ?? DEFAULT_TERRAIN;
 
   const today = useMemo(() => startOfDay(new Date()), []);
@@ -246,22 +253,21 @@ function SlotPage() {
               {totalPrice > 0 ? `${totalPrice} € ÷ ${playerCount} joueur${playerCount > 1 ? "s" : ""}` : "Sélectionnez un créneau"}
             </p>
           </div>
-          {playerCount < 10 ? (
-            <div className="rounded-2xl border border-dashed border-border bg-card p-4 text-center text-sm text-muted-foreground">
-              Il manque {10 - playerCount} joueur{10 - playerCount > 1 ? "s" : ""} pour réserver
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
-              <p className="font-bold text-center" style={{ color: "#0D1B4B" }}>Équipe complète ! Choisissez votre mode de paiement</p>
-              <div className="grid grid-cols-2 gap-3">
-                <button onClick={() => toast.success("Redirection vers Stripe... (démo)")} disabled={!selectedSlot}
-                  className="h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ background: "#635BFF" }}>💳 Stripe</button>
-                <button onClick={() => toast.success("Redirection vers PayPal... (démo)")} disabled={!selectedSlot}
-                  className="h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ background: "#003087" }}>🅿️ PayPal</button>
-              </div>
-            </div>
+          <button
+            disabled={!selectedSlot}
+            onClick={() => {
+              toast.success("Réservation confirmée ! Redirigé vers votre match.");
+              navigate({ to: "/mon-match" });
+            }}
+            className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ background: "#FF6B00", color: "#1A1A1A" }}
+          >
+            {selectedSlot ? `Réserver · ${totalPrice} €` : "Sélectionnez un créneau"}
+          </button>
+          {playerCount < 10 && selectedSlot && (
+            <p className="text-center text-xs text-muted-foreground">
+              Vous pouvez ajouter les {10 - playerCount} autres joueur{10 - playerCount > 1 ? "s" : ""} après la réservation
+            </p>
           )}
         </aside>
       </main>

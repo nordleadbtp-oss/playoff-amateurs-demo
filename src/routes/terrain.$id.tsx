@@ -1,6 +1,7 @@
-import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
-import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, MapPin, Star, Check } from "lucide-react";
+import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, MapPin, Star, Check, Minus, Plus } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";

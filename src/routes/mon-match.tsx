@@ -235,27 +235,39 @@ function MonMatchPage() {
             </div>
             <p className="text-sm text-muted-foreground mb-5">Choisissez le canal d'envoi aux joueurs.</p>
             <div className="space-y-3">
-              <button
-                onClick={() => { setShareOpen(false); toast.success("Lien copié — ouvre WhatsApp pour le coller"); }}
-                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
-                style={{ background: "#25D366", color: "#fff" }}
-              >
-                💬 Partager via WhatsApp
-              </button>
-              <button
-                onClick={() => { setShareOpen(false); toast.success("SMS envoyé aux joueurs"); }}
-                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition"
-                style={{ background: "#0D1B4B", color: "#fff" }}
-              >
-                📱 Envoyer par SMS
-              </button>
-              <button
-                onClick={() => { setShareOpen(false); toast.success("Mail envoyé aux joueurs"); }}
-                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 border-2 bg-card hover:bg-muted transition"
-                style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
-              >
-                ✉️ Envoyer par mail
-              </button>
+              {(() => {
+                const PAY_URL = "https://playoff.app/payer/match-12345";
+                const copyAnd = (label: string) => async () => {
+                  try { await navigator.clipboard.writeText(PAY_URL); } catch {}
+                  setShareOpen(false);
+                  toast.success(`Lien copié — prêt à partager via ${label}`);
+                };
+                return (
+                  <>
+                    <button
+                      onClick={copyAnd("WhatsApp")}
+                      className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+                      style={{ background: "#25D366", color: "#fff" }}
+                    >
+                      💬 Partager via WhatsApp
+                    </button>
+                    <button
+                      onClick={copyAnd("SMS")}
+                      className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition"
+                      style={{ background: "#0D1B4B", color: "#fff" }}
+                    >
+                      📱 Envoyer par SMS
+                    </button>
+                    <button
+                      onClick={copyAnd("mail")}
+                      className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 border-2 bg-card hover:bg-muted transition"
+                      style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+                    >
+                      ✉️ Envoyer par mail
+                    </button>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>

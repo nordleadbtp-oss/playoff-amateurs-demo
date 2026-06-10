@@ -3,6 +3,7 @@ import { CheckCircle2, MapPin, Calendar, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 export const Route = createFileRoute("/mes-reservations")({
   head: () => ({
@@ -37,7 +38,9 @@ const DEFAULT_RESERVATIONS: Reservation[] = [
 ];
 
 function MesReservationsPage() {
+  const { user } = useRequireAuth("/mes-reservations");
   const [reservations] = useState<Reservation[]>(DEFAULT_RESERVATIONS);
+  if (!user) return null;
 
   return (
     <div className="min-h-screen pb-28 md:pb-12">

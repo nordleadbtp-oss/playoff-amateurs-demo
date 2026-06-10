@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { FloatingInput } from "@/components/FloatingInput";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 export const Route = createFileRoute("/mon-match")({
   head: () => ({
@@ -32,11 +33,14 @@ const INITIAL_PLAYERS: Player[] = [
 const AVATAR_COLORS = ["#0D1B4B", "#FF6B00", "#22C55E", "#3B82F6", "#A855F7", "#EC4899", "#14B8A6", "#EAB308"];
 
 function MonMatchPage() {
+  const { user } = useRequireAuth("/mon-match");
   const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS);
   const [showForm, setShowForm] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [shareOpen, setShareOpen] = useState(false);
+  if (!user) return null;
+
 
   const paidCount = useMemo(() => players.filter((p) => p.paid).length, [players]);
   const total = players.length;

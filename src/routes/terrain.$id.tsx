@@ -101,9 +101,9 @@ const TERRAIN_DATA: Record<string, { name: string; sport: string; distance: stri
 const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽" };
 
 function SlotPage() {
-  const navigate = useNavigate();
   const { id } = useParams({ from: "/terrain/$id" });
   const terrain = TERRAIN_DATA[id] ?? DEFAULT_TERRAIN;
+  const [playerCount, setPlayerCount] = useState(10);
 
   // Aujourd'hui figé au mount + fenêtre 30 jours
   const today = useMemo(() => startOfDay(new Date()), []);

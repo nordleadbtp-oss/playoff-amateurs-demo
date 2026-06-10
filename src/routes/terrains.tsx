@@ -107,12 +107,14 @@ function TerrainsPage() {
   const villeRef = useRef<HTMLDivElement>(null);
 
   const filtered = useMemo(() => {
-    if (active === "Tous sports") {
-      return [...terrains.filter((t) => t.primary), ...terrains.filter((t) => !t.primary)];
-    }
-    const list = terrains.filter((t) => t.sport === active);
-    return [...list.filter((t) => t.primary), ...list.filter((t) => !t.primary)];
-  }, [active]);
+    const list = active === "Tous sports" ? [...terrains] : terrains.filter((t) => t.sport === active);
+    return [...list].sort((a, b) => {
+      if (sortBy === "distance") return parseFloat(a.distance) - parseFloat(b.distance);
+      if (sortBy === "rating") return b.rating - a.rating;
+      if (sortBy === "price") return a.price - b.price;
+      return 0;
+    });
+  }, [active, sortBy]);
 
   const visible = showAll ? filtered : filtered.slice(0, 3);
 

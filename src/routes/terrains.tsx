@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
-import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/terrains")({
   head: () => ({
@@ -19,25 +18,56 @@ export const Route = createFileRoute("/terrains")({
 const sports = ["Tous sports", "Football 5v5", "Basket à 5", "Padel"] as const;
 type Sport = (typeof sports)[number];
 
-const SPORT_MAP: Record<string, Exclude<Sport, "Tous sports">> = {
-  football: "Football 5v5",
-  basket: "Basket à 5",
-  padel: "Padel",
+const VILLES_IDF = [
+  "Avon (77310)", "Fontainebleau (77300)", "Melun (77000)", "Barbizon (77630)",
+  "Nemours (77140)", "Moret-sur-Loing (77250)", "Bois-le-Roi (77590)",
+  "Milly-la-Forêt (91490)", "Étampes (91150)", "Évry-Courcouronnes (91000)",
+  "Corbeil-Essonnes (91100)", "Lieusaint (77127)", "Pontault-Combault (77340)",
+  "Meaux (77100)", "Provins (77160)", "Chelles (77500)", "Lagny-sur-Marne (77400)",
+  "Noisiel (77186)", "Torcy (77200)", "Lognes (77185)",
+  "Paris (75001)", "Vincennes (94300)", "Créteil (94000)", "Montreuil (93100)",
+  "Saint-Denis (93200)", "Bobigny (93000)", "Versailles (78000)",
+];
+
+type Terrain = {
+  id: number;
+  name: string;
+  sport: Exclude<Sport, "Tous sports">;
+  distance: string;
+  rating: number;
+  reviews: number;
+  price: number;
+  available: boolean;
+  image: string;
+  primary?: boolean;
 };
 
-type TerrainRow = {
-  id: string;
-  nom: string;
-  sport: "football" | "basket" | "padel";
-  ville: string;
-  code_postal: string;
-  distance_km: number | null;
-  prix_heure: number;
-  note: number | null;
-  nb_avis: number;
-  disponible: boolean;
-  image_url: string | null;
-};
+const terrains: Terrain[] = [
+  // Football primaires (3)
+  { id: 1,  name: "Terrain Municipal Avon",            sport: "Football 5v5", distance: "2,3 km", rating: 4.6, reviews: 128, price: 40, available: true,  primary: true, image: "https://images.unsplash.com/photo-1556056504-5c7696c4c28d?auto=format&fit=crop&w=600&q=70" },
+  { id: 2,  name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", distance: "3,8 km", rating: 4.3, reviews: 87,  price: 45, available: true,  primary: true, image: "https://images.unsplash.com/photo-1510051640316-cee39563ddab?auto=format&fit=crop&w=600&q=70" },
+  { id: 3,  name: "Stade Couvert de Nemours",          sport: "Football 5v5", distance: "5,2 km", rating: 4.8, reviews: 54,  price: 50, available: false, primary: true, image: "https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=600&q=70" },
+  // Football secondaires
+  { id: 11, name: "Stade Jean Bouin Melun",            sport: "Football 5v5", distance: "4,1 km", rating: 4.4, reviews: 62,  price: 38, available: true,                 image: "https://images.unsplash.com/photo-1459865264687-595d652de67e?auto=format&fit=crop&w=600&q=70" },
+  { id: 12, name: "City Stade de Barbizon",            sport: "Football 5v5", distance: "6,7 km", rating: 4.2, reviews: 41,  price: 35, available: true,                 image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=70" },
+  { id: 13, name: "Terrain Synthétique Moret",         sport: "Football 5v5", distance: "8,3 km", rating: 4.0, reviews: 29,  price: 42, available: false,                image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=600&q=70" },
+  // Basket primaires (3)
+  { id: 21, name: "Gymnase Avon Centre",               sport: "Basket à 5",  distance: "1,8 km", rating: 4.5, reviews: 73,  price: 30, available: true,  primary: true, image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=600&q=70" },
+  { id: 22, name: "Salle Polyvalente Fontainebleau",   sport: "Basket à 5",  distance: "3,2 km", rating: 4.1, reviews: 55,  price: 28, available: true,  primary: true, image: "https://images.unsplash.com/photo-1505666287802-931dc83948e9?auto=format&fit=crop&w=600&q=70" },
+  { id: 23, name: "Playground Nemours Sud",            sport: "Basket à 5",  distance: "6,1 km", rating: 3.9, reviews: 33,  price: 32, available: false, primary: true, image: "https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?auto=format&fit=crop&w=600&q=70" },
+  // Basket secondaires
+  { id: 24, name: "Gymnase Léo Lagrange",              sport: "Basket à 5",  distance: "4,7 km", rating: 4.3, reviews: 48,  price: 29, available: true,                 image: "https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?auto=format&fit=crop&w=600&q=70" },
+  { id: 25, name: "Complexe Bois-le-Roi",              sport: "Basket à 5",  distance: "7,4 km", rating: 4.0, reviews: 36,  price: 27, available: true,                 image: "https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=600&q=70" },
+  { id: 26, name: "Halle des Sports Moret",            sport: "Basket à 5",  distance: "9,1 km", rating: 4.2, reviews: 25,  price: 33, available: false,                image: "https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?auto=format&fit=crop&w=600&q=70" },
+  // Padel primaires (3)
+  { id: 31, name: "Club Padel Avon",                   sport: "Padel",       distance: "2,9 km", rating: 4.7, reviews: 91,  price: 25, available: true,  primary: true, image: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=600&q=70" },
+  { id: 32, name: "Padel Arena Fontainebleau",         sport: "Padel",       distance: "4,4 km", rating: 4.5, reviews: 67,  price: 22, available: true,  primary: true, image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=70" },
+  { id: 33, name: "Padel Club Moret",                  sport: "Padel",       distance: "7,2 km", rating: 4.3, reviews: 48,  price: 27, available: false, primary: true, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=600&q=70" },
+  // Padel secondaires
+  { id: 34, name: "Padel Indoor Melun",                sport: "Padel",       distance: "5,8 km", rating: 4.6, reviews: 54,  price: 26, available: true,                 image: "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?auto=format&fit=crop&w=600&q=70" },
+  { id: 35, name: "Padel Garden Barbizon",             sport: "Padel",       distance: "6,9 km", rating: 4.4, reviews: 38,  price: 24, available: true,                 image: "https://images.unsplash.com/photo-1554284126-aa88f22d8b74?auto=format&fit=crop&w=600&q=70" },
+  { id: 36, name: "Padel Center Nemours",              sport: "Padel",       distance: "8,5 km", rating: 4.2, reviews: 29,  price: 28, available: false,                image: "https://images.unsplash.com/photo-1541534741688-7078b9961af5?auto=format&fit=crop&w=600&q=70" },
+];
 
 function Stars({ rating }: { rating: number }) {
   const full = Math.round(rating);
@@ -55,41 +85,17 @@ function Stars({ rating }: { rating: number }) {
 function TerrainsPage() {
   const [active, setActive] = useState<Sport>("Football 5v5");
   const [showAll, setShowAll] = useState(false);
-  const [villeQuery, setVilleQuery] = useState("");
+  const [villeQuery, setVilleQuery] = useState("Avon (77310)");
   const [villeSuggestions, setVilleSuggestions] = useState<string[]>([]);
   const villeRef = useRef<HTMLDivElement>(null);
-  const [terrains, setTerrains] = useState<TerrainRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    supabase.from("terrains").select("*").order("note", { ascending: false })
-      .then(({ data, error }) => {
-        if (error) {
-          toast.error("Connexion impossible — réessaie dans un instant");
-        } else {
-          setTerrains((data ?? []) as TerrainRow[]);
-        }
-        setLoading(false);
-      });
-  }, []);
-
-  const villes = useMemo(() => {
-    const set = new Set(terrains.map((t) => `${t.ville} (${t.code_postal})`));
-    return Array.from(set);
-  }, [terrains]);
 
   const filtered = useMemo(() => {
-    let list = terrains;
-    if (active !== "Tous sports") {
-      const sportKey = Object.entries(SPORT_MAP).find(([, v]) => v === active)?.[0];
-      list = list.filter((t) => t.sport === sportKey);
+    if (active === "Tous sports") {
+      return [...terrains.filter((t) => t.primary), ...terrains.filter((t) => !t.primary)];
     }
-    if (villeQuery.trim().length >= 2) {
-      const q = villeQuery.toLowerCase();
-      list = list.filter((t) => `${t.ville} ${t.code_postal}`.toLowerCase().includes(q));
-    }
-    return list;
-  }, [terrains, active, villeQuery]);
+    const list = terrains.filter((t) => t.sport === active);
+    return [...list.filter((t) => t.primary), ...list.filter((t) => !t.primary)];
+  }, [active]);
 
   const visible = showAll ? filtered : filtered.slice(0, 3);
 
@@ -111,7 +117,7 @@ function TerrainsPage() {
                 const q = e.target.value;
                 setVilleQuery(q);
                 if (q.length >= 2) {
-                  setVilleSuggestions(villes.filter((v) => v.toLowerCase().includes(q.toLowerCase())).slice(0, 6));
+                  setVilleSuggestions(VILLES_IDF.filter((v) => v.toLowerCase().includes(q.toLowerCase())).slice(0, 6));
                 } else {
                   setVilleSuggestions([]);
                 }
@@ -150,11 +156,11 @@ function TerrainsPage() {
             <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
             <input
               type="text"
-              defaultValue="Cette semaine"
+              defaultValue="Dim 31 mai 2026"
               aria-label="Date"
               readOnly
-              onClick={() => toast.info("Choisissez la date sur la page du terrain")}
-              className="w-full h-12 sm:h-14 pl-12 pr-4 rounded-xl bg-card border border-border outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 text-base font-medium cursor-pointer"
+              onClick={() => toast.info("Sélection de date (démo)")}
+              className="w-full h-12 sm:h-14 pl-12 pr-4 rounded-xl bg-card border border-border outline-none text-base font-medium cursor-pointer"
             />
           </div>
           <button
@@ -176,9 +182,7 @@ function TerrainsPage() {
                 key={s}
                 onClick={() => { setActive(s); setShowAll(false); }}
                 className={`shrink-0 h-10 px-4 rounded-full text-sm font-semibold border transition ${
-                  isActive
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-card text-foreground border-border hover:bg-muted"
+                  isActive ? "bg-primary text-primary-foreground border-primary" : "bg-card text-foreground border-border hover:bg-muted"
                 }`}
               >
                 {s}
@@ -187,93 +191,58 @@ function TerrainsPage() {
           })}
         </div>
 
-        {loading ? (
-          <ul className="mt-6 space-y-4">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <li key={i} className="h-28 sm:h-32 rounded-2xl bg-muted animate-pulse" />
-            ))}
-          </ul>
-        ) : visible.length === 0 ? (
-          <div className="mt-8 p-8 rounded-2xl border border-dashed border-border text-center text-muted-foreground bg-card">
-            Aucun terrain trouvé pour ces critères.
-          </div>
-        ) : (
-          <ul className="mt-6 space-y-4">
-            {visible.map((t) => {
-              const distance = t.distance_km != null ? `${String(t.distance_km).replace(".", ",")} km` : "—";
-              const rating = Number(t.note ?? 0);
-              const Wrapper: typeof Link | "div" = t.disponible ? Link : "div";
-              const wrapperProps = t.disponible
-                ? { to: "/terrain/$id", params: { id: t.id } }
-                : { "aria-disabled": true };
-              return (
-                <li key={t.id}>
-                  {/* @ts-expect-error union props */}
-                  <Wrapper
-                    {...wrapperProps}
-                    className={`group flex items-stretch gap-4 bg-card rounded-2xl border border-border overflow-hidden transition shadow-sm ${
-                      t.disponible ? "hover:shadow-md hover:border-primary/30 cursor-pointer" : "opacity-90"
-                    }`}
-                  >
-                    <div
-                      className="w-28 sm:w-44 shrink-0 bg-muted bg-cover bg-center"
-                      style={{ backgroundImage: t.image_url ? `url(${t.image_url})` : undefined }}
-                      aria-hidden
-                    />
-                    <div className="flex-1 min-w-0 py-3 sm:py-4 pr-3 sm:pr-5 flex flex-col gap-1.5">
-                      <h3 className="font-bold text-base sm:text-lg truncate">{t.nom}</h3>
-                      <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
-                        <span className="inline-flex items-center gap-1">
-                          <MapPin className="h-4 w-4" strokeWidth={1.75} /> {distance} · {t.ville}
+        <ul className="mt-6 space-y-4">
+          {visible.map((t) => {
+            const Wrapper: typeof Link | "div" = t.available ? Link : "div";
+            const wrapperProps = t.available ? { to: "/terrain/$id", params: { id: String(t.id) } } : { "aria-disabled": true };
+            return (
+              <li key={t.id}>
+                {/* @ts-expect-error union props */}
+                <Wrapper
+                  {...wrapperProps}
+                  className={`group flex items-stretch gap-4 bg-card rounded-2xl border border-border overflow-hidden transition shadow-sm ${
+                    t.available ? "hover:shadow-md hover:border-primary/30 cursor-pointer" : "opacity-90"
+                  }`}
+                >
+                  <div className="w-28 sm:w-44 shrink-0 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${t.image})` }} aria-hidden />
+                  <div className="flex-1 min-w-0 py-3 sm:py-4 pr-3 sm:pr-5 flex flex-col gap-1.5">
+                    <h3 className="font-bold text-base sm:text-lg truncate">{t.name}</h3>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+                      <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" strokeWidth={1.75} /> {t.distance}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <Stars rating={t.rating} />
+                        <span className="font-medium text-foreground/80">{t.rating.toString().replace(".", ",")}</span>
+                        <span>({t.reviews})</span>
+                      </span>
+                      {t.available ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
+                          <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
                         </span>
-                        <span className="inline-flex items-center gap-1">
-                          <Stars rating={rating} />
-                          <span className="font-medium text-foreground/80">{rating.toFixed(1).replace(".", ",")}</span>
-                          <span>({t.nb_avis})</span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#9CA3AF", color: "#fff" }}>
+                          <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet ce soir
                         </span>
-                        {t.disponible ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
-                            <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#9CA3AF", color: "#fff" }}>
-                            <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet
-                          </span>
-                        )}
-                      </div>
-                      <p className="font-semibold text-sm sm:text-base mt-1">
-                        À partir de <span className="text-foreground">{t.prix_heure} €</span> / h
-                      </p>
+                      )}
                     </div>
-                    <div className="flex items-center pr-3 sm:pr-5 text-muted-foreground group-hover:text-primary transition">
-                      <ChevronRight className="h-6 w-6" strokeWidth={1.75} />
-                    </div>
-                  </Wrapper>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+                    <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} €</span> / h</p>
+                  </div>
+                  <div className="flex items-center pr-3 sm:pr-5 text-muted-foreground group-hover:text-primary transition">
+                    <ChevronRight className="h-6 w-6" strokeWidth={1.75} />
+                  </div>
+                </Wrapper>
+              </li>
+            );
+          })}
+        </ul>
 
         {filtered.length > 3 && (
           <div className="mt-6 flex justify-center">
             <button
-              onClick={() => {
-                if (showAll) {
-                  setShowAll(false);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                } else {
-                  setShowAll(true);
-                }
-              }}
+              onClick={() => { if (showAll) { setShowAll(false); window.scrollTo({ top: 0, behavior: "smooth" }); } else { setShowAll(true); } }}
               className="inline-flex items-center gap-2 h-12 px-6 rounded-xl border-2 bg-card font-semibold hover:bg-muted transition"
               style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
             >
-              {showAll ? (
-                <>Voir moins de terrains <ChevronUp className="h-4 w-4" strokeWidth={2} /></>
-              ) : (
-                <>Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} /></>
-              )}
+              {showAll ? (<>Voir moins de terrains <ChevronUp className="h-4 w-4" strokeWidth={2} /></>) : (<>Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} /></>)}
             </button>
           </div>
         )}

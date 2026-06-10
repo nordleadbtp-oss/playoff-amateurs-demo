@@ -12,6 +12,7 @@ import { Toaster as SonnerToaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AuthProvider } from "../hooks/useAuth";
 
 function NotFoundComponent() {
   return (
@@ -116,8 +117,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
-      <SonnerToaster position="top-center" richColors closeButton />
+      <AuthProvider>
+        <Outlet />
+        <SonnerToaster position="top-center" richColors closeButton />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

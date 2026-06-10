@@ -256,9 +256,9 @@ function SlotPage() {
           <button
             disabled={!selectedSlot}
             onClick={() => {
-              toast.success("Réservation confirmée ! Redirigé vers votre match.");
+              toast.success("Réservation confirmée !");
               navigate({
-                to: "/mon-match",
+                to: "/mes-reservations",
                 search: {
                   terrainId: id,
                   slot: selectedSlot!.time,

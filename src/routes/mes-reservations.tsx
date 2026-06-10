@@ -1,11 +1,44 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, MapPin, Calendar, ChevronRight } from "lucide-react";
-import { useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 
+const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number; city: string }> = {
+  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 40, city: "Avon" },
+  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 45, city: "Fontainebleau" },
+  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", emoji: "⚽", price: 50, city: "Nemours" },
+  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 38, city: "Melun" },
+  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 35, city: "Barbizon" },
+  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", emoji: "⚽", price: 42, city: "Moret-sur-Loing" },
+  "21": { name: "Gymnase Avon Centre",                sport: "Basket à 5",  emoji: "🏀", price: 30, city: "Avon" },
+  "22": { name: "Salle Polyvalente Fontainebleau",    sport: "Basket à 5",  emoji: "🏀", price: 28, city: "Fontainebleau" },
+  "23": { name: "Playground Nemours Sud",             sport: "Basket à 5",  emoji: "🏀", price: 32, city: "Nemours" },
+  "24": { name: "Gymnase Léo Lagrange",               sport: "Basket à 5",  emoji: "🏀", price: 29, city: "Melun" },
+  "25": { name: "Complexe Bois-le-Roi",               sport: "Basket à 5",  emoji: "🏀", price: 27, city: "Bois-le-Roi" },
+  "26": { name: "Halle des Sports Moret",             sport: "Basket à 5",  emoji: "🏀", price: 33, city: "Moret-sur-Loing" },
+  "31": { name: "Club Padel Avon",                    sport: "Padel",       emoji: "🎾", price: 25, city: "Avon" },
+  "32": { name: "Padel Arena Fontainebleau",          sport: "Padel",       emoji: "🎾", price: 22, city: "Fontainebleau" },
+  "33": { name: "Padel Club Moret",                   sport: "Padel",       emoji: "🎾", price: 27, city: "Moret-sur-Loing" },
+  "34": { name: "Padel Indoor Melun",                 sport: "Padel",       emoji: "🎾", price: 26, city: "Melun" },
+  "35": { name: "Padel Garden Barbizon",              sport: "Padel",       emoji: "🎾", price: 24, city: "Barbizon" },
+  "36": { name: "Padel Center Nemours",               sport: "Padel",       emoji: "🎾", price: 28, city: "Nemours" },
+};
+const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", emoji: "⚽", price: 40, city: "Avon" };
+
+function formatSlotLabel(slot: string | undefined, date: string | undefined) {
+  if (!slot || !date) return "Sam 31 mai · 15h00 – 16h00";
+  const [y, m, d] = date.split("-");
+  const months = ["jan","fév","mar","avr","mai","juin","juil","août","sep","oct","nov","déc"];
+  const endH = String(Number(slot.split(":")[0]) + 1).padStart(2, "0");
+  return `${d} ${months[Number(m) - 1]} ${y} · ${slot} – ${endH}:00`;
+}
 
 export const Route = createFileRoute("/mes-reservations")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    terrainId: typeof search.terrainId === "string" ? search.terrainId : undefined,
+    slot: typeof search.slot === "string" ? search.slot : undefined,
+    date: typeof search.date === "string" ? search.date : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Mes réservations — PlayOff Amateurs" },
@@ -15,32 +48,10 @@ export const Route = createFileRoute("/mes-reservations")({
   component: MesReservationsPage,
 });
 
-type Reservation = {
-  id: string;
-  emoji: string;
-  name: string;
-  sport: string;
-  when: string;
-  city: string;
-  price: number;
-};
-
-const DEFAULT_RESERVATIONS: Reservation[] = [
-  {
-    id: "r-1",
-    emoji: "⚽",
-    name: "Terrain Municipal Avon",
-    sport: "Football 5v5",
-    when: "Dim 31 mai · 18h – 19h",
-    city: "Avon",
-    price: 80,
-  },
-];
-
 function MesReservationsPage() {
-
-  const [reservations] = useState<Reservation[]>(DEFAULT_RESERVATIONS);
-
+  const { terrainId, slot, date } = Route.useSearch();
+  const terrain = terrainId ? (TERRAIN_DATA[terrainId] ?? DEFAULT_TERRAIN) : null;
+  const slotLabel = formatSlotLabel(slot, date);
 
   return (
     <div className="min-h-screen pb-28 md:pb-12">
@@ -49,7 +60,7 @@ function MesReservationsPage() {
       <main className="mx-auto max-w-2xl px-4 sm:px-6 py-6 sm:py-10 space-y-5">
         <h1 className="text-2xl sm:text-3xl font-bold">Mes réservations</h1>
 
-        {reservations.length === 0 ? (
+        {!terrain ? (
           <div className="bg-card border border-border rounded-2xl px-6 py-12 text-center flex flex-col items-center gap-3">
             <div className="text-6xl" aria-hidden>📋</div>
             <h2 className="text-xl font-bold" style={{ color: "#0D1B4B" }}>
@@ -65,43 +76,41 @@ function MesReservationsPage() {
             </Link>
           </div>
         ) : (
-          reservations.map((r) => (
-            <Link
-              key={r.id}
-              to="/mon-match"
-              className="block bg-card border border-border rounded-2xl p-4 hover:shadow-md hover:border-primary/30 transition"
-            >
-              <div className="flex items-start gap-4">
-                <div className="h-14 w-14 rounded-full bg-muted inline-flex items-center justify-center text-3xl shrink-0" aria-hidden>
-                  {r.emoji}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p className="font-bold">{r.name}</p>
-                    <span
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
-                      style={{ background: "#DCFCE7", color: "#15803D" }}
-                    >
-                      <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Confirmée
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">{r.sport}</p>
-                  <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
-                    <span className="inline-flex items-center gap-1">
-                      <Calendar className="h-4 w-4" strokeWidth={1.75} /> {r.when}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <MapPin className="h-4 w-4" strokeWidth={1.75} /> {r.city}
-                    </span>
-                  </div>
-                  <p className="mt-2 font-extrabold text-lg" style={{ color: "#FF6B00" }}>
-                    {r.price} €
-                  </p>
-                </div>
-                <ChevronRight className="h-6 w-6 text-muted-foreground" strokeWidth={1.75} />
+          <Link
+            to="/mon-match"
+            search={{ terrainId, slot, date }}
+            className="block bg-card border border-border rounded-2xl p-4 hover:shadow-md hover:border-primary/30 transition"
+          >
+            <div className="flex items-start gap-4">
+              <div className="h-14 w-14 rounded-full bg-muted inline-flex items-center justify-center text-3xl shrink-0" aria-hidden>
+                {terrain.emoji}
               </div>
-            </Link>
-          ))
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="font-bold">{terrain.name}</p>
+                  <span
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
+                    style={{ background: "#DCFCE7", color: "#15803D" }}
+                  >
+                    <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Confirmée
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">{terrain.sport}</p>
+                <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar className="h-4 w-4" strokeWidth={1.75} /> {slotLabel}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin className="h-4 w-4" strokeWidth={1.75} /> {terrain.city}
+                  </span>
+                </div>
+                <p className="mt-2 font-extrabold text-lg" style={{ color: "#FF6B00" }}>
+                  {terrain.price} €
+                </p>
+              </div>
+              <ChevronRight className="h-6 w-6 text-muted-foreground" strokeWidth={1.75} />
+            </div>
+          </Link>
         )}
       </main>
 

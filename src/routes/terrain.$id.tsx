@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useParams, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useParams, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, MapPin, Star, Check, Minus, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -18,15 +18,15 @@ export const Route = createFileRoute("/terrain/$id")({
   component: SlotPage,
 });
 
-type Slot = { id: string; time: string; price: number; status: "available" | "full" };
+type Slot = { id: string; time: string; price: number; status: "available" | "full"; happyHour?: boolean };
 
 const TERRAIN_DATA: Record<string, { name: string; sport: string; distance: string; rating: number; emoji: string; price: number }> = {
-  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽", price: 40 },
-  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", distance: "3,8 km", rating: 4.3, emoji: "⚽", price: 45 },
-  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", distance: "5,2 km", rating: 4.8, emoji: "⚽", price: 50 },
-  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", distance: "4,1 km", rating: 4.4, emoji: "⚽", price: 38 },
-  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", distance: "6,7 km", rating: 4.2, emoji: "⚽", price: 35 },
-  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", distance: "8,3 km", rating: 4.0, emoji: "⚽", price: 42 },
+  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽", price: 80 },
+  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", distance: "3,8 km", rating: 4.3, emoji: "⚽", price: 80 },
+  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", distance: "5,2 km", rating: 4.8, emoji: "⚽", price: 80 },
+  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", distance: "4,1 km", rating: 4.4, emoji: "⚽", price: 80 },
+  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", distance: "6,7 km", rating: 4.2, emoji: "⚽", price: 80 },
+  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", distance: "8,3 km", rating: 4.0, emoji: "⚽", price: 80 },
   "21": { name: "Gymnase Avon Centre",                sport: "Basket à 5",  distance: "1,8 km", rating: 4.5, emoji: "🏀", price: 30 },
   "22": { name: "Salle Polyvalente Fontainebleau",    sport: "Basket à 5",  distance: "3,2 km", rating: 4.1, emoji: "🏀", price: 28 },
   "23": { name: "Playground Nemours Sud",             sport: "Basket à 5",  distance: "6,1 km", rating: 3.9, emoji: "🏀", price: 32 },
@@ -40,7 +40,7 @@ const TERRAIN_DATA: Record<string, { name: string; sport: string; distance: stri
   "35": { name: "Padel Garden Barbizon",              sport: "Padel",       distance: "6,9 km", rating: 4.4, emoji: "🎾", price: 24 },
   "36": { name: "Padel Center Nemours",               sport: "Padel",       distance: "8,5 km", rating: 4.2, emoji: "🎾", price: 28 },
 };
-const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽", price: 40 };
+const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽", price: 80 };
 
 const SLOTS_BY_DOW: Record<number, Omit<Slot, "price">[]> = {
   0: [{ id: "s1", time: "09:00", status: "available" }, { id: "s2", time: "11:00", status: "full" }, { id: "s3", time: "14:00", status: "available" }, { id: "s4", time: "16:00", status: "available" }, { id: "s5", time: "18:00", status: "full" }, { id: "s6", time: "20:00", status: "available" }],
@@ -81,9 +81,15 @@ function SlotPage() {
   const days = useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)), [weekStart]);
   const selectedDate = new Date(selectedDayISO + "T00:00:00");
 
+  const isFootball = terrain.sport === "Football 5v5";
+  const HAPPY_HOUR_PRICE = 50;
+
   const slots: Slot[] = useMemo(() => {
     const dow = (selectedDate.getDay() + 6) % 7;
-    return (SLOTS_BY_DOW[dow] ?? []).map((s) => ({ ...s, price: terrain.price }));
+    return (SLOTS_BY_DOW[dow] ?? []).map((s) => ({
+      ...s,
+      price: s.happyHour && isFootball ? HAPPY_HOUR_PRICE : terrain.price,
+    }));
   }, [selectedDayISO, terrain.price]);
 
   const selectedSlot = slots.find((s) => s.id === selectedSlotId && s.status === "available");
@@ -188,9 +194,16 @@ function SlotPage() {
                   className={`relative h-24 rounded-xl border transition flex flex-col items-center justify-center gap-1 font-semibold ${
                     isFull ? "bg-muted/60 border-border text-muted-foreground cursor-not-allowed"
                     : isSelected ? "border-transparent text-accent-foreground shadow-sm"
+                    : s.happyHour && isFootball ? "bg-amber-50 border-amber-300 hover:border-amber-400 hover:shadow-sm"
                     : "bg-card border-border hover:border-primary/40 hover:shadow-sm"
                   }`}
                   style={isSelected ? { background: "#FF6B00" } : undefined}>
+                  {s.happyHour && isFootball && !isFull && (
+                    <span className="absolute top-1.5 left-1/2 -translate-x-1/2 text-[9px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap"
+                      style={{ background: "#F59E0B", color: "#fff" }}>
+                      ⚡ Happy Hour
+                    </span>
+                  )}
                   <span className={`text-lg font-bold ${isFull ? "line-through" : ""}`}>{s.time}</span>
                   <span className="text-sm">{isFull ? <span className="line-through">COMPLET</span> : `${s.price} €`}</span>
                   {isSelected && <Check className="absolute bottom-1.5 h-4 w-4" strokeWidth={3} />}
@@ -282,3 +295,4 @@ function SlotPage() {
     </div>
   );
 }
+

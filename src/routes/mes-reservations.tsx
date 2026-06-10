@@ -1,15 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, MapPin, Calendar, ChevronRight } from "lucide-react";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 
 const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number; city: string }> = {
-  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 40, city: "Avon" },
-  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 45, city: "Fontainebleau" },
-  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", emoji: "⚽", price: 50, city: "Nemours" },
-  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 38, city: "Melun" },
-  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 35, city: "Barbizon" },
-  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", emoji: "⚽", price: 42, city: "Moret-sur-Loing" },
+  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 80, city: "Avon" },
+  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 80, city: "Fontainebleau" },
+  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", emoji: "⚽", price: 80, city: "Nemours" },
+  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 80, city: "Melun" },
+  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 80, city: "Barbizon" },
+  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", emoji: "⚽", price: 80, city: "Moret-sur-Loing" },
   "21": { name: "Gymnase Avon Centre",                sport: "Basket à 5",  emoji: "🏀", price: 30, city: "Avon" },
   "22": { name: "Salle Polyvalente Fontainebleau",    sport: "Basket à 5",  emoji: "🏀", price: 28, city: "Fontainebleau" },
   "23": { name: "Playground Nemours Sud",             sport: "Basket à 5",  emoji: "🏀", price: 32, city: "Nemours" },
@@ -23,7 +23,7 @@ const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string;
   "35": { name: "Padel Garden Barbizon",              sport: "Padel",       emoji: "🎾", price: 24, city: "Barbizon" },
   "36": { name: "Padel Center Nemours",               sport: "Padel",       emoji: "🎾", price: 28, city: "Nemours" },
 };
-const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", emoji: "⚽", price: 40, city: "Avon" };
+const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", emoji: "⚽", price: 80, city: "Avon" };
 
 function formatSlotLabel(slot: string | undefined, date: string | undefined) {
   if (!slot || !date) return "Sam 31 mai · 15h00 – 16h00";
@@ -118,3 +118,4 @@ function MesReservationsPage() {
     </div>
   );
 }
+

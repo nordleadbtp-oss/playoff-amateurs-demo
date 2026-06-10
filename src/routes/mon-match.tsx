@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Plus, BellRing, CheckCircle2, Clock, Share2, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -7,12 +7,12 @@ import { BottomNav } from "@/components/BottomNav";
 import { FloatingInput } from "@/components/FloatingInput";
 
 const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number }> = {
-  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 40 },
-  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 45 },
-  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", emoji: "⚽", price: 50 },
-  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 38 },
-  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 35 },
-  "13": { name: "Terrain Synthétique Moret",    sport: "Football 5v5", emoji: "⚽", price: 42 },
+  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 80 },
+  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 80 },
+  "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", emoji: "⚽", price: 80 },
+  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 80 },
+  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 80 },
+  "13": { name: "Terrain Synthétique Moret",    sport: "Football 5v5", emoji: "⚽", price: 80 },
   "21": { name: "Gymnase Avon Centre",                sport: "Basket à 5", emoji: "🏀", price: 30 },
   "22": { name: "Salle Polyvalente Fontainebleau",    sport: "Basket à 5", emoji: "🏀", price: 28 },
   "23": { name: "Playground Nemours Sud",             sport: "Basket à 5", emoji: "🏀", price: 32 },
@@ -26,7 +26,7 @@ const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string;
   "35": { name: "Padel Garden Barbizon",              sport: "Padel",       emoji: "🎾", price: 24 },
   "36": { name: "Padel Center Nemours",               sport: "Padel",       emoji: "🎾", price: 28 },
 };
-const DEFAULT_TERRAIN_INFO = { name: "Terrain Municipal Avon", sport: "Football 5v5", emoji: "⚽", price: 40 };
+const DEFAULT_TERRAIN_INFO = { name: "Terrain Municipal Avon", sport: "Football 5v5", emoji: "⚽", price: 80 };
 
 export const Route = createFileRoute("/mon-match")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -347,3 +347,4 @@ function MonMatchPage() {
     </div>
   );
 }
+

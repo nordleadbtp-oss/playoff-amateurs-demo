@@ -1,5 +1,5 @@
 ﻿import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp, X, ArrowUpDown } from "lucide-react";
+import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp, X, ArrowUpDown, LocateFixed } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
@@ -44,13 +44,13 @@ type Terrain = {
 
 const terrains: Terrain[] = [
   // Football primaires (3)
-  { id: 1,  name: "Terrain Municipal Avon",            sport: "Football 5v5", distance: "2,3 km", rating: 4.6, reviews: 128, price: 40, available: true,  primary: true, image: "https://images.unsplash.com/photo-1556056504-5c7696c4c28d?auto=format&fit=crop&w=600&q=70" },
-  { id: 2,  name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", distance: "3,8 km", rating: 4.3, reviews: 87,  price: 45, available: true,  primary: true, image: "https://images.unsplash.com/photo-1510051640316-cee39563ddab?auto=format&fit=crop&w=600&q=70" },
-  { id: 3,  name: "Stade Couvert de Nemours",          sport: "Football 5v5", distance: "5,2 km", rating: 4.8, reviews: 54,  price: 50, available: false, primary: true, image: "https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=600&q=70" },
+  { id: 1,  name: "Terrain Municipal Avon",            sport: "Football 5v5", distance: "2,3 km", rating: 4.6, reviews: 128, price: 80, available: true,  primary: true, image: "https://images.unsplash.com/photo-1556056504-5c7696c4c28d?auto=format&fit=crop&w=600&q=70" },
+  { id: 2,  name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", distance: "3,8 km", rating: 4.3, reviews: 87,  price: 80, available: true,  primary: true, image: "https://images.unsplash.com/photo-1510051640316-cee39563ddab?auto=format&fit=crop&w=600&q=70" },
+  { id: 3,  name: "Stade Couvert de Nemours",          sport: "Football 5v5", distance: "5,2 km", rating: 4.8, reviews: 54,  price: 80, available: false, primary: true, image: "https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=600&q=70" },
   // Football secondaires
-  { id: 11, name: "Stade Jean Bouin Melun",            sport: "Football 5v5", distance: "4,1 km", rating: 4.4, reviews: 62,  price: 38, available: true,                 image: "https://images.unsplash.com/photo-1459865264687-595d652de67e?auto=format&fit=crop&w=600&q=70" },
-  { id: 12, name: "City Stade de Barbizon",            sport: "Football 5v5", distance: "6,7 km", rating: 4.2, reviews: 41,  price: 35, available: true,                 image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=70" },
-  { id: 13, name: "Terrain Synthétique Moret",         sport: "Football 5v5", distance: "8,3 km", rating: 4.0, reviews: 29,  price: 42, available: false,                image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=600&q=70" },
+  { id: 11, name: "Stade Jean Bouin Melun",            sport: "Football 5v5", distance: "4,1 km", rating: 4.4, reviews: 62,  price: 80, available: true,                 image: "https://images.unsplash.com/photo-1459865264687-595d652de67e?auto=format&fit=crop&w=600&q=70" },
+  { id: 12, name: "City Stade de Barbizon",            sport: "Football 5v5", distance: "6,7 km", rating: 4.2, reviews: 41,  price: 80, available: true,                 image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=70" },
+  { id: 13, name: "Terrain Synthétique Moret",         sport: "Football 5v5", distance: "8,3 km", rating: 4.0, reviews: 29,  price: 80, available: false,                image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=600&q=70" },
   // Basket primaires (3)
   { id: 21, name: "Gymnase Avon Centre",               sport: "Basket à 5",  distance: "1,8 km", rating: 4.5, reviews: 73,  price: 30, available: true,  primary: true, image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=600&q=70" },
   { id: 22, name: "Salle Polyvalente Fontainebleau",   sport: "Basket à 5",  distance: "3,2 km", rating: 4.1, reviews: 55,  price: 28, available: true,  primary: true, image: "https://images.unsplash.com/photo-1505666287802-931dc83948e9?auto=format&fit=crop&w=600&q=70" },
@@ -86,6 +86,22 @@ function TerrainsPage() {
   const [active, setActive] = useState<Sport>("Football 5v5");
   const [showAll, setShowAll] = useState(false);
   const [sortBy, setSortBy] = useState<"distance" | "rating" | "price">("distance");
+  const [locating, setLocating] = useState(false);
+  const [geoActive, setGeoActive] = useState(false);
+
+  const handleLocate = () => {
+    setLocating(true);
+    setGeoActive(false);
+    setTimeout(() => {
+      setVilleQuery("Avon (77310)");
+      setVilleSuggestions([]);
+      setSortBy("distance");
+      setShowAll(false);
+      setLocating(false);
+      setGeoActive(true);
+      toast.success("Position détectée — terrains triés par proximité");
+    }, 1200);
+  };
   const [villeQuery, setVilleQuery] = useState("Avon (77310)");
   const [villeSuggestions, setVilleSuggestions] = useState<string[]>([]);
   const villeRef = useRef<HTMLDivElement>(null);
@@ -164,6 +180,18 @@ function TerrainsPage() {
               className="w-full h-12 sm:h-14 pl-12 pr-4 rounded-xl bg-card border border-border outline-none text-base font-medium cursor-pointer"
             />
           </div>
+          <button
+            onClick={handleLocate}
+            disabled={locating}
+            className="h-12 sm:h-14 px-4 rounded-xl font-bold inline-flex items-center justify-center gap-2 border-2 bg-card hover:bg-muted transition disabled:opacity-60"
+            style={geoActive ? { borderColor: "#22C55E", color: "#15803D" } : { borderColor: "#0D1B4B", color: "#0D1B4B" }}
+            aria-label="Me localiser"
+          >
+            <LocateFixed className={`h-5 w-5 ${locating ? "animate-spin" : ""}`} strokeWidth={2} />
+            <span className="hidden sm:inline whitespace-nowrap">
+              {locating ? "Localisation..." : geoActive ? "Localisé ✓" : "Me localiser"}
+            </span>
+          </button>
           <button
             onClick={() => toast.info("Recherche en cours...")}
             className="h-12 sm:h-14 px-5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
@@ -270,5 +298,8 @@ function TerrainsPage() {
     </div>
   );
 }
+
+
+
 
 

@@ -161,7 +161,7 @@ function SlotPage() {
   };
 
   const totalPrice = selectedSlot?.price ?? 0;
-  const perPlayer = totalPrice ? (totalPrice / 10).toFixed(2).replace(".", ",") : "—";
+  const perPlayer = totalPrice && playerCount > 0 ? (totalPrice / playerCount).toFixed(2).replace(".", ",") : "—";
 
   return (
     <div className="min-h-screen pb-28 md:pb-12">

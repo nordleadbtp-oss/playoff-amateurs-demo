@@ -72,7 +72,7 @@ const terrains: Terrain[] = [
   // Padel secondaires (images décalées)
   { id: 34, name: "Padel Indoor Melun", sport: "Padel", distance: "5,8 km", rating: 4.6, reviews: 54, price: 26, available: true, image: padel3 },
   { id: 35, name: "Padel Garden Barbizon", sport: "Padel", distance: "6,9 km", rating: 4.4, reviews: 38, price: 24, available: true, image: padel1 },
-  { id: 36, name: "Padel Center Nemours", sport: "Padel", distance: "8,5 km", rating: 4.2, reviews: 29, price: 28, available: false, image: padel3 },
+  { id: 36, name: "Padel Center Nemours", sport: "Padel", distance: "8,5 km", rating: 4.2, reviews: 29, price: 28, available: false, image: padel2 },
 ];
 
 function Stars({ rating }: { rating: number }) {

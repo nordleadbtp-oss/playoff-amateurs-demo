@@ -122,7 +122,9 @@ function SlotPage() {
   };
 
   const totalPrice = selectedSlot?.price ?? 0;
-  const perPlayer = totalPrice && playerCount > 0 ? (totalPrice/playerCount).toFixed(2).replace(".", ",") : "—";
+  const perPlayerValue = totalPrice && playerCount > 0 ? Math.ceil(totalPrice/playerCount) : 0;
+  const perPlayerRounded = totalPrice > 0 && totalPrice % playerCount !== 0;
+  const perPlayer = totalPrice && playerCount > 0 ? String(perPlayerValue) : "—";
 
   const handlePayment = async (provider: "stripe" | "paypal") => {
     if (!selectedSlot || !terrain) return;

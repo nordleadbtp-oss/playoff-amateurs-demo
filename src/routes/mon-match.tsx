@@ -112,13 +112,15 @@ function MonMatchPage() {
             <span style={{ color: "#FF6B00" }}>{pricePerPlayer} €</span>
           </p>
           <p className="text-sm opacity-80 mt-1">par joueur · tout compris</p>
-          <button
-            onClick={() => setShareOpen(true)}
-            className="mt-4 w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
-            style={{ background: "#FF6B00", color: "#1A1A1A" }}
-          >
-            <Share2 className="h-5 w-5" strokeWidth={2} /> Partager le lien de paiement
-          </button>
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={() => setShareOpen(true)}
+              className="h-12 px-5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+              style={{ background: "#FF6B00", color: "#1A1A1A" }}
+            >
+              <Share2 className="h-5 w-5" strokeWidth={2} /> Partager le lien
+            </button>
+          </div>
         </div>
 
         <div className="bg-card border border-border rounded-2xl p-4">

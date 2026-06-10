@@ -42,9 +42,10 @@ function MonMatchPage() {
   if (!user) return null;
 
 
+  const TERRAIN_TOTAL = 80; // prix fixe du terrain (hardcodé)
   const paidCount = useMemo(() => players.filter((p) => p.paid).length, [players]);
   const total = players.length;
-  const pricePerPlayer = 8;
+  const pricePerPlayer = total > 0 ? Math.ceil(TERRAIN_TOTAL / total) : TERRAIN_TOTAL;
   const collected = paidCount * pricePerPlayer;
   const totalAmount = total * pricePerPlayer;
   const remaining = totalAmount - collected;
@@ -103,7 +104,7 @@ function MonMatchPage() {
 
         <div className="rounded-2xl p-5 text-primary-foreground text-center" style={{ background: "#0D1B4B" }}>
           <p className="font-bold text-xl">
-            {totalAmount} € ÷ {total} joueurs ={" "}
+            {TERRAIN_TOTAL} € ÷ {total} joueur{total > 1 ? "s" : ""} ={" "}
             <span style={{ color: "#FF6B00" }}>{pricePerPlayer} €</span>
           </p>
           <p className="text-sm opacity-80 mt-1">par joueur · tout compris</p>

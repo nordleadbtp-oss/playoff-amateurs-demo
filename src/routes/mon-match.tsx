@@ -39,6 +39,8 @@ function MonMatchPage() {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [shareOpen, setShareOpen] = useState(false);
+  if (!user) return null;
+
 
   const paidCount = useMemo(() => players.filter((p) => p.paid).length, [players]);
   const total = players.length;

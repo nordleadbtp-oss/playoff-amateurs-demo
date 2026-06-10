@@ -1,14 +1,12 @@
-import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { FloatingInput } from "@/components/FloatingInput";
-import { useAuth } from "@/hooks/useAuth";
 import logoAsset from "@/assets/playoff-logo.png.asset.json";
 
 export const Route = createFileRoute("/connexion")({
   validateSearch: (s: Record<string, unknown>) => ({
     mode: s.mode === "signup" ? "signup" : "login",
-    redirect: typeof s.redirect === "string" ? s.redirect : undefined,
   }),
   head: () => ({
     meta: [
@@ -21,32 +19,21 @@ export const Route = createFileRoute("/connexion")({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { mode: initialMode, redirect } = useSearch({ from: "/connexion" });
-  const { signIn, signUp } = useAuth();
+  const { mode: initialMode } = Route.useSearch();
   const [mode, setMode] = useState<"login" | "signup">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [prenom, setPrenom] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const result = mode === "login"
-      ? await signIn(email, password)
-      : await signUp(email, password, prenom);
-    setLoading(false);
-
-    if (result.error) {
-      toast.error(
-        mode === "login"
-          ? "Connexion impossible — vérifie tes identifiants"
-          : `Inscription impossible — ${result.error}`,
-      );
-      return;
-    }
-    toast.success(mode === "login" ? "Bienvenue 👋" : "Compte créé 🎉");
-    navigate({ to: redirect ?? "/terrains" });
+    setTimeout(() => {
+      setLoading(false);
+      toast.success(mode === "login" ? "Bienvenue 👋 (démo)" : "Compte créé 🎉 (démo)");
+      navigate({ to: "/terrains" });
+    }, 800);
   };
 
   return (
@@ -101,6 +88,10 @@ function LoginPage() {
               {loading ? "..." : mode === "login" ? "Se connecter" : "Créer mon compte"}
             </button>
           </form>
+
+          <p className="mt-4 text-center text-xs text-muted-foreground">
+            Authentification simulée — démo Sprint 4
+          </p>
         </div>
       </div>
     </div>

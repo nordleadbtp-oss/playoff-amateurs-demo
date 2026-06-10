@@ -1,8 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Map, Calendar, ClipboardList, Bell, Menu, X, LogIn, LogOut, ClipboardList as ClipIcon, HelpCircle, Globe, Smartphone } from "lucide-react";
+import { Map, Calendar, ClipboardList, Bell, Menu, X, LogIn, HelpCircle, Globe, Smartphone } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
 import logoAsset from "@/assets/playoff-logo.png.asset.json";
 
 const links = [
@@ -15,19 +13,6 @@ export function AppHeader() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [menuOpen, setMenuOpen] = useState(false);
   const [notif, setNotif] = useState(true);
-  const { user, profile, signOut } = useAuth();
-
-  const initials = profile?.prenom
-    ? profile.prenom.slice(0, 2).toUpperCase()
-    : user
-    ? (user.email ?? "?").slice(0, 2).toUpperCase()
-    : null;
-
-  const handleSignOut = async () => {
-    await signOut();
-    setMenuOpen(false);
-    toast.success("À bientôt 👋");
-  };
 
   return (
     <header className="bg-primary text-primary-foreground sticky top-0 z-40">
@@ -64,21 +49,12 @@ export function AppHeader() {
           <button className="hidden sm:inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-white/10 transition" aria-label="Notifications">
             <Bell className="h-5 w-5" strokeWidth={1.75} />
           </button>
-          {initials ? (
-            <div
-              className="h-10 w-10 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center text-sm"
-              aria-label="Mon profil"
-            >
-              {initials}
-            </div>
-          ) : (
-            <Link
-              to="/connexion"
-              className="h-10 px-3 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center text-sm hover:opacity-90 transition"
-            >
-              Connexion
-            </Link>
-          )}
+          <Link
+            to="/connexion"
+            className="h-10 px-3 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center text-sm hover:opacity-90 transition"
+          >
+            Connexion
+          </Link>
           <button
             onClick={() => setMenuOpen(true)}
             className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-white/10 transition"
@@ -100,19 +76,12 @@ export function AppHeader() {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-3">
-              {user ? (
-                <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition text-left">
-                  <LogOut className="h-5 w-5" strokeWidth={1.75} />
-                  <span className="font-medium">Se déconnecter</span>
-                </button>
-              ) : (
-                <Link to="/connexion" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition">
-                  <LogIn className="h-5 w-5" strokeWidth={1.75} />
-                  <span className="font-medium">Se connecter / S'inscrire</span>
-                </Link>
-              )}
+              <Link to="/connexion" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition">
+                <LogIn className="h-5 w-5" strokeWidth={1.75} />
+                <span className="font-medium">Se connecter / S'inscrire</span>
+              </Link>
               <Link to="/mes-reservations" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition">
-                <ClipIcon className="h-5 w-5" strokeWidth={1.75} />
+                <ClipboardList className="h-5 w-5" strokeWidth={1.75} />
                 <span className="font-medium">Mes réservations</span>
               </Link>
               <div className="flex items-center gap-3 px-3 h-12 rounded-xl">
@@ -135,7 +104,7 @@ export function AppHeader() {
                   <HelpCircle className="h-5 w-5" strokeWidth={1.75} />
                   <span className="font-medium">Besoin d'aide</span>
                 </div>
-                <p className="text-sm text-muted-foreground pl-8">Contactez-nous : support@playoffamateurs.fr</p>
+                <p className="text-sm text-muted-foreground pl-8">support@playoffamateurs.fr</p>
               </div>
               <div className="flex items-center gap-3 px-3 h-12 rounded-xl">
                 <Globe className="h-5 w-5" strokeWidth={1.75} />

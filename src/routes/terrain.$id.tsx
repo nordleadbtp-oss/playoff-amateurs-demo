@@ -133,6 +133,7 @@ function SlotPage() {
       navigate({ to: "/connexion", search: { mode: "login", redirect: window.location.pathname } });
       return;
     }
+    toast.info(`Redirection vers ${provider === "stripe" ? "Stripe" : "PayPal"}... (démo)`);
     setBooking(true);
     const { data: resa, error: resaErr } = await supabase
       .from("reservations")

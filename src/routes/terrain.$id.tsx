@@ -1,6 +1,7 @@
-import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
-import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, MapPin, Star, Check } from "lucide-react";
+import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { ArrowLeft, ChevronLeft, ChevronRight, CalendarDays, MapPin, Star, Check, Minus, Plus } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -100,9 +101,9 @@ const TERRAIN_DATA: Record<string, { name: string; sport: string; distance: stri
 const DEFAULT_TERRAIN = { name: "Terrain Municipal Avon", sport: "Football 5v5", distance: "2,3 km", rating: 4.6, emoji: "⚽" };
 
 function SlotPage() {
-  const navigate = useNavigate();
   const { id } = useParams({ from: "/terrain/$id" });
   const terrain = TERRAIN_DATA[id] ?? DEFAULT_TERRAIN;
+  const [playerCount, setPlayerCount] = useState(10);
 
   // Aujourd'hui figé au mount + fenêtre 30 jours
   const today = useMemo(() => startOfDay(new Date()), []);
@@ -160,7 +161,7 @@ function SlotPage() {
   };
 
   const totalPrice = selectedSlot?.price ?? 0;
-  const perPlayer = totalPrice ? (totalPrice / 10).toFixed(2).replace(".", ",") : "—";
+  const perPlayer = totalPrice && playerCount > 0 ? (totalPrice / playerCount).toFixed(2).replace(".", ",") : "—";
 
   return (
     <div className="min-h-screen pb-28 md:pb-12">
@@ -339,7 +340,27 @@ function SlotPage() {
             </div>
             <div className="flex items-center justify-between px-4 py-3 text-sm">
               <span className="text-muted-foreground">Joueurs prévus</span>
-              <span className="font-medium">10</span>
+              <div className="inline-flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPlayerCount((n) => Math.max(1, n - 1))}
+                  disabled={playerCount <= 1}
+                  className="h-8 w-8 rounded-full border border-border inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Retirer un joueur"
+                >
+                  <Minus className="h-4 w-4" strokeWidth={2} />
+                </button>
+                <span className="font-semibold w-6 text-center">{playerCount}</span>
+                <button
+                  type="button"
+                  onClick={() => setPlayerCount((n) => Math.min(10, n + 1))}
+                  disabled={playerCount >= 10}
+                  className="h-8 w-8 rounded-full border border-border inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed"
+                  aria-label="Ajouter un joueur"
+                >
+                  <Plus className="h-4 w-4" strokeWidth={2} />
+                </button>
+              </div>
             </div>
             <div className="flex items-center justify-between px-4 py-3.5">
               <span className="font-semibold">Prix total</span>
@@ -352,17 +373,38 @@ function SlotPage() {
           <div className="rounded-2xl p-4 text-center text-primary-foreground" style={{ background: "#0D1B4B" }}>
             <p className="text-sm opacity-90">Participation par joueur</p>
             <p className="text-2xl font-extrabold mt-1">{perPlayer} {selectedSlot ? "€" : ""}</p>
-            <p className="text-xs opacity-75 mt-1">{selectedSlot ? `${totalPrice} € ÷ 10 joueurs` : "Sélectionnez un créneau"}</p>
+            <p className="text-xs opacity-75 mt-1">{selectedSlot ? `${totalPrice} € ÷ ${playerCount} joueur${playerCount > 1 ? "s" : ""}` : "Sélectionnez un créneau"}</p>
           </div>
 
-          <button
-            onClick={() => navigate({ to: "/mon-match" })}
-            disabled={!selectedSlot}
-            className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ background: "#FF6B00", color: "#1A1A1A" }}
-          >
-            <CalendarDays className="h-5 w-5" strokeWidth={2} /> Réserver ce créneau
-          </button>
+          {playerCount < 10 ? (
+            <div className="rounded-2xl border border-dashed border-border bg-card p-4 text-center text-sm text-muted-foreground transition-all duration-200">
+              Il manque {10 - playerCount} joueur{10 - playerCount > 1 ? "s" : ""} pour réserver
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-border bg-card p-4 space-y-3 transition-all duration-200">
+              <p className="font-bold text-center" style={{ color: "#0D1B4B" }}>
+                Équipe complète ! Choisissez votre mode de paiement
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => toast.success("Redirection vers Stripe... (démo)")}
+                  disabled={!selectedSlot}
+                  className="h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ background: "#635BFF" }}
+                >
+                  💳 Stripe
+                </button>
+                <button
+                  onClick={() => toast.success("Redirection vers PayPal... (démo)")}
+                  disabled={!selectedSlot}
+                  className="h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ background: "#003087" }}
+                >
+                  🅿️ PayPal
+                </button>
+              </div>
+            </div>
+          )}
         </aside>
       </main>
 

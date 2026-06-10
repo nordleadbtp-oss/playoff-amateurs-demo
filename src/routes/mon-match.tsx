@@ -112,13 +112,15 @@ function MonMatchPage() {
             <span style={{ color: "#FF6B00" }}>{pricePerPlayer} €</span>
           </p>
           <p className="text-sm opacity-80 mt-1">par joueur · tout compris</p>
-          <button
-            onClick={() => setShareOpen(true)}
-            className="mt-4 w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
-            style={{ background: "#FF6B00", color: "#1A1A1A" }}
-          >
-            <Share2 className="h-5 w-5" strokeWidth={2} /> Partager le lien de paiement
-          </button>
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={() => setShareOpen(true)}
+              className="h-12 px-5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+              style={{ background: "#FF6B00", color: "#1A1A1A" }}
+            >
+              <Share2 className="h-5 w-5" strokeWidth={2} /> Partager le lien
+            </button>
+          </div>
         </div>
 
         <div className="bg-card border border-border rounded-2xl p-4">
@@ -149,13 +151,22 @@ function MonMatchPage() {
                 <p className="flex-1 font-medium truncate">{p.name}</p>
                 <p className="text-sm font-semibold w-10 text-right">{pricePerPlayer}€</p>
                 {p.paid ? (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#DCFCE7", color: "#15803D" }}>
+                  <button
+                    onClick={() => !p.isMe && setPlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
+                    disabled={p.isMe}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 disabled:cursor-not-allowed hover:opacity-90"
+                    style={{ background: "#DCFCE7", color: "#15803D" }}
+                  >
                     Payé ✅
-                  </span>
+                  </button>
                 ) : (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#FED7AA", color: "#9A3412" }}>
+                  <button
+                    onClick={() => setPlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: true } : x))}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 hover:opacity-90 cursor-pointer"
+                    style={{ background: "#FED7AA", color: "#9A3412" }}
+                  >
                     <Clock className="h-3 w-3" strokeWidth={2} /> En attente
-                  </span>
+                  </button>
                 )}
               </li>
             ))}
@@ -224,27 +235,39 @@ function MonMatchPage() {
             </div>
             <p className="text-sm text-muted-foreground mb-5">Choisissez le canal d'envoi aux joueurs.</p>
             <div className="space-y-3">
-              <button
-                onClick={() => { setShareOpen(false); toast.success("Lien copié — ouvre WhatsApp pour le coller"); }}
-                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
-                style={{ background: "#25D366", color: "#fff" }}
-              >
-                💬 Partager via WhatsApp
-              </button>
-              <button
-                onClick={() => { setShareOpen(false); toast.success("SMS envoyé aux joueurs"); }}
-                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition"
-                style={{ background: "#0D1B4B", color: "#fff" }}
-              >
-                📱 Envoyer par SMS
-              </button>
-              <button
-                onClick={() => { setShareOpen(false); toast.success("Mail envoyé aux joueurs"); }}
-                className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 border-2 bg-card hover:bg-muted transition"
-                style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
-              >
-                ✉️ Envoyer par mail
-              </button>
+              {(() => {
+                const PAY_URL = "https://playoff.app/payer/match-12345";
+                const copyAnd = (label: string) => async () => {
+                  try { await navigator.clipboard.writeText(PAY_URL); } catch {}
+                  setShareOpen(false);
+                  toast.success(`Lien copié — prêt à partager via ${label}`);
+                };
+                return (
+                  <>
+                    <button
+                      onClick={copyAnd("WhatsApp")}
+                      className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+                      style={{ background: "#25D366", color: "#fff" }}
+                    >
+                      💬 Partager via WhatsApp
+                    </button>
+                    <button
+                      onClick={copyAnd("SMS")}
+                      className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition"
+                      style={{ background: "#0D1B4B", color: "#fff" }}
+                    >
+                      📱 Envoyer par SMS
+                    </button>
+                    <button
+                      onClick={copyAnd("mail")}
+                      className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 border-2 bg-card hover:bg-muted transition"
+                      style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+                    >
+                      ✉️ Envoyer par mail
+                    </button>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>

@@ -27,15 +27,6 @@ type Player = {
 
 const INITIAL_PLAYERS: Player[] = [
   { id: 1, initials: "TD", name: "Thai (moi)", color: "#0D1B4B", paid: true, isMe: true },
-  { id: 2, initials: "PB", name: "Pierre", color: "#FF6B00", paid: false },
-  { id: 3, initials: "LC", name: "Lucas", color: "#22C55E", paid: true },
-  { id: 4, initials: "AX", name: "Alex", color: "#3B82F6", paid: true },
-  { id: 5, initials: "HG", name: "Hugo", color: "#A855F7", paid: false },
-  { id: 6, initials: "MR", name: "Marc", color: "#0D1B4B", paid: true },
-  { id: 7, initials: "JL", name: "Julien", color: "#EC4899", paid: true },
-  { id: 8, initials: "SB", name: "Sami", color: "#14B8A6", paid: true },
-  { id: 9, initials: "RD", name: "Romain", color: "#EAB308", paid: true },
-  { id: 10, initials: "NV", name: "Noah", color: "#9CA3AF", paid: false },
 ];
 
 const AVATAR_COLORS = ["#0D1B4B", "#FF6B00", "#22C55E", "#3B82F6", "#A855F7", "#EC4899", "#14B8A6", "#EAB308"];
@@ -112,13 +103,13 @@ function MonMatchPage() {
             <span style={{ color: "#FF6B00" }}>{pricePerPlayer} €</span>
           </p>
           <p className="text-sm opacity-80 mt-1">par joueur · tout compris</p>
-          <div className="mt-4 flex justify-end">
+          <div className="mt-4 flex justify-center">
             <button
               onClick={() => setShareOpen(true)}
-              className="h-12 px-5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+              className="h-12 px-6 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
               style={{ background: "#FF6B00", color: "#1A1A1A" }}
             >
-              <Share2 className="h-5 w-5" strokeWidth={2} /> Partager le lien
+              <Share2 className="h-5 w-5" strokeWidth={2} /> Partager le lien de paiement
             </button>
           </div>
         </div>
@@ -166,6 +157,18 @@ function MonMatchPage() {
                     style={{ background: "#FED7AA", color: "#9A3412" }}
                   >
                     <Clock className="h-3 w-3" strokeWidth={2} /> En attente
+                  </button>
+                )}
+                {!p.isMe && (
+                  <button
+                    onClick={() => {
+                      setPlayers((list) => list.filter((x) => x.id !== p.id));
+                      toast.success(`${p.name} retiré du match`);
+                    }}
+                    className="h-7 w-7 rounded-full hover:bg-red-50 inline-flex items-center justify-center text-muted-foreground hover:text-red-500 transition ml-1"
+                    aria-label={`Retirer ${p.name}`}
+                  >
+                    <X className="h-3.5 w-3.5" strokeWidth={2} />
                   </button>
                 )}
               </li>

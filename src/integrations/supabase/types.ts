@@ -14,7 +14,203 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      creneaux: {
+        Row: {
+          created_at: string
+          date_debut: string
+          date_fin: string
+          id: string
+          prix_total: number
+          statut: string
+          terrain_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_debut: string
+          date_fin: string
+          id?: string
+          prix_total: number
+          statut?: string
+          terrain_id: string
+        }
+        Update: {
+          created_at?: string
+          date_debut?: string
+          date_fin?: string
+          id?: string
+          prix_total?: number
+          statut?: string
+          terrain_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creneaux_terrain_id_fkey"
+            columns: ["terrain_id"]
+            isOneToOne: false
+            referencedRelation: "terrains"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      joueurs_match: {
+        Row: {
+          created_at: string
+          email: string | null
+          est_organisateur: boolean
+          id: string
+          prenom: string
+          reservation_id: string
+          statut_paiement: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          est_organisateur?: boolean
+          id?: string
+          prenom: string
+          reservation_id: string
+          statut_paiement?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          est_organisateur?: boolean
+          id?: string
+          prenom?: string
+          reservation_id?: string
+          statut_paiement?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "joueurs_match_reservation_id_fkey"
+            columns: ["reservation_id"]
+            isOneToOne: false
+            referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          id: string
+          prenom: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          id: string
+          prenom: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          prenom?: string
+        }
+        Relationships: []
+      }
+      reservations: {
+        Row: {
+          created_at: string
+          creneau_id: string
+          id: string
+          prix_paye: number | null
+          statut: string
+          terrain_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          creneau_id: string
+          id?: string
+          prix_paye?: number | null
+          statut?: string
+          terrain_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          creneau_id?: string
+          id?: string
+          prix_paye?: number | null
+          statut?: string
+          terrain_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_creneau_id_fkey"
+            columns: ["creneau_id"]
+            isOneToOne: false
+            referencedRelation: "creneaux"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_terrain_id_fkey"
+            columns: ["terrain_id"]
+            isOneToOne: false
+            referencedRelation: "terrains"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      terrains: {
+        Row: {
+          code_postal: string
+          created_at: string
+          disponible: boolean
+          distance_km: number | null
+          id: string
+          image_url: string | null
+          nb_avis: number
+          nom: string
+          note: number | null
+          prix_heure: number
+          sport: string
+          ville: string
+        }
+        Insert: {
+          code_postal: string
+          created_at?: string
+          disponible?: boolean
+          distance_km?: number | null
+          id?: string
+          image_url?: string | null
+          nb_avis?: number
+          nom: string
+          note?: number | null
+          prix_heure: number
+          sport: string
+          ville: string
+        }
+        Update: {
+          code_postal?: string
+          created_at?: string
+          disponible?: boolean
+          distance_km?: number | null
+          id?: string
+          image_url?: string | null
+          nb_avis?: number
+          nom?: string
+          note?: number | null
+          prix_heure?: number
+          sport?: string
+          ville?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

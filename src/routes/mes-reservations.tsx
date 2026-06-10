@@ -4,12 +4,12 @@ import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 
 const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number; city: string }> = {
-  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 80, city: "Avon" },
-  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 80, city: "Fontainebleau" },
+  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 70, city: "Avon" },
+  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 75, city: "Fontainebleau" },
   "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", emoji: "⚽", price: 80, city: "Nemours" },
-  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 80, city: "Melun" },
-  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 80, city: "Barbizon" },
-  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", emoji: "⚽", price: 80, city: "Moret-sur-Loing" },
+  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 72, city: "Melun" },
+  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 65, city: "Barbizon" },
+  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", emoji: "⚽", price: 68, city: "Moret-sur-Loing" },
   "21": { name: "Gymnase Avon Centre",                sport: "Basket à 5",  emoji: "🏀", price: 30, city: "Avon" },
   "22": { name: "Salle Polyvalente Fontainebleau",    sport: "Basket à 5",  emoji: "🏀", price: 28, city: "Fontainebleau" },
   "23": { name: "Playground Nemours Sud",             sport: "Basket à 5",  emoji: "🏀", price: 32, city: "Nemours" },

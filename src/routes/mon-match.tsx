@@ -7,12 +7,12 @@ import { BottomNav } from "@/components/BottomNav";
 import { FloatingInput } from "@/components/FloatingInput";
 
 const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number }> = {
-  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 80 },
-  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 80 },
+  "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 70 },
+  "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 75 },
   "3":  { name: "Stade Couvert de Nemours",          sport: "Football 5v5", emoji: "⚽", price: 80 },
-  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 80 },
-  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 80 },
-  "13": { name: "Terrain Synthétique Moret",    sport: "Football 5v5", emoji: "⚽", price: 80 },
+  "11": { name: "Stade Jean Bouin Melun",             sport: "Football 5v5", emoji: "⚽", price: 72 },
+  "12": { name: "City Stade de Barbizon",             sport: "Football 5v5", emoji: "⚽", price: 65 },
+  "13": { name: "Terrain Synthétique Moret",          sport: "Football 5v5", emoji: "⚽", price: 68 },
   "21": { name: "Gymnase Avon Centre",                sport: "Basket à 5", emoji: "🏀", price: 30 },
   "22": { name: "Salle Polyvalente Fontainebleau",    sport: "Basket à 5", emoji: "🏀", price: 28 },
   "23": { name: "Playground Nemours Sud",             sport: "Basket à 5", emoji: "🏀", price: 32 },
@@ -26,7 +26,7 @@ const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string;
   "35": { name: "Padel Garden Barbizon",              sport: "Padel",       emoji: "🎾", price: 24 },
   "36": { name: "Padel Center Nemours",               sport: "Padel",       emoji: "🎾", price: 28 },
 };
-const DEFAULT_TERRAIN_INFO = { name: "Terrain Municipal Avon", sport: "Football 5v5", emoji: "⚽", price: 80 };
+const DEFAULT_TERRAIN_INFO = { name: "Terrain Municipal Avon", sport: "Football 5v5", emoji: "⚽", price: 70 };
 
 export const Route = createFileRoute("/mon-match")({
   validateSearch: (search: Record<string, unknown>) => ({

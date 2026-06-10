@@ -100,10 +100,17 @@ export function AppHeader() {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-3">
-              <Link to="/connexion" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition">
-                <LogIn className="h-5 w-5" strokeWidth={1.75} />
-                <span className="font-medium">Se connecter / S'inscrire</span>
-              </Link>
+              {user ? (
+                <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition text-left">
+                  <LogOut className="h-5 w-5" strokeWidth={1.75} />
+                  <span className="font-medium">Se déconnecter</span>
+                </button>
+              ) : (
+                <Link to="/connexion" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition">
+                  <LogIn className="h-5 w-5" strokeWidth={1.75} />
+                  <span className="font-medium">Se connecter / S'inscrire</span>
+                </Link>
+              )}
               <Link to="/mes-reservations" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition">
                 <ClipIcon className="h-5 w-5" strokeWidth={1.75} />
                 <span className="font-medium">Mes réservations</span>

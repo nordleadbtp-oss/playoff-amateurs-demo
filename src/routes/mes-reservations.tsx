@@ -1,5 +1,6 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, MapPin, Calendar, ChevronRight } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CheckCircle2, MapPin, Calendar, ChevronRight, BellRing } from "lucide-react";
+import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 
@@ -76,41 +77,52 @@ function MesReservationsPage() {
             </Link>
           </div>
         ) : (
-          <Link
-            to="/mon-match"
-            search={{ terrainId, slot, date }}
-            className="block bg-card border border-border rounded-2xl p-4 hover:shadow-md hover:border-primary/30 transition"
-          >
-            <div className="flex items-start gap-4">
-              <div className="h-14 w-14 rounded-full bg-muted inline-flex items-center justify-center text-3xl shrink-0" aria-hidden>
-                {terrain.emoji}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-bold">{terrain.name}</p>
-                  <span
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
-                    style={{ background: "#DCFCE7", color: "#15803D" }}
-                  >
-                    <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Match confirmé
-                  </span>
+          <div className="space-y-3">
+            <Link
+              to="/mon-match"
+              search={{ terrainId, slot, date }}
+              className="block bg-card border border-border rounded-2xl p-4 hover:shadow-md hover:border-primary/30 transition"
+            >
+              <div className="flex items-start gap-4">
+                <div className="h-14 w-14 rounded-full bg-muted inline-flex items-center justify-center text-3xl shrink-0" aria-hidden>
+                  {terrain.emoji}
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">{terrain.sport}</p>
-                <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
-                  <span className="inline-flex items-center gap-1">
-                    <Calendar className="h-4 w-4" strokeWidth={1.75} /> {slotLabel}
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <MapPin className="h-4 w-4" strokeWidth={1.75} /> {terrain.city}
-                  </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="font-bold">{terrain.name}</p>
+                    <span
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
+                      style={{ background: "#DCFCE7", color: "#15803D" }}
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Match confirmé
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">{terrain.sport}</p>
+                  <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+                    <span className="inline-flex items-center gap-1">
+                      <Calendar className="h-4 w-4" strokeWidth={1.75} /> {slotLabel}
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin className="h-4 w-4" strokeWidth={1.75} /> {terrain.city}
+                    </span>
+                  </div>
+                  <p className="mt-2 font-extrabold text-lg" style={{ color: "#FF6B00" }}>
+                    {terrain.price} €
+                  </p>
                 </div>
-                <p className="mt-2 font-extrabold text-lg" style={{ color: "#FF6B00" }}>
-                  {terrain.price} €
-                </p>
+                <ChevronRight className="h-6 w-6 text-muted-foreground" strokeWidth={1.75} />
               </div>
-              <ChevronRight className="h-6 w-6 text-muted-foreground" strokeWidth={1.75} />
-            </div>
-          </Link>
+            </Link>
+
+            <button
+              onClick={() => toast.success("Rappel envoyé à tous les joueurs — ils recevront un SMS 24h avant le match")}
+              className="w-full h-12 rounded-xl font-semibold inline-flex items-center justify-center gap-2 border-2 hover:bg-muted transition"
+              style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+            >
+              <BellRing className="h-5 w-5" strokeWidth={1.75} />
+              Envoyer un rappel aux joueurs
+            </button>
+          </div>
         )}
       </main>
 
@@ -118,4 +130,3 @@ function MesReservationsPage() {
     </div>
   );
 }
-

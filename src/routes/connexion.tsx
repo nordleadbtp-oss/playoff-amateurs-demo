@@ -39,9 +39,9 @@ function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
-        <Link to="/terrains" className="flex justify-center mb-8">
+        <div className="flex justify-center mb-8">
           <img src={logoAsset.url} alt="PlayOff Amateurs" className="h-16 w-auto" />
-        </Link>
+        </div>
 
         <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
           <div className="flex p-1 bg-muted rounded-xl mb-6">

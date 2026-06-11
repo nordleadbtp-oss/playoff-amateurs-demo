@@ -11,7 +11,7 @@ function readFromLS() {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return null;
     const data = JSON.parse(raw);
-    if (data.terrainId && data.slot && data.date) return data as { terrainId: string; slot: string; date: string; confirmed: boolean };
+    if (data.terrainId) return data as { terrainId: string; slot?: string; date?: string; confirmed: boolean };
     return null;
   } catch { return null; }
 }

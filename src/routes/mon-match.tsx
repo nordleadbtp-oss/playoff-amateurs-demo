@@ -76,7 +76,12 @@ function saveToLS(terrainId: string | undefined, slot: string | undefined, date:
 }
 
 function MonMatchPage() {
-  const { terrainId, slot, date } = Route.useSearch();
+  const search = Route.useSearch();
+  // Si pas de query params (accès via BottomNav), fallback sur localStorage
+  const lsSaved = (() => { try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch { return {}; } })();
+  const terrainId = search.terrainId ?? lsSaved.terrainId;
+  const slot      = search.slot      ?? lsSaved.slot;
+  const date      = search.date      ?? lsSaved.date;
   const terrainInfo = terrainId ? (TERRAIN_DATA[terrainId] ?? DEFAULT_TERRAIN_INFO) : DEFAULT_TERRAIN_INFO;
 
   const slotLabel = (() => {

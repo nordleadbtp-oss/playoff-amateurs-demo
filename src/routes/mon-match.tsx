@@ -95,7 +95,11 @@ function MonMatchPage() {
 
   const navigate = useNavigate();
   const [confirmed, setConfirmed] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}").confirmed === true; } catch { return false; }
+    try {
+      const saved = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+      if (terrainId && saved.terrainId && saved.terrainId !== terrainId) return false;
+      return saved.confirmed === true;
+    } catch { return false; }
   });
   const [players, setPlayers] = useState<Player[]>(() => {
     try {

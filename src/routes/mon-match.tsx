@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { FloatingInput } from "@/components/FloatingInput";
+import { upsertReservation } from "@/lib/reservations";
 
 const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number }> = {
   "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 70 },

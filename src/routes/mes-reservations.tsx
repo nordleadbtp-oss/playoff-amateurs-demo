@@ -111,11 +111,11 @@ function MesReservationsPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-bold">{terrain.name}</p>
                           {isConfirmed ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#DCFCE7", color: "#15803D" }}>
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#E6EDF5", color: "#0D1B4B" }}>
                               <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Match confirmé
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#FEF9C3", color: "#92400E" }}>
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#F3F4F6", color: "#6B7280" }}>
                               En attente de paiements
                             </span>
                           )}

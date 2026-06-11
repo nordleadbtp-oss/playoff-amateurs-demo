@@ -66,7 +66,7 @@ const INITIAL_PLAYERS: Player[] = [
   { id: 10, initials: "RD", name: "Romain Delacroix",   color: "#FF6B00", paid: false },
 ];
 
-const AVATAR_COLORS = ["#0D1B4B", "#FF6B00", "#22C55E", "#3B82F6", "#A855F7", "#EC4899", "#14B8A6", "#EAB308"];
+const AVATAR_COLORS = ["#0D1B4B", "#1E3A6F", "#4A6FA5", "#8FA8D3", "#FF6B00", "#FF8C42", "#FFB885", "#7A6B5A"];
 
 const LS_KEY = "playoff_match";
 
@@ -174,11 +174,11 @@ function MonMatchPage() {
             <h1 className="text-2xl sm:text-3xl font-bold">Mon match</h1>
           </div>
           {total > 0 && paidCount === total ? (
-            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#DCFCE7", color: "#15803D", borderColor: "#86EFAC" }}>
+            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#E6EDF5", color: "#0D1B4B", borderColor: "#C5D2E5" }}>
               <CheckCircle2 className="h-4 w-4" strokeWidth={2} /> Confirmé
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#FEF9C3", color: "#92400E", borderColor: "#FDE68A" }}>
+            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#F3F4F6", color: "#6B7280", borderColor: "#E5E7EB" }}>
               <Clock className="h-4 w-4" strokeWidth={2} /> En attente
             </span>
           )}
@@ -225,7 +225,7 @@ function MonMatchPage() {
             <p className="font-bold">{paidCount} / {total} joueurs</p>
           </div>
           <div className="mt-3 h-3 w-full rounded-full bg-muted overflow-hidden">
-            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, background: "#22C55E" }} />
+            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, background: "linear-gradient(90deg, #0D1B4B, #FF6B00)" }} />
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
             {collected} € collectés · {remaining} € restants
@@ -254,7 +254,7 @@ function MonMatchPage() {
                     onClick={() => !p.isMe && updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
                     disabled={p.isMe}
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 disabled:cursor-not-allowed hover:opacity-90"
-                    style={{ background: "#DCFCE7", color: "#15803D" }}
+                    style={{ background: "#E6EDF5", color: "#0D1B4B" }}
                   >
                     Payé ✅
                   </button>
@@ -262,7 +262,7 @@ function MonMatchPage() {
                   <button
                     onClick={() => updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: true } : x))}
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 hover:opacity-90 cursor-pointer"
-                    style={{ background: "#FED7AA", color: "#9A3412" }}
+                    style={{ background: "#F3F4F6", color: "#6B7280" }}
                   >
                     <Clock className="h-3 w-3" strokeWidth={2} /> En attente
                   </button>
@@ -285,7 +285,7 @@ function MonMatchPage() {
                     onClick={() => sendIndividualLink(p)}
                     className="ml-auto h-8 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 hover:opacity-90 active:scale-[0.99] transition"
                     style={p.paid
-                      ? { background: "#F0FDF4", color: "#15803D", border: "1px solid #86EFAC" }
+                      ? { background: "#F3F4F6", color: "#6B7280", border: "1px solid #E5E7EB" }
                       : { background: "#0D1B4B", color: "#fff" }
                     }
                   >
@@ -335,7 +335,7 @@ function MonMatchPage() {
           onClick={() => toast.success(`Rappel envoyé à ${pendingCount} joueur${pendingCount > 1 ? "s" : ""}`)}
           disabled={pendingCount === 0}
           className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ background: "#22C55E" }}
+          style={{ background: "#0D1B4B" }}
         >
           <BellRing className="h-5 w-5" strokeWidth={2} />
           Envoyer un rappel ({pendingCount} joueur{pendingCount > 1 ? "s" : ""})

@@ -169,7 +169,7 @@ function MonMatchPage() {
             </Link>
             <h1 className="text-2xl sm:text-3xl font-bold">Mon match</h1>
           </div>
-          {confirmed ? (
+          {total > 0 && paidCount === total ? (
             <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#DCFCE7", color: "#15803D", borderColor: "#86EFAC" }}>
               <CheckCircle2 className="h-4 w-4" strokeWidth={2} /> Confirmé
             </span>

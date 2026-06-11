@@ -73,6 +73,9 @@ const LS_KEY = "playoff_match";
 function saveToLS(terrainId: string | undefined, slot: string | undefined, date: string | undefined, players: Player[], confirmed: boolean) {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({ terrainId, slot, date, players, confirmed }));
+    if (terrainId && slot && date) {
+      upsertReservation({ terrainId, slot, date, players, confirmed });
+    }
   } catch {}
 }
 

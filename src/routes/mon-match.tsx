@@ -67,6 +67,14 @@ const INITIAL_PLAYERS: Player[] = [
 
 const AVATAR_COLORS = ["#0D1B4B", "#FF6B00", "#22C55E", "#3B82F6", "#A855F7", "#EC4899", "#14B8A6", "#EAB308"];
 
+const LS_KEY = "playoff_match";
+
+function saveToLS(terrainId: string | undefined, slot: string | undefined, date: string | undefined, players: Player[], confirmed: boolean) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({ terrainId, slot, date, players, confirmed }));
+  } catch {}
+}
+
 function MonMatchPage() {
   const { terrainId, slot, date } = Route.useSearch();
   const terrainInfo = terrainId ? (TERRAIN_DATA[terrainId] ?? DEFAULT_TERRAIN_INFO) : DEFAULT_TERRAIN_INFO;
@@ -81,8 +89,15 @@ function MonMatchPage() {
   })();
 
   const navigate = useNavigate();
-  const [confirmed, setConfirmed] = useState(false);
-  const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS);
+  const [confirmed, setConfirmed] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}").confirmed === true; } catch { return false; }
+  });
+  const [players, setPlayers] = useState<Player[]>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+      return Array.isArray(saved.players) && saved.players.length > 0 ? saved.players : INITIAL_PLAYERS;
+    } catch { return INITIAL_PLAYERS; }
+  });
   const [showForm, setShowForm] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
@@ -98,6 +113,14 @@ function MonMatchPage() {
   const remaining = totalAmount - collected;
   const progress = total > 0 ? (paidCount / total) * 100 : 0;
   const pendingCount = total - paidCount;
+
+  const updatePlayers = (updater: (list: Player[]) => Player[]) => {
+    setPlayers((prev) => {
+      const next = updater(prev);
+      saveToLS(terrainId, slot, date, next, confirmed);
+      return next;
+    });
+  };
 
   const sendIndividualLink = async (p: Player) => {
     const url = `https://pay.playoff.app/match-12345/joueur-${p.id}`;
@@ -118,7 +141,7 @@ function MonMatchPage() {
       color: AVATAR_COLORS[players.length % AVATAR_COLORS.length],
       paid: false,
     };
-    setPlayers((p) => [...p, newPlayer]);
+    updatePlayers((p) => [...p, newPlayer]);
     setFirstName("");
     setEmail("");
     setShowForm(false);
@@ -215,7 +238,7 @@ function MonMatchPage() {
                 </p>
                 {p.paid ? (
                   <button
-                    onClick={() => !p.isMe && setPlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
+                    onClick={() => !p.isMe && updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
                     disabled={p.isMe}
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 disabled:cursor-not-allowed hover:opacity-90"
                     style={{ background: "#DCFCE7", color: "#15803D" }}
@@ -224,7 +247,7 @@ function MonMatchPage() {
                   </button>
                 ) : (
                   <button
-                    onClick={() => setPlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: true } : x))}
+                    onClick={() => updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: true } : x))}
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 hover:opacity-90 cursor-pointer"
                     style={{ background: "#FED7AA", color: "#9A3412" }}
                   >
@@ -234,7 +257,7 @@ function MonMatchPage() {
                 {!p.isMe && (
                   <button
                     onClick={() => {
-                      setPlayers((list) => list.filter((x) => x.id !== p.id));
+                      updatePlayers((list) => list.filter((x) => x.id !== p.id));
                       toast.success(`${p.name} retiré du match`);
                     }}
                     className="h-7 w-7 rounded-full hover:bg-red-50 inline-flex items-center justify-center text-muted-foreground hover:text-red-500 transition ml-1"
@@ -309,6 +332,7 @@ function MonMatchPage() {
           <button
             onClick={() => {
               setConfirmed(true);
+              saveToLS(terrainId, slot, date, players, true);
               toast.success("Match confirmé ! Retrouvez-le dans vos réservations.");
               setTimeout(() => {
                 navigate({

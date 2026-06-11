@@ -4,6 +4,18 @@ import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 
+const LS_KEY = "playoff_match";
+
+function readFromLS() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (data.terrainId && data.slot && data.date) return data as { terrainId: string; slot: string; date: string; confirmed: boolean };
+    return null;
+  } catch { return null; }
+}
+
 const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number; city: string }> = {
   "1":  { name: "Terrain Municipal Avon",            sport: "Football 5v5", emoji: "⚽", price: 70, city: "Avon" },
   "2":  { name: "Complexe Sportif de Fontainebleau", sport: "Football 5v5", emoji: "⚽", price: 75, city: "Fontainebleau" },
@@ -50,9 +62,28 @@ export const Route = createFileRoute("/mes-reservations")({
 });
 
 function MesReservationsPage() {
-  const { terrainId, slot, date } = Route.useSearch();
-  const terrain = terrainId ? (TERRAIN_DATA[terrainId] ?? DEFAULT_TERRAIN) : null;
+  const search = Route.useSearch();
+
+  // Priorité localStorage → query params
+  const saved = readFromLS();
+  const terrainId = saved?.terrainId ?? search.terrainId;
+  const slot      = saved?.slot      ?? search.slot;
+  const date      = saved?.date      ?? search.date;
+
+  const terrain  = terrainId ? (TERRAIN_DATA[terrainId] ?? DEFAULT_TERRAIN) : null;
   const slotLabel = formatSlotLabel(slot, date);
+
+  // Statut : confirmé manuellement OU tous les joueurs ont payé
+  const allPaid = (() => {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) return false;
+      const data = JSON.parse(raw);
+      if (!Array.isArray(data.players) || data.players.length === 0) return false;
+      return data.players.every((p: { paid: boolean }) => p.paid);
+    } catch { return false; }
+  })();
+  const isConfirmed = saved?.confirmed || allPaid;
 
   return (
     <div className="min-h-screen pb-28 md:pb-12">
@@ -90,12 +121,21 @@ function MesReservationsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="font-bold">{terrain.name}</p>
-                    <span
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
-                      style={{ background: "#DCFCE7", color: "#15803D" }}
-                    >
-                      <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Match confirmé
-                    </span>
+                    {isConfirmed ? (
+                      <span
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
+                        style={{ background: "#DCFCE7", color: "#15803D" }}
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Match confirmé
+                      </span>
+                    ) : (
+                      <span
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
+                        style={{ background: "#FEF9C3", color: "#92400E" }}
+                      >
+                        En attente de paiements
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">{terrain.sport}</p>
                   <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground flex-wrap">

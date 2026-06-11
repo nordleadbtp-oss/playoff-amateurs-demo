@@ -1,9 +1,9 @@
-import courtBasket1 from "@/assets/court-basket-1.jpg";
-import courtBasket2 from "@/assets/court-basket-2.jpg";
-import courtBasket3 from "@/assets/court-basket-3.jpg";
-import courtPadel1 from "@/assets/court-padel-1.jpg";
-import courtPadel2 from "@/assets/court-padel-2.jpg";
-import courtPadel3 from "@/assets/court-padel-3.jpg";
+const courtBasket1 = "/court-basket-1.jpg";
+const courtBasket2 = "/court-basket-2.jpg";
+const courtBasket3 = "/court-basket-3.jpg";
+const courtPadel1 = "/court-padel-1.jpg";
+const courtPadel2 = "/court-padel-2.jpg";
+const courtPadel3 = "/court-padel-3.jpg";
 ﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp, X, ArrowUpDown, LocateFixed } from "lucide-react";
 import { useMemo, useRef, useState } from "react";

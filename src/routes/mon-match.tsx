@@ -53,7 +53,16 @@ type Player = {
 };
 
 const INITIAL_PLAYERS: Player[] = [
-  { id: 1, initials: "TD", name: "Thai (moi)", color: "#0D1B4B", paid: true, isMe: true },
+  { id: 1,  initials: "TD", name: "Thai (moi)",        color: "#0D1B4B", paid: true,  isMe: true },
+  { id: 2,  initials: "KB", name: "Karim Benali",       color: "#FF6B00", paid: true  },
+  { id: 3,  initials: "AD", name: "Antoine Dubois",     color: "#22C55E", paid: true  },
+  { id: 4,  initials: "SH", name: "Sofiane Hamidi",     color: "#3B82F6", paid: false },
+  { id: 5,  initials: "HL", name: "Hugo Leroy",         color: "#A855F7", paid: false },
+  { id: 6,  initials: "NM", name: "Nicolas Moreau",     color: "#EC4899", paid: true  },
+  { id: 7,  initials: "YB", name: "Yanis Boukhari",     color: "#14B8A6", paid: false },
+  { id: 8,  initials: "TR", name: "Thomas Renard",      color: "#EAB308", paid: true  },
+  { id: 9,  initials: "CM", name: "Clément Martinez",   color: "#0D1B4B", paid: false },
+  { id: 10, initials: "RD", name: "Romain Delacroix",   color: "#FF6B00", paid: false },
 ];
 
 const AVATAR_COLORS = ["#0D1B4B", "#FF6B00", "#22C55E", "#3B82F6", "#A855F7", "#EC4899", "#14B8A6", "#EAB308"];

@@ -277,6 +277,7 @@ function SlotPage() {
             disabled={!selectedSlot}
             onClick={() => {
               toast.success("Créneau sélectionné — organisez votre match !");
+              localStorage.removeItem("playoff_match");
               navigate({
                 to: "/mon-match",
                 search: {

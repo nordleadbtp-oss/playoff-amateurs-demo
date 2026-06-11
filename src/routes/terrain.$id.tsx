@@ -7,6 +7,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import { upsertReservation } from "@/lib/reservations";
 
 export const Route = createFileRoute("/terrain/$id")({
   head: () => ({
@@ -278,6 +279,13 @@ function SlotPage() {
             onClick={() => {
               toast.success("Créneau sélectionné — organisez votre match !");
               localStorage.removeItem("playoff_match");
+              upsertReservation({
+                terrainId: id,
+                slot: selectedSlot!.time,
+                date: selectedDayISO,
+                players: [],
+                confirmed: false,
+              });
               navigate({
                 to: "/mon-match",
                 search: {

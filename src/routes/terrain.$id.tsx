@@ -279,6 +279,13 @@ function SlotPage() {
             onClick={() => {
               toast.success("Créneau sélectionné — organisez votre match !");
               localStorage.removeItem("playoff_match");
+              upsertReservation({
+                terrainId: id,
+                slot: selectedSlot!.time,
+                date: selectedDayISO,
+                players: [],
+                confirmed: false,
+              });
               navigate({
                 to: "/mon-match",
                 search: {

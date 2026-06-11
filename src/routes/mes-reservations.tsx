@@ -92,7 +92,7 @@ function MesReservationsPage() {
                     className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold"
                     style={{ background: "#DCFCE7", color: "#15803D" }}
                   >
-                    <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Confirmée
+                    <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Match confirmé
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">{terrain.sport}</p>

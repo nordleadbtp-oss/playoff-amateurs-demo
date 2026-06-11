@@ -1,4 +1,4 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Plus, BellRing, CheckCircle2, Clock, Share2, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -71,6 +71,8 @@ function MonMatchPage() {
     return "Sam 31 mai · 15h00 – 16h00";
   })();
 
+  const navigate = useNavigate();
+  const [confirmed, setConfirmed] = useState(false);
   const [players, setPlayers] = useState<Player[]>(INITIAL_PLAYERS);
   const [showForm, setShowForm] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -126,9 +128,15 @@ function MonMatchPage() {
             </Link>
             <h1 className="text-2xl sm:text-3xl font-bold">Mon match</h1>
           </div>
-          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#DCFCE7", color: "#15803D", borderColor: "#86EFAC" }}>
-            <CheckCircle2 className="h-4 w-4" strokeWidth={2} /> Réservé
-          </span>
+          {confirmed ? (
+            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#DCFCE7", color: "#15803D", borderColor: "#86EFAC" }}>
+              <CheckCircle2 className="h-4 w-4" strokeWidth={2} /> Confirmé
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#FEF9C3", color: "#92400E", borderColor: "#FDE68A" }}>
+              <Clock className="h-4 w-4" strokeWidth={2} /> En attente
+            </span>
+          )}
         </div>
 
         {/* Recap terrain */}
@@ -287,6 +295,26 @@ function MonMatchPage() {
           <BellRing className="h-5 w-5" strokeWidth={2} />
           Envoyer un rappel ({pendingCount} joueur{pendingCount > 1 ? "s" : ""})
         </button>
+
+        {!confirmed && (
+          <button
+            onClick={() => {
+              setConfirmed(true);
+              toast.success("Match confirmé ! Retrouvez-le dans vos réservations.");
+              setTimeout(() => {
+                navigate({
+                  to: "/mes-reservations",
+                  search: { terrainId, slot, date },
+                });
+              }, 1200);
+            }}
+            className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
+            style={{ background: "#FF6B00", color: "#1A1A1A" }}
+          >
+            <CheckCircle2 className="h-5 w-5" strokeWidth={2} />
+            Confirmer le match
+          </button>
+        )}
       </main>
 
       {shareOpen && (

@@ -5,7 +5,7 @@ import logoAsset from "@/assets/playoff-logo.png.asset.json";
 
 const links = [
   { to: "/terrains", label: "Terrains", icon: Map },
-  { to: "/mon-match", label: "Mes matches", icon: Calendar },
+  { to: "/mon-match", label: "Mon match", icon: Calendar },
   { to: "/mes-reservations", label: "Mes réservations", icon: ClipboardList },
 ] as const;
 

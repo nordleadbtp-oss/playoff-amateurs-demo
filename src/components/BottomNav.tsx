@@ -3,7 +3,7 @@ import { MapPin, CalendarDays, ClipboardList, User } from "lucide-react";
 
 const items = [
   { to: "/terrains", label: "Terrains", icon: MapPin, key: "terrains" },
-  { to: "/mon-match", label: "Matches", icon: CalendarDays, key: "matches" },
+  { to: "/mon-match", label: "Mon match", icon: CalendarDays, key: "matches" },
   { to: "/mes-reservations", label: "Réservations", icon: ClipboardList, key: "reservations" },
   { to: "/connexion", label: "Profil", icon: User, key: "profil" },
 ] as const;

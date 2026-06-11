@@ -240,17 +240,13 @@ function TerrainsPage() {
         </div>
 
         <ul className="mt-3 space-y-4">
-          {visible.map((t) => {
-            const Wrapper: typeof Link | "div" = t.available ? Link : "div";
-            const wrapperProps = t.available ? { to: "/terrain/$id", params: { id: String(t.id) } } : { "aria-disabled": true };
-            return (
-              <li key={t.id}>
-                {/* @ts-expect-error union props */}
-                <Wrapper
-                  {...wrapperProps}
-                  className={`group flex items-stretch gap-4 bg-card rounded-2xl border border-border overflow-hidden transition shadow-sm ${
-                    t.available ? "hover:shadow-md hover:border-primary/30 cursor-pointer" : "opacity-90"
-                  }`}
+          {visible.map((t) => (
+            <li key={t.id}>
+              {t.available ? (
+                <Link
+                  to="/terrain/$id"
+                  params={{ id: String(t.id) }}
+                  className="group flex items-stretch gap-4 bg-card rounded-2xl border border-border overflow-hidden transition shadow-sm hover:shadow-md hover:border-primary/30 cursor-pointer"
                 >
                   <div className="w-28 sm:w-44 shrink-0 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${t.image})` }} aria-hidden />
                   <div className="flex-1 min-w-0 py-3 sm:py-4 pr-3 sm:pr-5 flex flex-col gap-1.5">
@@ -262,25 +258,44 @@ function TerrainsPage() {
                         <span className="font-medium text-foreground/80">{t.rating.toString().replace(".", ",")}</span>
                         <span>({t.reviews})</span>
                       </span>
-                      {t.available ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
-                          <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#9CA3AF", color: "#fff" }}>
-                          <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet ce soir
-                        </span>
-                      )}
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#22C55E", color: "#fff" }}>
+                        <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
+                      </span>
                     </div>
                     <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} €</span> / h</p>
                   </div>
                   <div className="flex items-center pr-3 sm:pr-5 text-muted-foreground group-hover:text-primary transition">
                     <ChevronRight className="h-6 w-6" strokeWidth={1.75} />
                   </div>
-                </Wrapper>
-              </li>
-            );
-          })}
+                </Link>
+              ) : (
+                <div
+                  aria-disabled={true}
+                  className="group flex items-stretch gap-4 bg-card rounded-2xl border border-border overflow-hidden transition shadow-sm opacity-90"
+                >
+                  <div className="w-28 sm:w-44 shrink-0 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${t.image})` }} aria-hidden />
+                  <div className="flex-1 min-w-0 py-3 sm:py-4 pr-3 sm:pr-5 flex flex-col gap-1.5">
+                    <h3 className="font-bold text-base sm:text-lg truncate">{t.name}</h3>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+                      <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" strokeWidth={1.75} /> {t.distance}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <Stars rating={t.rating} />
+                        <span className="font-medium text-foreground/80">{t.rating.toString().replace(".", ",")}</span>
+                        <span>({t.reviews})</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#9CA3AF", color: "#fff" }}>
+                        <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet ce soir
+                      </span>
+                    </div>
+                    <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} €</span> / h</p>
+                  </div>
+                  <div className="flex items-center pr-3 sm:pr-5 text-muted-foreground transition">
+                    <ChevronRight className="h-6 w-6" strokeWidth={1.75} />
+                  </div>
+                </div>
+              )}
+            </li>
+          ))}
         </ul>
 
         {filtered.length > 3 && (

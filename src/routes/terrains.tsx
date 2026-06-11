@@ -61,12 +61,12 @@ const terrains: Terrain[] = [
   { id: 26, name: "Halle des Sports Moret",            sport: "Basket à 5",  distance: "9,1 km", rating: 4.2, reviews: 25,  price: 33, available: false,                image: "https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?auto=format&fit=crop&w=600&q=70" },
   // Padel primaires (3)
   { id: 31, name: "Club Padel Avon",                   sport: "Padel",       distance: "2,9 km", rating: 4.7, reviews: 91,  price: 25, available: true,  primary: true, image: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=600&q=70" },
-  { id: 32, name: "Padel Arena Fontainebleau",         sport: "Padel",       distance: "4,4 km", rating: 4.5, reviews: 67,  price: 22, available: true,  primary: true, image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=70" },
-  { id: 33, name: "Padel Club Moret",                  sport: "Padel",       distance: "7,2 km", rating: 4.3, reviews: 48,  price: 27, available: false, primary: true, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=600&q=70" },
+  { id: 32, name: "Padel Arena Fontainebleau",         sport: "Padel",       distance: "4,4 km", rating: 4.5, reviews: 67,  price: 22, available: true,  primary: true, image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=600&q=70" },
+  { id: 33, name: "Padel Club Moret",                  sport: "Padel",       distance: "7,2 km", rating: 4.3, reviews: 48,  price: 27, available: false, primary: true, image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=600&q=70" },
   // Padel secondaires
-  { id: 34, name: "Padel Indoor Melun",                sport: "Padel",       distance: "5,8 km", rating: 4.6, reviews: 54,  price: 26, available: true,                 image: "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?auto=format&fit=crop&w=600&q=70" },
-  { id: 35, name: "Padel Garden Barbizon",             sport: "Padel",       distance: "6,9 km", rating: 4.4, reviews: 38,  price: 24, available: true,                 image: "https://images.unsplash.com/photo-1554284126-aa88f22d8b74?auto=format&fit=crop&w=600&q=70" },
-  { id: 36, name: "Padel Center Nemours",              sport: "Padel",       distance: "8,5 km", rating: 4.2, reviews: 29,  price: 28, available: false,                image: "https://images.unsplash.com/photo-1541534741688-7078b9961af5?auto=format&fit=crop&w=600&q=70" },
+  { id: 34, name: "Padel Indoor Melun",                sport: "Padel",       distance: "5,8 km", rating: 4.6, reviews: 54,  price: 26, available: true,                 image: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=600&h=400&q=70" },
+  { id: 35, name: "Padel Garden Barbizon",             sport: "Padel",       distance: "6,9 km", rating: 4.4, reviews: 38,  price: 24, available: true,                 image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=600&h=400&q=70" },
+  { id: 36, name: "Padel Center Nemours",              sport: "Padel",       distance: "8,5 km", rating: 4.2, reviews: 29,  price: 28, available: false,                image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=600&h=400&q=70" },
 ];
 
 function Stars({ rating }: { rating: number }) {

@@ -1,12 +1,12 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+﻿import { Link, useRouterState } from "@tanstack/react-router";
 import { Map, Calendar, ClipboardList, Bell, Menu, X, LogIn, HelpCircle, Globe, Smartphone } from "lucide-react";
 import { useState } from "react";
-import logoAsset from "@/assets/playoff-logo.png.asset.json";
+
 
 const links = [
   { to: "/terrains", label: "Terrains", icon: Map },
   { to: "/mon-match", label: "Mon match", icon: Calendar },
-  { to: "/mes-reservations", label: "Mes réservations", icon: ClipboardList },
+  { to: "/mes-reservations", label: "Mes rÃ©servations", icon: ClipboardList },
 ] as const;
 
 export function AppHeader() {
@@ -18,7 +18,7 @@ export function AppHeader() {
     <header className="bg-primary text-primary-foreground sticky top-0 z-40">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
         <div className="flex items-center shrink-0">
-          <img src={logoAsset.url} alt="PlayOff Amateurs" className="h-10 sm:h-12 w-auto" />
+          <img src="/playoff-logo.png" alt="PlayOff Amateurs" className="h-10 sm:h-12 w-auto" />
         </div>
 
         <nav className="hidden md:flex items-center gap-8">
@@ -76,7 +76,7 @@ export function AppHeader() {
               </Link>
               <Link to="/mes-reservations" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition">
                 <ClipboardList className="h-5 w-5" strokeWidth={1.75} />
-                <span className="font-medium">Mes réservations</span>
+                <span className="font-medium">Mes rÃ©servations</span>
               </Link>
               <div className="flex items-center gap-3 px-3 h-12 rounded-xl">
                 <Bell className="h-5 w-5" strokeWidth={1.75} />
@@ -103,16 +103,16 @@ export function AppHeader() {
               <div className="flex items-center gap-3 px-3 h-12 rounded-xl">
                 <Globe className="h-5 w-5" strokeWidth={1.75} />
                 <span className="font-medium flex-1">Langue</span>
-                <span className="text-sm text-muted-foreground">Français</span>
+                <span className="text-sm text-muted-foreground">FranÃ§ais</span>
               </div>
             </div>
             <div className="p-4 border-t border-border">
               <div className="rounded-2xl p-4 text-primary-foreground" style={{ background: "#0D1B4B" }}>
                 <div className="flex items-center gap-2 mb-1">
                   <Smartphone className="h-5 w-5" strokeWidth={1.75} />
-                  <p className="font-bold">Télécharger l'app</p>
+                  <p className="font-bold">TÃ©lÃ©charger l'app</p>
                 </div>
-                <p className="text-sm opacity-85">Réserve un terrain encore plus vite</p>
+                <p className="text-sm opacity-85">RÃ©serve un terrain encore plus vite</p>
               </div>
             </div>
           </aside>
@@ -121,3 +121,4 @@ export function AppHeader() {
     </header>
   );
 }
+

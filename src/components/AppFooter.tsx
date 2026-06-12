@@ -8,17 +8,21 @@ const links = [
 
 export function AppFooter() {
   return (
-    <footer className="hidden md:flex items-center justify-center gap-6 py-4 border-t border-border text-xs text-muted-foreground">
-      {links.map((l) => (
-        <button
-          key={l.label}
-          onClick={() => toast.info(`${l.label} — page non disponible en démo`)}
-          className="hover:text-foreground transition"
-        >
-          {l.label}
-        </button>
-      ))}
-      <span>© 2026 PlayOff Amateurs</span>
+    <footer className="pb-20 md:pb-4 border-t border-border text-muted-foreground">
+      <div className="flex flex-col items-center gap-3 py-5 md:flex-row md:justify-center md:gap-6 md:py-4">
+        <div className="flex items-center gap-4 md:gap-6">
+          {links.map((l) => (
+            <button
+              key={l.label}
+              onClick={() => toast.info(`${l.label} — page non disponible en démo`)}
+              className="text-xs font-medium hover:text-foreground transition"
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+        <span className="text-xs">© 2026 PlayOff Amateurs</span>
+      </div>
     </footer>
   );
 }

@@ -51,7 +51,7 @@ export function AppHeader() {
           </button>
           <Link
             to="/connexion"
-            className="h-10 px-3 rounded-full bg-accent text-accent-foreground font-bold flex items-center justify-center text-sm hover:opacity-90 transition"
+            className="hidden sm:flex h-10 px-3 rounded-full bg-accent text-accent-foreground font-bold items-center justify-center text-sm hover:opacity-90 transition"
           >
             Connexion
           </Link>

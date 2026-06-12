@@ -143,14 +143,14 @@ function SlotPage() {
           <p className="mt-6 text-xs font-bold tracking-widest text-muted-foreground uppercase">Choisissez votre créneau</p>
 
           <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
-            <div className="inline-flex items-center gap-3">
+            <div className="inline-flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <button onClick={() => canPrevWeek && setWeekStart((d) => addDays(d, -7))} disabled={!canPrevWeek}
-                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed">
+                className="h-10 w-10 shrink-0 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed">
                 <ChevronLeft className="h-5 w-5" strokeWidth={1.75} />
               </button>
-              <p className="font-semibold">{formatLong(selectedDate)}</p>
+              <p className="font-semibold text-sm sm:text-base min-w-0 truncate">{formatLong(selectedDate)}</p>
               <button onClick={() => canNextWeek && setWeekStart((d) => addDays(d, 7))} disabled={!canNextWeek}
-                className="h-10 w-10 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed">
+                className="h-10 w-10 shrink-0 rounded-xl border border-border bg-card inline-flex items-center justify-center hover:bg-muted transition disabled:opacity-40 disabled:cursor-not-allowed">
                 <ChevronRight className="h-5 w-5" strokeWidth={1.75} />
               </button>
             </div>
@@ -221,7 +221,7 @@ function SlotPage() {
           </div>
         </section>
 
-        <aside className="lg:sticky lg:top-24 self-start space-y-3">
+        <aside className="lg:sticky lg:top-24 self-start space-y-3 pb-20 lg:pb-0">
           <h2 className="font-bold text-lg">Récapitulatif</h2>
           <div className="bg-card border border-border rounded-2xl p-4">
             <div className="flex items-start gap-3">
@@ -274,6 +274,44 @@ function SlotPage() {
               {totalPrice > 0 ? `${totalPrice} € ÷ ${playerCount} joueur${playerCount > 1 ? "s" : ""}` : "Sélectionnez un créneau"}
             </p>
           </div>
+          {/* CTA desktop — dans l'aside */}
+          <div className="hidden lg:block">
+            <button
+              disabled={!selectedSlot}
+              onClick={() => {
+                toast.success("Créneau sélectionné — organisez votre match !");
+                localStorage.removeItem("playoff_match");
+                upsertReservation({
+                  terrainId: id,
+                  slot: selectedSlot!.time,
+                  date: selectedDayISO,
+                  players: [],
+                  confirmed: false,
+                });
+                navigate({
+                  to: "/mon-match",
+                  search: {
+                    terrainId: id,
+                    slot: selectedSlot!.time,
+                    date: selectedDayISO,
+                  },
+                });
+              }}
+              className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{ background: "#FF6B00", color: "#1A1A1A" }}
+            >
+              {selectedSlot ? `Réserver · ${totalPrice} €` : "Sélectionnez un créneau"}
+            </button>
+            {playerCount < 10 && selectedSlot && (
+              <p className="text-center text-xs text-muted-foreground mt-2">
+                Vous pouvez ajouter les {10 - playerCount} autres joueur{10 - playerCount > 1 ? "s" : ""} après la réservation
+              </p>
+            )}
+          </div>
+        </aside>
+
+        {/* CTA mobile épinglé en bas, au-dessus de la BottomNav */}
+        <div className="lg:hidden fixed bottom-16 inset-x-0 z-30 px-4 pb-3 bg-gradient-to-t from-background via-background/95 to-transparent pt-4">
           <button
             disabled={!selectedSlot}
             onClick={() => {
@@ -295,17 +333,12 @@ function SlotPage() {
                 },
               });
             }}
-            className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed shadow-lg"
             style={{ background: "#FF6B00", color: "#1A1A1A" }}
           >
             {selectedSlot ? `Réserver · ${totalPrice} €` : "Sélectionnez un créneau"}
           </button>
-          {playerCount < 10 && selectedSlot && (
-            <p className="text-center text-xs text-muted-foreground">
-              Vous pouvez ajouter les {10 - playerCount} autres joueur{10 - playerCount > 1 ? "s" : ""} après la réservation
-            </p>
-          )}
-        </aside>
+        </div>
       </main>
       <BottomNav active="reservations" />
     </div>

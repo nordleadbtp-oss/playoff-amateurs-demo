@@ -237,53 +237,56 @@ function MonMatchPage() {
           <p className="text-base font-medium text-muted-foreground mb-2">Joueurs ({total})</p>
           <ul className="bg-card border border-border rounded-2xl divide-y divide-border overflow-hidden">
             {players.map((p) => (
-              <li key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
-                <div
-                  className="h-10 w-10 rounded-full text-white font-bold text-sm inline-flex items-center justify-center shrink-0"
-                  style={{ background: p.color }}
-                  aria-hidden
-                >
-                  {p.initials}
+              <li key={p.id} className="flex flex-col px-4 py-3 gap-2">
+                {/* Ligne 1 : avatar + nom + prix + statut + supprimer */}
+                <div className="flex items-center gap-3">
+                  <div
+                    className="h-10 w-10 rounded-full text-white font-bold text-sm inline-flex items-center justify-center shrink-0"
+                    style={{ background: p.color }}
+                    aria-hidden
+                  >
+                    {p.initials}
+                  </div>
+                  <p className="flex-1 font-medium truncate min-w-0">{p.name}</p>
+                  <p className="text-sm font-semibold whitespace-nowrap shrink-0">
+                    {pricePerPlayer}€{isRounded && <span className="text-[10px] font-normal text-muted-foreground ml-1">(arrondi)</span>}
+                  </p>
+                  {p.paid ? (
+                    <button
+                      onClick={() => !p.isMe && updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
+                      disabled={p.isMe}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 disabled:cursor-not-allowed hover:opacity-90 shrink-0"
+                      style={{ background: "#E6EDF5", color: "#0D1B4B" }}
+                    >
+                      Payé ✅
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: true } : x))}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 hover:opacity-90 cursor-pointer shrink-0"
+                      style={{ background: "#F3F4F6", color: "#6B7280" }}
+                    >
+                      <Clock className="h-3 w-3" strokeWidth={2} /> En attente
+                    </button>
+                  )}
+                  {!p.isMe && (
+                    <button
+                      onClick={() => {
+                        updatePlayers((list) => list.filter((x) => x.id !== p.id));
+                        toast.success(`${p.name} retiré du match`);
+                      }}
+                      className="h-7 w-7 rounded-full hover:bg-red-50 inline-flex items-center justify-center text-muted-foreground hover:text-red-500 transition shrink-0"
+                      aria-label={`Retirer ${p.name}`}
+                    >
+                      <X className="h-3.5 w-3.5" strokeWidth={2} />
+                    </button>
+                  )}
                 </div>
-                <p className="flex-1 font-medium truncate">{p.name}</p>
-                <p className="text-sm font-semibold text-right whitespace-nowrap">
-                  {pricePerPlayer}€{isRounded && <span className="text-[10px] font-normal text-muted-foreground ml-1">(arrondi)</span>}
-                </p>
-                {p.paid ? (
-                  <button
-                    onClick={() => !p.isMe && updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
-                    disabled={p.isMe}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 disabled:cursor-not-allowed hover:opacity-90"
-                    style={{ background: "#E6EDF5", color: "#0D1B4B" }}
-                  >
-                    Payé ✅
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: true } : x))}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 hover:opacity-90 cursor-pointer"
-                    style={{ background: "#F3F4F6", color: "#6B7280" }}
-                  >
-                    <Clock className="h-3 w-3" strokeWidth={2} /> En attente
-                  </button>
-                )}
-                {!p.isMe && (
-                  <button
-                    onClick={() => {
-                      updatePlayers((list) => list.filter((x) => x.id !== p.id));
-                      toast.success(`${p.name} retiré du match`);
-                    }}
-                    className="h-7 w-7 rounded-full hover:bg-red-50 inline-flex items-center justify-center text-muted-foreground hover:text-red-500 transition ml-1"
-                    aria-label={`Retirer ${p.name}`}
-                  >
-                    <X className="h-3.5 w-3.5" strokeWidth={2} />
-                  </button>
-                )}
-                {/* Bouton envoi lien dès qu'un joueur est ajouté, qu'il ait payé ou non */}
+                {/* Ligne 2 : bouton lien paiement (pleine largeur sur mobile) */}
                 {!p.isMe && (
                   <button
                     onClick={() => sendIndividualLink(p)}
-                    className="ml-auto h-8 px-3 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 hover:opacity-90 active:scale-[0.99] transition"
+                    className="w-full h-9 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:opacity-90 active:scale-[0.99] transition"
                     style={p.paid
                       ? { background: "#F3F4F6", color: "#6B7280", border: "1px solid #E5E7EB" }
                       : { background: "#0D1B4B", color: "#fff" }

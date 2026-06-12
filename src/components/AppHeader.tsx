@@ -1,4 +1,4 @@
-﻿import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Map, Calendar, ClipboardList, Bell, Menu, X, LogIn, HelpCircle, Globe, Smartphone } from "lucide-react";
 import { useState } from "react";
 
@@ -6,7 +6,7 @@ import { useState } from "react";
 const links = [
   { to: "/terrains", label: "Terrains", icon: Map },
   { to: "/mon-match", label: "Mon match", icon: Calendar },
-  { to: "/mes-reservations", label: "Mes rÃ©servations", icon: ClipboardList },
+  { to: "/mes-reservations", label: "Mes réservations", icon: ClipboardList },
 ] as const;
 
 export function AppHeader() {
@@ -76,7 +76,7 @@ export function AppHeader() {
               </Link>
               <Link to="/mes-reservations" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 px-3 h-12 rounded-xl hover:bg-muted transition">
                 <ClipboardList className="h-5 w-5" strokeWidth={1.75} />
-                <span className="font-medium">Mes rÃ©servations</span>
+                <span className="font-medium">Mes réservations</span>
               </Link>
               <div className="flex items-center gap-3 px-3 h-12 rounded-xl">
                 <Bell className="h-5 w-5" strokeWidth={1.75} />

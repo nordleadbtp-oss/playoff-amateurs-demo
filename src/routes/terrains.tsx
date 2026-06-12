@@ -256,7 +256,7 @@ function TerrainsPage() {
                 >
                   <div className="w-28 sm:w-44 shrink-0 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${t.image})` }} aria-hidden />
                   <div className="flex-1 min-w-0 py-3 sm:py-4 pr-3 sm:pr-5 flex flex-col gap-1.5">
-                    <h3 className="font-bold text-base sm:text-lg truncate">{t.name}</h3>
+                    <h3 className="font-bold text-base sm:text-lg truncate" style={{ color: "#1A1A1A" }}>{t.name}</h3>
                     <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
                       <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" strokeWidth={1.75} /> {t.distance}</span>
                       <span className="inline-flex items-center gap-1">
@@ -281,7 +281,7 @@ function TerrainsPage() {
                 >
                   <div className="w-28 sm:w-44 shrink-0 bg-muted bg-cover bg-center" style={{ backgroundImage: `url(${t.image})` }} aria-hidden />
                   <div className="flex-1 min-w-0 py-3 sm:py-4 pr-3 sm:pr-5 flex flex-col gap-1.5">
-                    <h3 className="font-bold text-base sm:text-lg truncate">{t.name}</h3>
+                    <h3 className="font-bold text-base sm:text-lg truncate" style={{ color: "#1A1A1A" }}>{t.name}</h3>
                     <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
                       <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" strokeWidth={1.75} /> {t.distance}</span>
                       <span className="inline-flex items-center gap-1">

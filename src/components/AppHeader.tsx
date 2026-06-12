@@ -49,12 +49,6 @@ export function AppHeader() {
           <button className="hidden sm:inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-white/10 transition" aria-label="Notifications">
             <Bell className="h-5 w-5" strokeWidth={1.75} />
           </button>
-          <Link
-            to="/connexion"
-            className="hidden sm:flex h-10 px-3 rounded-full bg-accent text-accent-foreground font-bold items-center justify-center text-sm hover:opacity-90 transition"
-          >
-            Connexion
-          </Link>
           <button
             onClick={() => setMenuOpen(true)}
             className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-white/10 transition"

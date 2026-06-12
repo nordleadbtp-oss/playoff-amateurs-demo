@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { AppFooter } from "@/components/AppFooter";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -340,6 +341,7 @@ function SlotPage() {
           </button>
         </div>
       </main>
+      <AppFooter />
       <BottomNav active="reservations" />
     </div>
   );

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { AppFooter } from "@/components/AppFooter";
 import { FloatingInput } from "@/components/FloatingInput";
 import { upsertReservation } from "@/lib/reservations";
 
@@ -420,6 +421,7 @@ function MonMatchPage() {
         </div>
       )}
 
+      <AppFooter />
       <BottomNav active="reservations" />
     </div>
   );

@@ -10,6 +10,7 @@ import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { AppFooter } from "@/components/AppFooter";
 
 export const Route = createFileRoute("/terrains")({
   head: () => ({
@@ -317,6 +318,7 @@ function TerrainsPage() {
         )}
       </main>
 
+      <AppFooter />
       <BottomNav active="terrains" />
     </div>
   );

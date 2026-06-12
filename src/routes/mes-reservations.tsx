@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { AppFooter } from "@/components/AppFooter";
 import { getReservations, removeReservation, type Reservation } from "@/lib/reservations";
 
 const TERRAIN_DATA: Record<string, { name: string; sport: string; emoji: string; price: number; city: string }> = {
@@ -159,6 +160,7 @@ function MesReservationsPage() {
         )}
       </main>
 
+      <AppFooter />
       <BottomNav active="reservations" />
     </div>
   );

@@ -1,16 +1,17 @@
-const courtBasket1 = "/court-basket-1.jpg";
-const courtBasket2 = "/court-basket-2.jpg";
-const courtBasket3 = "/court-basket-3.jpg";
-const courtPadel1 = "/court-padel-1.jpg";
-const courtPadel2 = "/court-padel-2.jpg";
-const courtPadel3 = "/court-padel-3.jpg";
-ï»¿import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { MapPin, Star, ChevronRight, Search, Calendar, ChevronDown, ChevronUp, X, ArrowUpDown, LocateFixed } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { AppFooter } from "@/components/AppFooter";
+
+const courtBasket1 = "/court-basket-1.jpg";
+const courtBasket2 = "/court-basket-2.jpg";
+const courtBasket3 = "/court-basket-3.jpg";
+const courtPadel1 = "/court-padel-1.jpg";
+const courtPadel2 = "/court-padel-2.jpg";
+const courtPadel3 = "/court-padel-3.jpg";
 
 export const Route = createFileRoute("/terrains")({
   head: () => ({

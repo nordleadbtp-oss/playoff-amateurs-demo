@@ -9,8 +9,8 @@ export const Route = createFileRoute("/connexion")({
   }),
   head: () => ({
     meta: [
-      { title: "Connexion â€” PlayOff Amateurs" },
-      { name: "description", content: "Connectez-vous Ã  votre compte PlayOff Amateurs." },
+      { title: "Connexion — PlayOff Amateurs" },
+      { name: "description", content: "Connectez-vous à votre compte PlayOff Amateurs." },
     ],
   }),
   component: LoginPage,
@@ -30,7 +30,7 @@ function LoginPage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      toast.success(mode === "login" ? "Bienvenue ðŸ‘‹ (dÃ©mo)" : "Compte crÃ©Ã© ðŸŽ‰ (dÃ©mo)");
+      toast.success(mode === "login" ? "Bienvenue (démo)" : "Compte créé (démo)");
       navigate({ to: "/terrains" });
     }, 800);
   };
@@ -65,20 +65,19 @@ function LoginPage() {
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold">
-            {mode === "login" ? "Bon retour ðŸ‘‹" : "CrÃ©er mon compte"}
+            {mode === "login" ? "Bon retour" : "Créer mon compte"}
           </h1>
           <p className="mt-1 text-muted-foreground">
-            {mode === "login" ? "Connecte-toi Ã  PlayOff Amateurs" : "Rejoins PlayOff Amateurs"}
+            {mode === "login" ? "Connecte-toi à PlayOff Amateurs" : "Rejoins PlayOff Amateurs"}
           </p>
 
-          {/* Connexion Google */}
           <button
             type="button"
             onClick={() => {
               setLoading(true);
               setTimeout(() => {
                 setLoading(false);
-                toast.success("Connexion Google simulÃ©e â€” dÃ©mo Sprint 4");
+                toast.success("Connexion Google simulée — démo Sprint 4");
                 navigate({ to: "/terrains" });
               }, 800);
             }}
@@ -101,15 +100,15 @@ function LoginPage() {
 
           <form onSubmit={onSubmit} className="space-y-3">
             {mode === "signup" && (
-              <FloatingInput label="PrÃ©nom" value={prenom} onChange={(e) => setPrenom(e.target.value)} required />
+              <FloatingInput label="Prénom" value={prenom} onChange={(e) => setPrenom(e.target.value)} required />
             )}
             <FloatingInput label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
             <FloatingInput label="Mot de passe" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={6} />
 
             {mode === "login" && (
               <div className="text-right">
-                <button type="button" onClick={() => toast.info("Lien de rÃ©initialisation envoyÃ© (dÃ©mo)")} className="text-xs text-muted-foreground hover:underline">
-                  Mot de passe oubliÃ© ?
+                <button type="button" onClick={() => toast.info("Lien de réinitialisation envoyé (démo)")} className="text-xs text-muted-foreground hover:underline">
+                  Mot de passe oublié ?
                 </button>
               </div>
             )}
@@ -120,12 +119,12 @@ function LoginPage() {
               className="w-full h-12 rounded-xl font-bold text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-60"
               style={{ background: "#0D1B4B" }}
             >
-              {loading ? "..." : mode === "login" ? "Se connecter" : "CrÃ©er mon compte"}
+              {loading ? "..." : mode === "login" ? "Se connecter" : "Créer mon compte"}
             </button>
           </form>
 
           <p className="mt-4 text-center text-xs text-muted-foreground">
-            Authentification simulÃ©e â€” dÃ©mo Sprint 4
+            Authentification simulée — démo Sprint 4
           </p>
         </div>
       </div>

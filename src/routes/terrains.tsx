@@ -23,7 +23,7 @@ export const Route = createFileRoute("/terrains")({
   component: TerrainsPage,
 });
 
-const sports = ["Tous sports", "Football 5v5", "Basket Ã  5", "Padel"] as const;
+const sports = ["Tous sports", "Football 5v5", "Basket à 5", "Padel"] as const;
 type Sport = (typeof sports)[number];
 
 const VILLES_IDF = [
@@ -60,13 +60,13 @@ const terrains: Terrain[] = [
   { id: 12, name: "City Stade de Barbizon",            sport: "Football 5v5", distance: "6,7 km", rating: 4.2, reviews: 41,  price: 65, available: true,                 image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=70" },
   { id: 13, name: "Terrain Synthétique Moret",         sport: "Football 5v5", distance: "8,3 km", rating: 4.0, reviews: 29,  price: 68, available: false,                image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=600&q=70" },
   // Basket primaires (3)
-  { id: 21, name: "Gymnase Avon Centre",               sport: "Basket Ã  5",  distance: "1,8 km", rating: 4.5, reviews: 73,  price: 30, available: true,  primary: true, image: courtBasket1 },
-  { id: 22, name: "Salle Polyvalente Fontainebleau",   sport: "Basket Ã  5",  distance: "3,2 km", rating: 4.1, reviews: 55,  price: 28, available: true,  primary: true, image: courtBasket2 },
-  { id: 23, name: "Playground Nemours Sud",            sport: "Basket Ã  5",  distance: "6,1 km", rating: 3.9, reviews: 33,  price: 32, available: false, primary: true, image: courtBasket3 },
+  { id: 21, name: "Gymnase Avon Centre",               sport: "Basket à 5",  distance: "1,8 km", rating: 4.5, reviews: 73,  price: 30, available: true,  primary: true, image: courtBasket1 },
+  { id: 22, name: "Salle Polyvalente Fontainebleau",   sport: "Basket à 5",  distance: "3,2 km", rating: 4.1, reviews: 55,  price: 28, available: true,  primary: true, image: courtBasket2 },
+  { id: 23, name: "Playground Nemours Sud",            sport: "Basket à 5",  distance: "6,1 km", rating: 3.9, reviews: 33,  price: 32, available: false, primary: true, image: courtBasket3 },
   // Basket secondaires
-  { id: 24, name: "Gymnase Léo Lagrange",              sport: "Basket Ã  5",  distance: "4,7 km", rating: 4.3, reviews: 48,  price: 29, available: true,                 image: "https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?auto=format&fit=crop&w=600&q=70" },
-  { id: 25, name: "Complexe Bois-le-Roi",              sport: "Basket Ã  5",  distance: "7,4 km", rating: 4.0, reviews: 36,  price: 27, available: true,                 image: "https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=600&q=70" },
-  { id: 26, name: "Halle des Sports Moret",            sport: "Basket Ã  5",  distance: "9,1 km", rating: 4.2, reviews: 25,  price: 33, available: false,                image: "https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?auto=format&fit=crop&w=600&q=70" },
+  { id: 24, name: "Gymnase Léo Lagrange",              sport: "Basket à 5",  distance: "4,7 km", rating: 4.3, reviews: 48,  price: 29, available: true,                 image: "https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?auto=format&fit=crop&w=600&q=70" },
+  { id: 25, name: "Complexe Bois-le-Roi",              sport: "Basket à 5",  distance: "7,4 km", rating: 4.0, reviews: 36,  price: 27, available: true,                 image: "https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=600&q=70" },
+  { id: 26, name: "Halle des Sports Moret",            sport: "Basket à 5",  distance: "9,1 km", rating: 4.2, reviews: 25,  price: 33, available: false,                image: "https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?auto=format&fit=crop&w=600&q=70" },
   // Padel primaires (3)
   { id: 31, name: "Club Padel Avon",                   sport: "Padel",       distance: "2,9 km", rating: 4.7, reviews: 91,  price: 25, available: true,  primary: true, image: courtPadel1 },
   { id: 32, name: "Padel Arena Fontainebleau",         sport: "Padel",       distance: "4,4 km", rating: 4.5, reviews: 67,  price: 22, available: true,  primary: true, image: courtPadel2 },

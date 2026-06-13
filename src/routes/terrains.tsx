@@ -199,7 +199,7 @@ function TerrainsPage() {
           >
             <LocateFixed className={`h-5 w-5 ${locating ? "animate-spin" : ""}`} strokeWidth={2} />
             <span className="hidden sm:inline whitespace-nowrap">
-              {locating ? "Localisation..." : geoActive ? "Localisé âœ“" : "Me localiser"}
+              {locating ? "Localisation..." : geoActive ? "Localisé ✓" : "Me localiser"}
             </span>
           </button>
           <button
@@ -270,7 +270,7 @@ function TerrainsPage() {
                         <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
                       </span>
                     </div>
-                    <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} â‚¬</span> / h</p>
+                    <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} €</span> / h</p>
                   </div>
                   <div className="flex items-center pr-3 sm:pr-5 text-muted-foreground group-hover:text-primary transition">
                     <ChevronRight className="h-6 w-6" strokeWidth={1.75} />
@@ -295,7 +295,7 @@ function TerrainsPage() {
                         <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet ce soir
                       </span>
                     </div>
-                    <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} â‚¬</span> / h</p>
+                    <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} €</span> / h</p>
                   </div>
                   <div className="flex items-center pr-3 sm:pr-5 text-muted-foreground transition">
                     <ChevronRight className="h-6 w-6" strokeWidth={1.75} />

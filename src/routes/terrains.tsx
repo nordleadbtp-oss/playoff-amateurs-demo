@@ -16,8 +16,8 @@ const courtPadel3 = "/court-padel-3.jpg";
 export const Route = createFileRoute("/terrains")({
   head: () => ({
     meta: [
-      { title: "Trouvez un terrain â€” PlayOff Amateurs" },
-      { name: "description", content: "Liste de terrains sportifs disponibles prÃ¨s de chez vous." },
+      { title: "Trouvez un terrain — PlayOff Amateurs" },
+      { name: "description", content: "Liste de terrains sportifs disponibles près de chez vous." },
     ],
   }),
   component: TerrainsPage,
@@ -29,11 +29,11 @@ type Sport = (typeof sports)[number];
 const VILLES_IDF = [
   "Avon (77310)", "Fontainebleau (77300)", "Melun (77000)", "Barbizon (77630)",
   "Nemours (77140)", "Moret-sur-Loing (77250)", "Bois-le-Roi (77590)",
-  "Milly-la-ForÃªt (91490)", "Ã‰tampes (91150)", "Ã‰vry-Courcouronnes (91000)",
+  "Milly-la-Forêt (91490)", "Étampes (91150)", "Évry-Courcouronnes (91000)",
   "Corbeil-Essonnes (91100)", "Lieusaint (77127)", "Pontault-Combault (77340)",
   "Meaux (77100)", "Provins (77160)", "Chelles (77500)", "Lagny-sur-Marne (77400)",
   "Noisiel (77186)", "Torcy (77200)", "Lognes (77185)",
-  "Paris (75001)", "Vincennes (94300)", "CrÃ©teil (94000)", "Montreuil (93100)",
+  "Paris (75001)", "Vincennes (94300)", "Créteil (94000)", "Montreuil (93100)",
   "Saint-Denis (93200)", "Bobigny (93000)", "Versailles (78000)",
 ];
 
@@ -58,13 +58,13 @@ const terrains: Terrain[] = [
   // Football secondaires
   { id: 11, name: "Stade Jean Bouin Melun",            sport: "Football 5v5", distance: "4,1 km", rating: 4.4, reviews: 62,  price: 72, available: true,                 image: "https://images.unsplash.com/photo-1459865264687-595d652de67e?auto=format&fit=crop&w=600&q=70" },
   { id: 12, name: "City Stade de Barbizon",            sport: "Football 5v5", distance: "6,7 km", rating: 4.2, reviews: 41,  price: 65, available: true,                 image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=70" },
-  { id: 13, name: "Terrain SynthÃ©tique Moret",         sport: "Football 5v5", distance: "8,3 km", rating: 4.0, reviews: 29,  price: 68, available: false,                image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=600&q=70" },
+  { id: 13, name: "Terrain Synthétique Moret",         sport: "Football 5v5", distance: "8,3 km", rating: 4.0, reviews: 29,  price: 68, available: false,                image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=600&q=70" },
   // Basket primaires (3)
   { id: 21, name: "Gymnase Avon Centre",               sport: "Basket Ã  5",  distance: "1,8 km", rating: 4.5, reviews: 73,  price: 30, available: true,  primary: true, image: courtBasket1 },
   { id: 22, name: "Salle Polyvalente Fontainebleau",   sport: "Basket Ã  5",  distance: "3,2 km", rating: 4.1, reviews: 55,  price: 28, available: true,  primary: true, image: courtBasket2 },
   { id: 23, name: "Playground Nemours Sud",            sport: "Basket Ã  5",  distance: "6,1 km", rating: 3.9, reviews: 33,  price: 32, available: false, primary: true, image: courtBasket3 },
   // Basket secondaires
-  { id: 24, name: "Gymnase LÃ©o Lagrange",              sport: "Basket Ã  5",  distance: "4,7 km", rating: 4.3, reviews: 48,  price: 29, available: true,                 image: "https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?auto=format&fit=crop&w=600&q=70" },
+  { id: 24, name: "Gymnase Léo Lagrange",              sport: "Basket Ã  5",  distance: "4,7 km", rating: 4.3, reviews: 48,  price: 29, available: true,                 image: "https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?auto=format&fit=crop&w=600&q=70" },
   { id: 25, name: "Complexe Bois-le-Roi",              sport: "Basket Ã  5",  distance: "7,4 km", rating: 4.0, reviews: 36,  price: 27, available: true,                 image: "https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=600&q=70" },
   { id: 26, name: "Halle des Sports Moret",            sport: "Basket Ã  5",  distance: "9,1 km", rating: 4.2, reviews: 25,  price: 33, available: false,                image: "https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?auto=format&fit=crop&w=600&q=70" },
   // Padel primaires (3)
@@ -107,7 +107,7 @@ function TerrainsPage() {
       setShowAll(false);
       setLocating(false);
       setGeoActive(true);
-      toast.success("Position dÃ©tectÃ©e â€” terrains triÃ©s par proximitÃ©");
+      toast.success("Position détectée — terrains triés par proximité");
     }, 1200);
   };
   const [villeQuery, setVilleQuery] = useState("Avon (77310)");
@@ -132,7 +132,7 @@ function TerrainsPage() {
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-10">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-          Trouvez un terrain prÃ¨s de chez vous
+          Trouvez un terrain près de chez vous
         </h1>
 
         <div className="mt-5 flex flex-col sm:flex-row gap-2 sm:gap-3">
@@ -186,7 +186,7 @@ function TerrainsPage() {
               defaultValue="Dim 31 mai 2026"
               aria-label="Date"
               readOnly
-              onClick={() => toast.info("SÃ©lection de date (dÃ©mo)")}
+              onClick={() => toast.info("Sélection de date (démo)")}
               className="w-full h-12 sm:h-14 pl-12 pr-4 rounded-xl bg-card border border-border outline-none text-base font-medium cursor-pointer"
             />
           </div>
@@ -199,7 +199,7 @@ function TerrainsPage() {
           >
             <LocateFixed className={`h-5 w-5 ${locating ? "animate-spin" : ""}`} strokeWidth={2} />
             <span className="hidden sm:inline whitespace-nowrap">
-              {locating ? "Localisation..." : geoActive ? "LocalisÃ© âœ“" : "Me localiser"}
+              {locating ? "Localisation..." : geoActive ? "Localisé âœ“" : "Me localiser"}
             </span>
           </button>
           <button
@@ -231,7 +231,7 @@ function TerrainsPage() {
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-2">
-          <p className="text-sm text-muted-foreground">{filtered.length} terrain{filtered.length > 1 ? "s" : ""} trouvÃ©{filtered.length > 1 ? "s" : ""}</p>
+          <p className="text-sm text-muted-foreground">{filtered.length} terrain{filtered.length > 1 ? "s" : ""} trouvé{filtered.length > 1 ? "s" : ""}</p>
           <div className="flex items-center gap-1.5 bg-card border border-border rounded-xl px-3 h-10">
             <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={2} />
             <select
@@ -270,7 +270,7 @@ function TerrainsPage() {
                         <span className="h-1.5 w-1.5 rounded-full bg-white" /> Disponible
                       </span>
                     </div>
-                    <p className="font-semibold text-sm sm:text-base mt-1">Ã€ partir de <span className="text-foreground">{t.price} â‚¬</span> / h</p>
+                    <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} â‚¬</span> / h</p>
                   </div>
                   <div className="flex items-center pr-3 sm:pr-5 text-muted-foreground group-hover:text-primary transition">
                     <ChevronRight className="h-6 w-6" strokeWidth={1.75} />
@@ -295,7 +295,7 @@ function TerrainsPage() {
                         <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet ce soir
                       </span>
                     </div>
-                    <p className="font-semibold text-sm sm:text-base mt-1">Ã€ partir de <span className="text-foreground">{t.price} â‚¬</span> / h</p>
+                    <p className="font-semibold text-sm sm:text-base mt-1">À partir de <span className="text-foreground">{t.price} â‚¬</span> / h</p>
                   </div>
                   <div className="flex items-center pr-3 sm:pr-5 text-muted-foreground transition">
                     <ChevronRight className="h-6 w-6" strokeWidth={1.75} />

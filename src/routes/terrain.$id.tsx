@@ -163,7 +163,7 @@ function SlotPage() {
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">
                 <div className="p-2 border-b border-border">
-                  <button onClick={goToday} className="w-full h-10 rounded-lg font-semibold text-sm hover:opacity-95 transition" style={{ background: "#FF6B00", color: "#1A1A1A" }}>
+                  <button onClick={goToday} className="w-full h-10 rounded-lg font-semibold text-sm hover:opacity-95 transition" style={{ background: "#ed522a", color: "#1A1A1A" }}>
                     Aujourd'hui
                   </button>
                 </div>
@@ -206,7 +206,7 @@ function SlotPage() {
                     : s.happyHour && isFootball ? "bg-amber-50 border-amber-300 hover:border-amber-400 hover:shadow-sm"
                     : "bg-card border-border hover:border-primary/40 hover:shadow-sm"
                   }`}
-                  style={isSelected ? { background: "#FF6B00" } : undefined}>
+                  style={isSelected ? { background: "#ed522a" } : undefined}>
                   {s.happyHour && isFootball && !isFull && (
                     <span className="absolute top-1.5 left-1/2 -translate-x-1/2 text-[9px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap"
                       style={{ background: "#F59E0B", color: "#fff" }}>
@@ -262,10 +262,10 @@ function SlotPage() {
             </div>
             <div className="flex items-center justify-between px-4 py-3.5">
               <span className="font-semibold">Prix total</span>
-              <span className="font-extrabold text-lg" style={{ color: "#FF6B00" }}>{selectedSlot ? `${totalPrice} €` : "—"}</span>
+              <span className="font-extrabold text-lg" style={{ color: "#ed522a" }}>{selectedSlot ? `${totalPrice} €` : "—"}</span>
             </div>
           </div>
-          <div className="rounded-2xl p-4 text-center text-primary-foreground" style={{ background: "#0D1B4B" }}>
+          <div className="rounded-2xl p-4 text-center text-primary-foreground" style={{ background: "#142852" }}>
             <p className="text-sm opacity-90">Participation par joueur</p>
             <p className="text-2xl font-extrabold mt-1">
               {totalPrice > 0 ? `${pricePerPlayer} €` : "—"}
@@ -299,7 +299,7 @@ function SlotPage() {
                 });
               }}
               className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ background: "#FF6B00", color: "#1A1A1A" }}
+              style={{ background: "#ed522a", color: "#1A1A1A" }}
             >
               {selectedSlot ? `Réserver · ${totalPrice} €` : "Sélectionnez un créneau"}
             </button>
@@ -335,7 +335,7 @@ function SlotPage() {
               });
             }}
             className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed shadow-lg"
-            style={{ background: "#FF6B00", color: "#1A1A1A" }}
+            style={{ background: "#ed522a", color: "#1A1A1A" }}
           >
             {selectedSlot ? `Réserver · ${totalPrice} €` : "Sélectionnez un créneau"}
           </button>

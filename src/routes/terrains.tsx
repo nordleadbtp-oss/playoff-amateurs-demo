@@ -194,7 +194,7 @@ function TerrainsPage() {
             onClick={handleLocate}
             disabled={locating}
             className="h-12 sm:h-14 w-12 sm:w-auto px-0 sm:px-4 rounded-xl font-bold inline-flex items-center justify-center gap-2 border-2 bg-card hover:bg-muted transition disabled:opacity-60"
-            style={geoActive ? { borderColor: "#22C55E", color: "#15803D" } : { borderColor: "#0D1B4B", color: "#0D1B4B" }}
+            style={geoActive ? { borderColor: "#22C55E", color: "#15803D" } : { borderColor: "#142852", color: "#142852" }}
             aria-label="Me localiser"
           >
             <LocateFixed className={`h-5 w-5 ${locating ? "animate-spin" : ""}`} strokeWidth={2} />
@@ -205,7 +205,7 @@ function TerrainsPage() {
           <button
             onClick={() => toast.info("Recherche en cours...")}
             className="h-12 sm:h-14 px-5 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
-            style={{ background: "#FF6B00", color: "#1A1A1A" }}
+            style={{ background: "#ed522a", color: "#1A1A1A" }}
             aria-label="Rechercher"
           >
             <Search className="h-5 w-5" strokeWidth={2} />
@@ -311,7 +311,7 @@ function TerrainsPage() {
             <button
               onClick={() => { if (showAll) { setShowAll(false); window.scrollTo({ top: 0, behavior: "smooth" }); } else { setShowAll(true); } }}
               className="inline-flex items-center gap-2 h-12 px-6 rounded-xl border-2 bg-card font-semibold hover:bg-muted transition"
-              style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+              style={{ borderColor: "#142852", color: "#142852" }}
             >
               {showAll ? (<>Voir moins de terrains <ChevronUp className="h-4 w-4" strokeWidth={2} /></>) : (<>Voir plus de terrains <ChevronDown className="h-4 w-4" strokeWidth={2} /></>)}
             </button>

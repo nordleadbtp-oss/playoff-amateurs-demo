@@ -32,9 +32,9 @@
   --foreground: oklch(0.18 0 0);          /* #1A1A1A */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0 0);
-  --primary: oklch(0.22 0.09 270);        /* #0D1B4B navy */
+  --primary: oklch(0.22 0.09 270);        /* #142852 navy */
   --primary-foreground: oklch(1 0 0);
-  --accent: oklch(0.69 0.21 42);          /* #FF6B00 orange */
+  --accent: oklch(0.69 0.21 42);          /* #ed522a orange */
   --accent-foreground: oklch(0.18 0 0);   /* #1A1A1A on orange */
   --muted: oklch(0.93 0.01 240);
   --muted-foreground: oklch(0.45 0.02 240);

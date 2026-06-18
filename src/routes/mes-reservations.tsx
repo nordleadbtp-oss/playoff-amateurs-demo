@@ -78,14 +78,14 @@ function MesReservationsPage() {
         {!mounted ? null : reservations.length === 0 ? (
           <div className="bg-card border border-border rounded-2xl px-6 py-12 text-center flex flex-col items-center gap-3">
             <div className="text-6xl" aria-hidden>📋</div>
-            <h2 className="text-xl font-bold" style={{ color: "#0D1B4B" }}>
+            <h2 className="text-xl font-bold" style={{ color: "#142852" }}>
               Aucune réservation pour l'instant
             </h2>
             <p className="text-muted-foreground">Réserve un terrain pour commencer</p>
             <Link
               to="/terrains"
               className="mt-3 h-12 px-6 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition text-white"
-              style={{ background: "#0D1B4B" }}
+              style={{ background: "#142852" }}
             >
               Trouver un terrain
             </Link>
@@ -112,7 +112,7 @@ function MesReservationsPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-bold">{terrain.name}</p>
                           {isConfirmed ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#E6EDF5", color: "#0D1B4B" }}>
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" style={{ background: "#E6EDF5", color: "#142852" }}>
                               <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2} /> Match confirmé
                             </span>
                           ) : (
@@ -130,7 +130,7 @@ function MesReservationsPage() {
                             <MapPin className="h-4 w-4" strokeWidth={1.75} /> {terrain.city}
                           </span>
                         </div>
-                        <p className="mt-2 font-extrabold text-lg" style={{ color: "#FF6B00" }}>
+                        <p className="mt-2 font-extrabold text-lg" style={{ color: "#ed522a" }}>
                           {terrain.price} €
                         </p>
                       </div>
@@ -151,7 +151,7 @@ function MesReservationsPage() {
             <button
               onClick={() => toast.success("Rappel envoyé à tous les joueurs — ils recevront un SMS 24h avant le match")}
               className="w-full h-12 rounded-xl font-semibold inline-flex items-center justify-center gap-2 border-2 hover:bg-muted transition"
-              style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+              style={{ borderColor: "#142852", color: "#142852" }}
             >
               <BellRing className="h-5 w-5" strokeWidth={1.75} />
               Envoyer un rappel aux joueurs

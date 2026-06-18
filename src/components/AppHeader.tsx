@@ -106,7 +106,7 @@ export function AppHeader() {
               </div>
             </div>
             <div className="p-4 border-t border-border">
-              <div className="rounded-2xl p-4 text-primary-foreground" style={{ background: "#0D1B4B" }}>
+              <div className="rounded-2xl p-4 text-primary-foreground" style={{ background: "#142852" }}>
                 <div className="flex items-center gap-2 mb-1">
                   <Smartphone className="h-5 w-5" strokeWidth={1.75} />
                   <p className="font-bold">Télécharger l'app</p>

@@ -55,19 +55,19 @@ type Player = {
 };
 
 const INITIAL_PLAYERS: Player[] = [
-  { id: 1,  initials: "TD", name: "Thai (moi)",        color: "#0D1B4B", paid: true,  isMe: true },
-  { id: 2,  initials: "KB", name: "Karim Benali",       color: "#FF6B00", paid: true  },
+  { id: 1,  initials: "TD", name: "Thai (moi)",        color: "#142852", paid: true,  isMe: true },
+  { id: 2,  initials: "KB", name: "Karim Benali",       color: "#ed522a", paid: true  },
   { id: 3,  initials: "AD", name: "Antoine Dubois",     color: "#22C55E", paid: true  },
   { id: 4,  initials: "SH", name: "Sofiane Hamidi",     color: "#3B82F6", paid: false },
   { id: 5,  initials: "HL", name: "Hugo Leroy",         color: "#A855F7", paid: false },
   { id: 6,  initials: "NM", name: "Nicolas Moreau",     color: "#EC4899", paid: true  },
   { id: 7,  initials: "YB", name: "Yanis Boukhari",     color: "#14B8A6", paid: false },
   { id: 8,  initials: "TR", name: "Thomas Renard",      color: "#EAB308", paid: true  },
-  { id: 9,  initials: "CM", name: "Clément Martinez",   color: "#0D1B4B", paid: false },
-  { id: 10, initials: "RD", name: "Romain Delacroix",   color: "#FF6B00", paid: false },
+  { id: 9,  initials: "CM", name: "Clément Martinez",   color: "#142852", paid: false },
+  { id: 10, initials: "RD", name: "Romain Delacroix",   color: "#ed522a", paid: false },
 ];
 
-const AVATAR_COLORS = ["#0D1B4B", "#1E3A6F", "#4A6FA5", "#8FA8D3", "#FF6B00", "#FF8C42", "#FFB885", "#7A6B5A"];
+const AVATAR_COLORS = ["#142852", "#1E3A6F", "#4A6FA5", "#8FA8D3", "#ed522a", "#FF8C42", "#FFB885", "#7A6B5A"];
 
 const LS_KEY = "playoff_match";
 
@@ -175,7 +175,7 @@ function MonMatchPage() {
             <h1 className="text-2xl sm:text-3xl font-bold">Mon match</h1>
           </div>
           {total > 0 && paidCount === total ? (
-            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#E6EDF5", color: "#0D1B4B", borderColor: "#C5D2E5" }}>
+            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border" style={{ background: "#E6EDF5", color: "#142852", borderColor: "#C5D2E5" }}>
               <CheckCircle2 className="h-4 w-4" strokeWidth={2} /> Confirmé
             </span>
           ) : (
@@ -197,22 +197,22 @@ function MonMatchPage() {
           </div>
           <div className="text-right">
             <p className="text-xs text-muted-foreground">Prix total</p>
-            <p className="font-extrabold text-xl" style={{ color: "#FF6B00" }}>{TERRAIN_TOTAL} €</p>
+            <p className="font-extrabold text-xl" style={{ color: "#ed522a" }}>{TERRAIN_TOTAL} €</p>
           </div>
         </div>
 
         {/* Calcul par joueur */}
-        <div className="rounded-2xl p-5 text-primary-foreground text-center" style={{ background: "#0D1B4B" }}>
+        <div className="rounded-2xl p-5 text-primary-foreground text-center" style={{ background: "#142852" }}>
           <p className="font-bold text-xl">
             {TERRAIN_TOTAL} € ÷ {total} joueur{total > 1 ? "s" : ""} ={" "}
-            <span style={{ color: "#FF6B00" }}>{pricePerPlayer} €</span>
+            <span style={{ color: "#ed522a" }}>{pricePerPlayer} €</span>
           </p>
           <p className="text-sm opacity-80 mt-1">par joueur · tout compris</p>
           <div className="mt-4 flex justify-center">
             <button
               onClick={() => setShareOpen(true)}
               className="h-12 px-6 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
-              style={{ background: "#FF6B00", color: "#1A1A1A" }}
+              style={{ background: "#ed522a", color: "#1A1A1A" }}
             >
               <Share2 className="h-5 w-5" strokeWidth={2} /> Partager le lien de paiement
             </button>
@@ -222,11 +222,11 @@ function MonMatchPage() {
         {/* Barre de progression */}
         <div className="bg-card border border-border rounded-2xl p-4">
           <div className="flex items-center justify-between">
-            <p className="font-bold" style={{ color: "#0D1B4B" }}>Paiements reçus</p>
+            <p className="font-bold" style={{ color: "#142852" }}>Paiements reçus</p>
             <p className="font-bold">{paidCount} / {total} joueurs</p>
           </div>
           <div className="mt-3 h-3 w-full rounded-full bg-muted overflow-hidden">
-            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, background: "linear-gradient(90deg, #0D1B4B, #FF6B00)" }} />
+            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, background: "linear-gradient(90deg, #142852, #ed522a)" }} />
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
             {collected} € collectés · {remaining} € restants
@@ -257,7 +257,7 @@ function MonMatchPage() {
                       onClick={() => !p.isMe && updatePlayers((list) => list.map((x) => x.id === p.id ? { ...x, paid: false } : x))}
                       disabled={p.isMe}
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition duration-200 disabled:cursor-not-allowed hover:opacity-90 shrink-0"
-                      style={{ background: "#E6EDF5", color: "#0D1B4B" }}
+                      style={{ background: "#E6EDF5", color: "#142852" }}
                     >
                       Payé ✅
                     </button>
@@ -290,7 +290,7 @@ function MonMatchPage() {
                     className="w-full h-9 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:opacity-90 active:scale-[0.99] transition"
                     style={p.paid
                       ? { background: "#F3F4F6", color: "#6B7280", border: "1px solid #E5E7EB" }
-                      : { background: "#0D1B4B", color: "#fff" }
+                      : { background: "#142852", color: "#fff" }
                     }
                   >
                     <Share2 className="h-3 w-3" strokeWidth={2} />
@@ -318,7 +318,7 @@ function MonMatchPage() {
                 <button
                   type="submit"
                   className="h-12 px-6 rounded-xl font-bold hover:opacity-95 active:scale-[0.99] transition"
-                  style={{ background: "#FF6B00", color: "#1A1A1A" }}
+                  style={{ background: "#ed522a", color: "#1A1A1A" }}
                 >
                   Ajouter
                 </button>
@@ -328,7 +328,7 @@ function MonMatchPage() {
             <button
               onClick={() => setShowForm(true)}
               className="mt-3 w-full h-12 rounded-xl border-2 bg-card font-semibold inline-flex items-center justify-center gap-2 hover:bg-muted transition"
-              style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+              style={{ borderColor: "#142852", color: "#142852" }}
             >
               <Plus className="h-5 w-5" strokeWidth={2} /> Ajouter un joueur
             </button>
@@ -339,7 +339,7 @@ function MonMatchPage() {
           onClick={() => toast.success(`Rappel envoyé à ${pendingCount} joueur${pendingCount > 1 ? "s" : ""}`)}
           disabled={pendingCount === 0}
           className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ background: "#0D1B4B" }}
+          style={{ background: "#142852" }}
         >
           <BellRing className="h-5 w-5" strokeWidth={2} />
           Envoyer un rappel ({pendingCount} joueur{pendingCount > 1 ? "s" : ""})
@@ -359,7 +359,7 @@ function MonMatchPage() {
               }, 1200);
             }}
             className="w-full h-14 rounded-xl font-bold text-base inline-flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition"
-            style={{ background: "#FF6B00", color: "#1A1A1A" }}
+            style={{ background: "#ed522a", color: "#1A1A1A" }}
           >
             <CheckCircle2 className="h-5 w-5" strokeWidth={2} />
             Confirmer le match
@@ -372,7 +372,7 @@ function MonMatchPage() {
           <div className="absolute inset-0 bg-black/50 animate-in fade-in duration-200" onClick={() => setShareOpen(false)} />
           <div className="relative w-full sm:max-w-md bg-card rounded-t-2xl sm:rounded-2xl shadow-xl p-6 animate-in slide-in-from-bottom duration-200">
             <div className="flex items-center justify-between mb-1">
-              <h3 className="font-bold text-lg" style={{ color: "#0D1B4B" }}>Partager le lien de paiement</h3>
+              <h3 className="font-bold text-lg" style={{ color: "#142852" }}>Partager le lien de paiement</h3>
               <button
                 onClick={() => setShareOpen(false)}
                 className="h-9 w-9 rounded-full hover:bg-muted inline-flex items-center justify-center"
@@ -402,14 +402,14 @@ function MonMatchPage() {
                     <button
                       onClick={copyAnd("SMS")}
                       className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition"
-                      style={{ background: "#0D1B4B", color: "#fff" }}
+                      style={{ background: "#142852", color: "#fff" }}
                     >
                       📱 Envoyer par SMS
                     </button>
                     <button
                       onClick={copyAnd("mail")}
                       className="w-full h-12 rounded-xl font-bold inline-flex items-center justify-center gap-2 border-2 bg-card hover:bg-muted transition"
-                      style={{ borderColor: "#0D1B4B", color: "#0D1B4B" }}
+                      style={{ borderColor: "#142852", color: "#142852" }}
                     >
                       ✉️ Envoyer par mail
                     </button>

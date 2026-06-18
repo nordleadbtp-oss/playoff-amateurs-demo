@@ -72,7 +72,7 @@ function MesReservationsPage() {
     <div className="min-h-screen pb-28 md:pb-12">
       <AppHeader />
 
-      <main className="mx-auto max-w-2xl px-4 sm:px-6 py-6 sm:py-10 space-y-5">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-10 space-y-5">
         <h1 className="text-2xl sm:text-3xl font-bold">Mes réservations</h1>
 
         {!mounted ? null : reservations.length === 0 ? (

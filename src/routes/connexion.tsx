@@ -117,7 +117,7 @@ function LoginPage() {
               type="submit"
               disabled={loading}
               className="w-full h-12 rounded-xl font-bold text-white hover:opacity-95 active:scale-[0.99] transition disabled:opacity-60"
-              style={{ background: "#0D1B4B" }}
+              style={{ background: "#142852" }}
             >
               {loading ? "..." : mode === "login" ? "Se connecter" : "Créer mon compte"}
             </button>

@@ -291,7 +291,7 @@ function TerrainsPage() {
                         <span className="font-medium text-foreground/80">{t.rating.toString().replace(".", ",")}</span>
                         <span>({t.reviews})</span>
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#9CA3AF", color: "#fff" }}>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: "#ed522a", color: "#fff" }}>
                         <span className="h-1.5 w-1.5 rounded-full bg-white" /> Complet ce soir
                       </span>
                     </div>

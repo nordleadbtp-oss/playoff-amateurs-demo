@@ -163,10 +163,10 @@ function MonMatchPage() {
   };
 
   return (
-    <div className="min-h-screen pb-28 md:pb-12">
+    <div className="flex min-h-screen flex-col">
       <AppHeader />
 
-      <main className="mx-auto max-w-2xl px-4 sm:px-6 py-5 sm:py-8 space-y-4">
+      <main className="flex-1 mx-auto w-full max-w-2xl px-4 sm:px-6 py-5 sm:py-8 pb-28 md:pb-10 space-y-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Link to="/terrains" className="h-10 w-10 rounded-full bg-card border border-border inline-flex items-center justify-center hover:bg-muted transition" aria-label="Retour">

@@ -127,10 +127,10 @@ function TerrainsPage() {
   const visible = showAll ? filtered : filtered.slice(0, 3);
 
   return (
-    <div className="min-h-screen pb-24 md:pb-12">
+    <div className="flex min-h-screen flex-col">
       <AppHeader />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-10">
+      <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 py-6 sm:py-10 pb-24 md:pb-10">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
           Trouvez un terrain près de chez vous
         </h1>

@@ -114,9 +114,9 @@ function SlotPage() {
   const isExact = totalPrice > 0 && totalPrice % playerCount === 0;
 
   return (
-    <div className="min-h-screen pb-28 md:pb-12">
+    <div className="flex min-h-screen flex-col">
       <AppHeader />
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 lg:gap-8">
+      <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 py-6 sm:py-8 pb-28 md:pb-10 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 lg:gap-8">
         <section>
           <Link to="/terrains" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition">
             <ArrowLeft className="h-4 w-4" strokeWidth={1.75} /> Terrains

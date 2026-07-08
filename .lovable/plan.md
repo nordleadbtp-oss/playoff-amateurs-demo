@@ -1,46 +1,29 @@
-## Plan : Application de la charte graphique officielle PlayOff Amateurs
+# Export de l'historique des prompts
 
-### 1. Couleurs — remplacements globaux
+Créer un fichier markdown récapitulant tous les prompts utilisateur du projet PlayOff Amateurs pour archivage.
 
-| Ancienne | Nouvelle |
-|----------|----------|
-| `#FF6B00` | `#ed522a` |
-| `#0D1B4B` | `#142852` |
+## Fichier créé
 
-**Fichiers concernés** (10 fichiers, ~45 occurrences) :
-- `src/styles.css` — tokens CSS `--primary` et `--accent` (2 lignes)
-- `src/routes/mes-reservations.tsx` — 4 occurrences inline + `max-w-2xl` → `max-w-4xl`
-- `src/routes/terrains.tsx` — 3 occurrences inline
-- `src/routes/mon-match.tsx` — ~17 occurrences inline + palette `AVATAR_COLORS`
-- `src/routes/terrain.$id.tsx` — 5 occurrences inline
-- `src/routes/connexion.tsx` — 1 occurrence inline
-- `src/components/AppFooter.tsx` — 1 occurrence inline
-- `src/components/AppHeader.tsx` — 1 occurrence inline
-- `src/components/BottomNav.tsx` — 3 occurrences inline
+`/mnt/documents/playoff-amateurs-prompts-historique.md`
 
-### 2. Background dans styles.css
+Emplacement `/mnt/documents/` → fichier persistant, téléchargeable directement depuis le chat via une balise `<presentation-artifact>`.
 
-Changer `--background` de `oklch(0.974 0.011 240)` (#F0F4F8) vers `oklch(1 0 0)` (blanc pur).
+## Contenu du document
 
-### 3. Typographies
+Structure en markdown :
 
-#### Dans `src/styles.css` :
-- Remplacer `--font-sans` par `"Open Sans", ui-sans-serif, system-ui, sans-serif` pour le corps de texte.
-- Ajouter des utilitaires `@utility` ou classes utilitaires pour les titres en `Inter` Bold/SemiBold.
+- **En-tête** : titre, projet, date d'export (08/07/2026)
+- **Liste chronologique** des 13 prompts identifiés, avec pour chacun :
+  - Numéro et date
+  - Titre / thème
+  - Résumé du contenu (paraphrase — le contenu verbatim n'est pas toujours disponible via la recherche)
+  - Fichiers principaux impactés (quand connus)
+- **Section finale** : notes sur les limites (paraphrases vs verbatim, messages tool non indexés)
 
-#### Dans `src/routes/__root.tsx` :
-- Ajouter le lien Google Fonts pour **Open Sans** (400, 600) aux côtés de l'import Inter existant.
+## Ce qui n'est PAS fait
 
-#### Application typographique :
-- Conserver `font-sans` sur `html, body` (Open Sans par défaut).
-- Titres (`h1`, `h2`, `h3`) : appliquer `font-[family-name:Inter]` avec `font-bold` ou `font-semibold`.
+- Aucune modification de code applicatif
+- Pas de changement de configuration
+- Uniquement la création d'un fichier de documentation dans `/mnt/documents/`
 
-### 4. Layout desktop dans mes-reservations.tsx
-
-Remplacer `max-w-2xl` par `max-w-4xl` sur le `<main>` pour que le contenu utilise mieux la largeur desktop.
-
-### 5. Vérification post-implémentation
-
-- Vérifier que les dégradés linéaires (ex. `mon-match.tsx` `linear-gradient(90deg, #0D1B4B, #FF6B00)`) utilisent bien les nouvelles couleurs.
-- S'assurer qu'aucune couleur legacy ne subsiste via un grep final.
-- Contrôler le rendu visuel en preview.
+Confirmez pour que je passe en build et génère le fichier.
